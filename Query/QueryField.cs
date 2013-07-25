@@ -44,39 +44,39 @@ namespace Query
                 return query.Where(this.When[filter.Value]);
             }
 
-            Func<ExpressionBuilder, Filter, ExpressionBuilder> func;
+            Func<ExpressionBuilder, Filter, ExpressionBuilder> operatorFunction;
 
             switch (filter.Operator)
             {
                 case FilterOperator.Equal:
-                    func = (b, f) => b.EqualTo(f.Value);
+                    operatorFunction = (b, f) => b.EqualTo(f.Value);
                     break;
                 case FilterOperator.NotEqual:
-                    func = (b, f) => b.NotEqualTo(f.Value);
+                    operatorFunction = (b, f) => b.NotEqualTo(f.Value);
                     break;
                 case FilterOperator.GreaterThan:
-                    func = (b, f) => b.GreaterThanThis(f.Value);
+                    operatorFunction = (b, f) => b.GreaterThanThis(f.Value);
                     break;
                 case FilterOperator.GreaterThanEqual:
-                    func = (b, f) => b.GreaterThanOrEqualTo(f.Value);
+                    operatorFunction = (b, f) => b.GreaterThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.LessThan:
-                    func = (b, f) => b.LessThanThis(f.Value);
+                    operatorFunction = (b, f) => b.LessThanThis(f.Value);
                     break;
                 case FilterOperator.LessThanEqual:
-                    func = (b, f) => b.LessThanOrEqualTo(f.Value);
+                    operatorFunction = (b, f) => b.LessThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.Between:
-                    func = (b, f) => b.Between(f.Values[0], f.Values[1]);
+                    operatorFunction = (b, f) => b.Between(f.Values[0], f.Values[1]);
                     break;
                 case FilterOperator.Contains:
-                    func = (b, f) => b.Call<string>("ToLower").Call<string>("Contains", f.Value.ToString().ToLower());
+                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("Contains", f.Value.ToString().ToLower());
                     break;
                 case FilterOperator.StartsWith:
-                    func = (b, f) => b.Call<string>("ToLower").Call<string>("StartsWith", f.Value.ToString().ToLower());
+                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("StartsWith", f.Value.ToString().ToLower());
                     break;
                 case FilterOperator.EndsWith:
-                    func = (b, f) => b.Call<string>("ToLower").Call<string>("EndsWith", f.Value.ToString().ToLower());
+                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("EndsWith", f.Value.ToString().ToLower());
                     break;
                 default:
                     throw new Exception("Unkown operator: " + filter.Operator);
@@ -87,7 +87,7 @@ namespace Query
                 ExpressionBuilder.False(),
                 (current, key) =>
                 current.OrElse(
-                    func(
+                    operatorFunction(
                         ExpressionBuilder.New(builder.Param, key.Body.Replace(key.Parameters[0], builder.Param)),
                         filter)
                     .Expression));

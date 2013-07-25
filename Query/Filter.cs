@@ -12,6 +12,12 @@ namespace Query
         #region Published Properties
 
         /// <summary>
+        /// The name of this Filter.
+        /// Used to associate a QueryField with a Filter.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Determines if the filter is applied or not.
         /// </summary>
         public bool Valid { get; set; }
@@ -37,6 +43,11 @@ namespace Query
         /// THe operator used when comparing the filter value to the target expression
         /// </summary>
         public FilterOperator Operator { get; set; }
+
+        /// <summary>
+        /// The original text entered by the user, without any modification.
+        /// </summary>
+        public string OriginalText { get; set; }
 
         #endregion Published Properties
     }
