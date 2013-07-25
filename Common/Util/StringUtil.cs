@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Query.Common
+namespace Common.Util
 {
     public class StringUtil
     {

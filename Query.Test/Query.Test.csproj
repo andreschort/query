@@ -55,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Query.SampleModel\Query.SampleModel.csproj">
       <Project>{F6B6FC52-EF63-4B12-BAC8-EE4854DA6A55}</Project>
       <Name>Query.SampleModel</Name>

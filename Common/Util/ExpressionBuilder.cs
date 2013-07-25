@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Query.Common
+namespace Common.Util
 {
     public class ExpressionBuilder
     {
@@ -50,7 +50,7 @@ namespace Query.Common
             return new ExpressionBuilder { Expression = Expression.Constant(false) };
         }
 
-        public static Expression Build<T, E>(Expression<Func<T, E>> expression)
+        public static LambdaExpression Build<T, E>(Expression<Func<T, E>> expression)
         {
             return expression;
         }

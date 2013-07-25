@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Query.Common;
+using Common.Util;
 
 namespace Common.Extension
 {
