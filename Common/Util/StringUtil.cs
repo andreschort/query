@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Common.Util
 {
@@ -52,6 +53,15 @@ namespace Common.Util
         {
             DateTime val;
             return DateTime.TryParse(value, out val) ? val : (DateTime?)null;
+        }
+
+        public static DateTime? ToDateNullable(
+            string value,
+            IFormatProvider provider,
+            DateTimeStyles styles)
+        {
+            DateTime val;
+            return DateTime.TryParse(value, provider, styles, out val) ? val : (DateTime?)null;
         }
 
         public static Queue<string> SplitByDotToHeadAndTail(string s)

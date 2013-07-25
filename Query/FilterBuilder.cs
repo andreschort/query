@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using Common.Util;
 
 namespace Query
 {
@@ -35,6 +37,7 @@ namespace Query
         public Dictionary<FilterOperator, string> Symbols { get; set; }
 
         /// <summary>
+        /// Only for Text filters
         /// The wildcard used for StartsWith, Contains and EndsWith operators.
         /// </summary>
         public string Wildcard { get; set; }
@@ -94,6 +97,67 @@ namespace Query
             else
             {
                 filter.Operator = FilterOperator.Equal;
+            }
+
+            return filter;
+        }
+
+        public Filter Boolean(string name, string value)
+        {
+            var filter = new Filter
+                {
+                    Name = name,
+                    OriginalText = value
+                };
+
+            var val = StringUtil.ToBoolNullable(value);
+
+            if (val.HasValue)
+            {
+                filter.Valid = true;
+                filter.Value = val.Value;
+                filter.Operator = FilterOperator.Equal;
+            }
+            
+            return filter;
+        }
+
+        public Filter Date(string name, string datesStr, char separator)
+        {
+            var filter = new Filter {Name = name, OriginalText = datesStr};
+
+            var parts = datesStr.Split(new[] {separator}, 2);
+
+            var from = StringUtil.ToDateNullable(
+                parts[0],
+                CultureInfo.InvariantCulture.DateTimeFormat,
+                DateTimeStyles.None);
+
+            DateTime? to = null;
+            if (parts.Count() > 1)
+            {
+                to = StringUtil.ToDateNullable(
+                    parts[1],
+                    CultureInfo.InvariantCulture.DateTimeFormat,
+                    DateTimeStyles.None);
+            }
+
+            filter.Valid = from.HasValue || to.HasValue;
+
+            filter.Values.Add(from);
+            filter.Values.Add(to);
+
+            if (from.HasValue && to.HasValue)
+            {
+                filter.Operator = FilterOperator.Between;
+            }
+            else if (from.HasValue)
+            {
+                filter.Operator = FilterOperator.GreaterThanEqual;
+            }
+            else if (to.HasValue)
+            {
+                filter.Operator = FilterOperator.LessThanEqual;
             }
 
             return filter;
