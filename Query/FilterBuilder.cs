@@ -162,5 +162,25 @@ namespace Query
 
             return filter;
         }
+
+        public Filter List(
+            string name,
+            string value,
+            string defaultValue,
+            Type enumType = null)
+        {
+            var filter = new Filter {Name = name, OriginalText = value};
+
+            var text = value ?? defaultValue;
+
+            filter.Valid = !text.Equals(defaultValue);
+
+            if (filter.Valid)
+            {
+                filter.Operator = FilterOperator.Equal;
+            }
+
+            return filter;
+        }
     }
 }

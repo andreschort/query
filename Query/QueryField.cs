@@ -11,6 +11,10 @@ namespace Query
     {
         #region Published Properties
 
+        public string Name { get; set; }
+
+        public LambdaExpression Select { get; set; }
+
         /// <summary>
         /// Key: Filter value
         /// Value: Expression to apply as a filter to the IQueryable

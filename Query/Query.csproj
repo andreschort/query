@@ -45,6 +45,7 @@
     <Compile Include="FilterOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryField.cs" />
+    <Compile Include="QueryFieldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

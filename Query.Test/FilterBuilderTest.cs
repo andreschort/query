@@ -221,5 +221,34 @@ namespace Query.Test
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
         }
+
+        [TestMethod]
+        public void ListDefault()
+        {
+            FilterBuilder builder = new FilterBuilder();
+
+            const string defaultValue = "default";
+            const string value = defaultValue;
+            var filter = builder.List("name", value, defaultValue);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.IsFalse(filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+            Assert.AreEqual(value, filter.OriginalText);
+        }
+
+        [TestMethod]
+        public void List()
+        {
+            FilterBuilder builder = new FilterBuilder();
+
+            const string value = "value";
+            var filter = builder.List("name", value, "default");
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.IsTrue(filter.Valid);
+            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
+            Assert.AreEqual(value, filter.OriginalText);
+        }
     }
 }
