@@ -7,6 +7,8 @@ namespace Query.Test
     [TestClass]
     public class FilterBuilderTest
     {
+        #region Text
+
         [TestMethod]
         public void TextEmptyIsNotValid()
         {
@@ -66,6 +68,10 @@ namespace Query.Test
             Assert.AreEqual(FilterOperator.EndsWith, filter.Operator);
         }
 
+        #endregion Text
+
+        #region Boolean
+
         [TestMethod]
         public void BooleanTrue()
         {
@@ -107,7 +113,11 @@ namespace Query.Test
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual("not_a_valid_bool_value", filter.OriginalText);
         }
-        
+
+        #endregion Boolean
+
+        #region Date
+
         [TestMethod]
         public void DateEmpty()
         {
@@ -222,6 +232,10 @@ namespace Query.Test
             Assert.AreEqual(value, filter.OriginalText);
         }
 
+        #endregion Date
+
+        #region List
+
         [TestMethod]
         public void ListDefault()
         {
@@ -250,6 +264,8 @@ namespace Query.Test
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
         }
+
+        #endregion List
 
         #region Integer
 
@@ -486,6 +502,25 @@ namespace Query.Test
             const string betweenOperator = "|";
             const int rightValue = 1;
             var originalText = betweenOperator + rightValue;
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        [TestMethod]
+        [Ignore]
+        public void IntegerBetweenOperatorInvalid()
+        {
+            // This test shows that we need to improve FilterBuilder.GetOperator
+            var builder = new FilterBuilder();
+            const string betweenOperator = "|";
+
+            const string originalText = "2|3|";
             builder.Symbols[FilterOperator.Between] = betweenOperator;
 
             var filter = builder.Integer("name", originalText);

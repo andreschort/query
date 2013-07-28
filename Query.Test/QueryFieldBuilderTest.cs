@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,7 +40,34 @@ namespace Query.Test
             
             Assert.AreEqual("Campo", builder.Instance.Name);
             Assert.AreEqual(typeof(string), builder.Instance.Select.ReturnType);
-            Assert.AreEqual(typeof(string), builder.Instance.Where);
+            Assert.AreEqual(1, builder.Instance.Where.Count);
+            Assert.AreEqual(typeof(string), builder.Instance.Where[0].ReturnType);
+        }
+
+        [TestMethod]
+        public void WhereAfterSelect()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create("Campo").Select(x => x.EstadoCivil).Where(x => x.EstadoCivil_Id);
+            
+            Assert.AreEqual("Campo", builder.Instance.Name);
+            Assert.AreEqual(typeof(EstadoCivil), builder.Instance.Select.ReturnType);
+            Assert.AreEqual(1, builder.Instance.Where.Count);
+            Assert.AreEqual(typeof(int), builder.Instance.Where[0].ReturnType);
+        }
+
+        [TestMethod]
+        public void WhereBeforeSelect()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create("Campo").Where(x => x.EstadoCivil_Id).Select(x => x.EstadoCivil);
+            
+            Assert.AreEqual("Campo", builder.Instance.Name);
+            Assert.AreEqual(typeof(EstadoCivil), builder.Instance.Select.ReturnType);
+            Assert.AreEqual(1, builder.Instance.Where.Count);
+            Assert.AreEqual(typeof(int), builder.Instance.Where[0].ReturnType);
         }
     }
 }
