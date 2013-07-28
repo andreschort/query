@@ -10,7 +10,7 @@ namespace Query.Test
         [TestMethod]
         public void TextEmptyIsNotValid()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             var filter = builder.Text("name", string.Empty);
 
@@ -24,7 +24,7 @@ namespace Query.Test
         [TestMethod]
         public void TextDefaultStartsWith()
         {
-            FilterBuilder builder = new FilterBuilder
+            var builder = new FilterBuilder
                 {
                     MissingWildcardBehavior = FilterOperator.StartsWith
                 };
@@ -41,7 +41,7 @@ namespace Query.Test
         [TestMethod]
         public void TextStartsWith()
         {
-            FilterBuilder builder = new FilterBuilder {Wildcard = "%"};
+            var builder = new FilterBuilder { Wildcard = "%" };
 
             var filter = builder.Text("name", "value%");
 
@@ -55,7 +55,7 @@ namespace Query.Test
         [TestMethod]
         public void TextEndsWith()
         {
-            FilterBuilder builder = new FilterBuilder { Wildcard = "%" };
+            var builder = new FilterBuilder { Wildcard = "%" };
 
             var filter = builder.Text("name", "%value");
 
@@ -69,7 +69,7 @@ namespace Query.Test
         [TestMethod]
         public void BooleanTrue()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             var filter = builder.Boolean("name", true.ToString());
 
@@ -83,7 +83,7 @@ namespace Query.Test
         [TestMethod]
         public void BooleanFalse()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             var filter = builder.Boolean("name", false.ToString());
 
@@ -97,7 +97,7 @@ namespace Query.Test
         [TestMethod]
         public void BooleanInvalid()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             var filter = builder.Boolean("name", "not_a_valid_bool_value");
 
@@ -111,7 +111,7 @@ namespace Query.Test
         [TestMethod]
         public void DateEmpty()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             const char separator = ';';
             var value = string.Empty;
@@ -128,10 +128,10 @@ namespace Query.Test
         [TestMethod]
         public void DateSeparatorOnly()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             const char separator = ';';
-            string value = separator.ToString();
+            var value = separator.ToString();
 
             var filter = builder.Date("name", value, separator);
 
@@ -146,9 +146,9 @@ namespace Query.Test
         [TestMethod]
         public void DateFrom()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
-            DateTime from = DateTime.Today;
+            var from = DateTime.Today;
 
             const char separator = ';';
             var fromStr = @from.ToString(CultureInfo.InvariantCulture);
@@ -166,9 +166,9 @@ namespace Query.Test
         [TestMethod]
         public void DateTo()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
-            DateTime to = DateTime.Today;
+            var to = DateTime.Today;
 
             const char separator = ';';
             var toStr = to.ToString(CultureInfo.InvariantCulture);
@@ -186,10 +186,10 @@ namespace Query.Test
         [TestMethod]
         public void DateBetween()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
-            DateTime from = DateTime.Today;
-            DateTime to = DateTime.Today;
+            var from = DateTime.Today;
+            var to = DateTime.Today;
 
             var fromStr = @from.ToString(CultureInfo.InvariantCulture);
             var toStr = to.ToString(CultureInfo.InvariantCulture);
@@ -208,7 +208,7 @@ namespace Query.Test
         [TestMethod]
         public void DateInvalid()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             const char separator = ';';
             const string value = "wefwef";
@@ -225,7 +225,7 @@ namespace Query.Test
         [TestMethod]
         public void ListDefault()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             const string defaultValue = "default";
             const string value = defaultValue;
@@ -240,7 +240,7 @@ namespace Query.Test
         [TestMethod]
         public void List()
         {
-            FilterBuilder builder = new FilterBuilder();
+            var builder = new FilterBuilder();
 
             const string value = "value";
             var filter = builder.List("name", value, "default");
@@ -250,5 +250,252 @@ namespace Query.Test
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
         }
+
+        #region Integer
+
+        [TestMethod]
+        public void IntegerInvalid()
+        {
+            var builder = new FilterBuilder();
+
+            const string value = "aaf";
+            var filter = builder.Integer("name", value);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+            Assert.AreEqual(null, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerNoOperator()
+        {
+            var builder = new FilterBuilder();
+
+            const string value = "2";
+            var filter = builder.Integer("name", value);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
+            Assert.AreEqual(int.Parse(value), filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerEqualOperator()
+        {
+            var builder = new FilterBuilder();
+            const string equalOperator = "=";
+            const int value = 2;
+            
+            var originalText = equalOperator + value;
+            builder.Symbols[FilterOperator.Equal] = equalOperator;
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerNotEqualOperator()
+        {
+            var builder = new FilterBuilder();
+            const string notEqualOperator = "!=";
+            const int value = 2;
+            var originalText = notEqualOperator + value;
+
+            builder.Symbols[FilterOperator.NotEqual] = notEqualOperator;
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.NotEqual, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerGreaterThanEqualOperator()
+        {
+            var builder = new FilterBuilder();
+            const string greaterThanEqualOperator = ">=";
+            const int value = 2;
+            var originalText = greaterThanEqualOperator + value;
+            builder.Symbols[FilterOperator.GreaterThanEqual] = greaterThanEqualOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.GreaterThanEqual, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerLessThanEqualOperator()
+        {
+            var builder = new FilterBuilder();
+            const string lessThanEqualOperator = "<=";
+            const int value = 2;
+            var originalText = lessThanEqualOperator + value;
+            builder.Symbols[FilterOperator.LessThanEqual] = lessThanEqualOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.LessThanEqual, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerGreaterThanOperator()
+        {
+            var builder = new FilterBuilder();
+            const string greaterThanOperator = ">";
+            const int value = 2;
+            var originalText = greaterThanOperator + value;
+            builder.Symbols[FilterOperator.GreaterThan] = greaterThanOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.GreaterThan, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerLessThanOperator()
+        {
+            var builder = new FilterBuilder();
+            const string lessThanOperator = "<";
+            const int value = 2;
+            var originalText = lessThanOperator + value;
+            builder.Symbols[FilterOperator.LessThan] = lessThanOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.LessThan, filter.Operator);
+            Assert.AreEqual(value, filter.Value);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperator()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "|";
+            const int leftValue = 1;
+            const int rightValue = 2;
+            var originalText = leftValue + betweenOperator + rightValue;
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(true, filter.Valid);
+            Assert.AreEqual(FilterOperator.Between, filter.Operator);
+            Assert.AreEqual(leftValue, filter.Values[0]);
+            Assert.AreEqual(rightValue, filter.Values[1]);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperatorNoNumbers()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "|";
+            const string originalText = betweenOperator;
+
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperatorLeftLetters()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "d|";
+            const string originalText = betweenOperator;
+
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperatorTwoTimes()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "3||5";
+            const string originalText = betweenOperator;
+
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperatorOnlyLeft()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "|";
+            const int leftValue = 1;
+            var originalText = leftValue + betweenOperator;
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        [TestMethod]
+        public void IntegerBetweenOperatorOnlyRight()
+        {
+            var builder = new FilterBuilder();
+            const string betweenOperator = "|";
+            const int rightValue = 1;
+            var originalText = betweenOperator + rightValue;
+            builder.Symbols[FilterOperator.Between] = betweenOperator;
+
+            var filter = builder.Integer("name", originalText);
+
+            Assert.AreEqual("name", filter.Name);
+            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(false, filter.Valid);
+            Assert.AreEqual(FilterOperator.None, filter.Operator);
+        }
+
+        #endregion Integer
     }
 }

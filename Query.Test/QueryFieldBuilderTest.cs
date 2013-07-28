@@ -40,7 +40,6 @@ namespace Query.Test
             Assert.AreEqual("Campo", builder.Instance.Name);
             Assert.AreEqual(typeof(string), builder.Instance.Select.ReturnType);
             Assert.AreEqual(typeof(string), builder.Instance.Where);
-            Assert.AreEqual(typeof(string), builder.Instance.OrderBy);
         }
     }
 }

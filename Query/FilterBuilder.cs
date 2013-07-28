@@ -13,6 +13,9 @@ namespace Query
 
         private const FilterOperator DefaultMissingWildcardBehavior = FilterOperator.StartsWith;
 
+        /// <summary>
+        /// The default symbols for each operator. The order matters because of the lame implementation of GetOperator
+        /// </summary>
         private static readonly Dictionary<FilterOperator, string> DefaultSymbols = new Dictionary<FilterOperator, string>
             {
                 { FilterOperator.NotEqual, "!=" },
@@ -181,6 +184,47 @@ namespace Query
             }
 
             return filter;
+        }
+
+        public Filter Integer(string name, string value)
+        {
+            var filter = new Filter {Name = name, OriginalText = value, Operator = GetOperator(value)};
+
+            if (filter.Operator.Equals(FilterOperator.None))
+            {
+                filter.Operator = FilterOperator.Equal;
+            }
+
+            var parts = value.Split(new[] { this.Symbols[filter.Operator] }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Any())
+            {
+                filter.Values.Add(StringUtil.ToIntNullable(parts[0]));
+            }
+
+            if (parts.Count() > 1)
+            {
+                filter.Values.Add(StringUtil.ToInt(parts[1]));
+            }
+
+            filter.Valid = filter.Value != null;
+
+            if (filter.Operator.Equals(FilterOperator.Between))
+            {
+                filter.Valid = filter.Values.Count == 2 && filter.Values[0] != null && filter.Values[1] != null;
+            }
+
+            if (!filter.Valid)
+            {
+                filter.Operator = FilterOperator.None;
+            }
+
+            return filter;
+        }
+
+        private FilterOperator GetOperator(string value)
+        {
+            return this.Symbols.Keys.FirstOrDefault(x => value.Contains(Symbols[x]));
         }
     }
 }
