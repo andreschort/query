@@ -266,13 +266,13 @@ namespace Query
                 case FilterType.Decimal:
                     return this.Decimal(field.Name, value);
                 case FilterType.Date:
-                    return this.Date(field.Name, value, ';');
+                    return this.Date(field.Name, value, ';'); //TODO separator
 
                 case FilterType.Boolean:
                     return this.Boolean(field.Name, value);
 
                 case FilterType.List:
-                    return this.List(field.Name, value, "-1"); //TODO defaultValue & enumType
+                    return this.List(field.Name, value, "-1"); //TODO defaultValue
 
                 default:
                     return null;

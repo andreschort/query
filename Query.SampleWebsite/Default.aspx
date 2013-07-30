@@ -18,6 +18,12 @@
     </section>
 </asp:Content>
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
+    
+    <style>
+        table { width:960px; }
+        th input { width: 90%; }
+    </style>
+
     <h3>We suggest the following:</h3>
         <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
                         OnFilter="GridExtender_Filter" />
@@ -27,6 +33,8 @@
             <query:TextField Name="Apellido" HeaderText="Apellido" DataField="Apellido" />
             <query:TextField Name="Dni" HeaderText="Dni" DataField="Dni" />
             <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" />
+            <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" />
+            <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
         </Columns>
     </asp:GridView>
     

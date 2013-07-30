@@ -15,12 +15,19 @@ namespace Query
         public QueryFieldBuilder<T> Create(string name)
         {
             this.Instance = new QueryField<T> {Name = name};
+            
+            this.withManualFilterType = false;
+            this.withManualWhere = false;
+            
             return this;
         }
 
         public QueryFieldBuilder<T> Create<E>(Expression<Func<T, E>> select)
         {
             this.Instance = new QueryField<T> {Name = @select.GetPropertyInfo().Name};
+
+            this.withManualFilterType = false;
+            this.withManualWhere = false;
 
             return this.Select(select);
         }

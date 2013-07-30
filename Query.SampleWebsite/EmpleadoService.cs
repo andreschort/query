@@ -19,7 +19,7 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
             query.Fields.Add(
                 fieldBuilder.Create("EstadoCivil")
-                            .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero)
+                            .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero) // When using EntityFramework without enum support
                                              ? "Soltero"
                                              : x.EstadoCivil_Id.Equals((int) EstadoCivil.Casado)
                                                    ? "Casado"
@@ -34,11 +34,14 @@ namespace Query.SampleWebSite
                             .Where(x => x.EstadoCivil_Id)
                             .Instance);
 
+            query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
+            query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
+
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero},
+                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, Edad = 29, Salario = 150.33m},
+                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, Edad = 35, Salario = 200.94m},
+                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, Edad = 24, Salario = 300.44m},
                 };
 
             return query.Apply(empleados.AsQueryable(), values).ToDataTable();

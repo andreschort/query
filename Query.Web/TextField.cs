@@ -60,6 +60,7 @@ namespace Query.Web
 
             this.textBox.Attributes["class"] = "data-query-textFilter";
             this.textBox.AutoCompleteType = AutoCompleteType.Disabled;
+            textBox.Attributes["autocomplete"] = "off";
             this.textBox.Attributes["data-query-placeholder"] = this.FilterPlaceholder;
 
             if (this.AutoFilterDelay.HasValue)

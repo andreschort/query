@@ -1,4 +1,6 @@
-﻿namespace Query.SampleModel
+﻿using System;
+
+namespace Query.SampleModel
 {
     public class Empleado
     {
@@ -7,6 +9,12 @@
         public string Apellido { get; set; }
 
         public int Dni { get; set; }
+
+        public int Edad { get; set; }
+
+        public DateTime FechaNacimiento { get; set; }
+
+        public decimal Salario { get; set; }
 
         public int EstadoCivil_Id { get; set; }
 
