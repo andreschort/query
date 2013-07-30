@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Extension\ExpressionExtensions.cs" />
     <Compile Include="Extension\MemberInfoExtensions.cs" />
-    <Compile Include="Extension\IEnumerableExtensions.cs" />
+    <Compile Include="Extension\IQueryableExtensions.cs" />
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ExpressionBuilder.cs" />

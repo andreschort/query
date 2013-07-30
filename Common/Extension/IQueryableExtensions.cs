@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Common.Extension
 {
-    public static class IEnumerableExtensions
+    public static class IQueryableExtensions
     {
         public static DataTable ToDataTable(this IQueryable list)
         {
