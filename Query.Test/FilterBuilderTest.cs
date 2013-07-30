@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Query.SampleModel;
 
 namespace Query.Test
 {
@@ -247,20 +248,22 @@ namespace Query.Test
 
             Assert.AreEqual("name", filter.Name);
             Assert.IsFalse(filter.Valid);
+            Assert.IsNull(filter.Value);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
         }
 
         [TestMethod]
-        public void List()
+        public void ListInteger()
         {
             var builder = new FilterBuilder();
 
-            const string value = "value";
+            const string value = "1";
             var filter = builder.List("name", value, "default");
 
             Assert.AreEqual("name", filter.Name);
             Assert.IsTrue(filter.Valid);
+            Assert.AreEqual(1, filter.Value);
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
         }

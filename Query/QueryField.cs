@@ -9,9 +9,9 @@ namespace Query
 {
     public class QueryField<T>
     {
-        #region Published Properties
-
         public string Name { get; set; }
+
+        public FilterType FilterType { get; set; }
 
         public LambdaExpression Select { get; set; }
 
@@ -34,8 +34,6 @@ namespace Query
             this.Where = new List<LambdaExpression>();
         }
 
-        #endregion Published Properties
-        
         public IQueryable<T> Filter(IQueryable<T> query, Filter filter)
         {
             if (!filter.Valid)

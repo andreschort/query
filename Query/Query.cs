@@ -15,6 +15,21 @@ namespace Query
 
         public List<QueryField<T>> Fields { get; set; }
 
+        public IQueryable Apply(IQueryable<T> query, Dictionary<string, string> values)
+        {
+            FilterBuilder filterBuilder = new FilterBuilder();
+            var filters = from value in values
+                          let field = this.Fields.Find(x => x.Name.Equals(value.Key))
+                          select filterBuilder.Create(field, value.Value);
+
+            return this.Apply(query, filters);
+        }
+
+        public IQueryable Apply(IQueryable<T> query, IEnumerable<Filter> filters)
+        {
+            return this.Project(this.Filter(query, filters));
+        }
+
         /// <summary>
         /// Create a select new {} expression and apply it to queryable.
         /// </summary>
@@ -52,7 +67,7 @@ namespace Query
                                                                   Expression.Constant(queryable), selector));
         }
 
-        public IQueryable<T> Filter(IQueryable<T> query, List<Filter> filters)
+        public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)
         {
             return filters.Aggregate(query, this.Filter);
         }

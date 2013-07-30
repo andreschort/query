@@ -166,11 +166,7 @@ namespace Query
             return filter;
         }
 
-        public Filter List(
-            string name,
-            string value,
-            string defaultValue,
-            Type enumType = null)
+        public Filter List(string name, string value, string defaultValue)
         {
             var filter = new Filter {Name = name, OriginalText = value};
 
@@ -181,6 +177,7 @@ namespace Query
             if (filter.Valid)
             {
                 filter.Operator = FilterOperator.Equal;
+                filter.Values.Add(StringUtil.ToInt(text));
             }
 
             return filter;
@@ -256,6 +253,30 @@ namespace Query
             }
 
             return filter;
+        }
+
+        public Filter Create<T>(QueryField<T> field, string value)
+        {
+            switch (field.FilterType)
+            {
+                case FilterType.Text:
+                    return this.Text(field.Name, value);
+                case FilterType.Integer:
+                    return this.Integer(field.Name, value);
+                case FilterType.Decimal:
+                    return this.Decimal(field.Name, value);
+                case FilterType.Date:
+                    return this.Date(field.Name, value, ';');
+
+                case FilterType.Boolean:
+                    return this.Boolean(field.Name, value);
+
+                case FilterType.List:
+                    return this.List(field.Name, value, "-1"); //TODO defaultValue & enumType
+
+                default:
+                    return null;
+            }
         }
 
         private FilterOperator GetOperator(string value)

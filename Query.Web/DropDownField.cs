@@ -57,6 +57,11 @@ namespace Query.Web
             this.dropDownList.AutoPostBack = true;
             this.dropDownList.SelectedIndexChanged += this.DropDownList_SelectedIndexChanged;
 
+            if (this.TabIndex.HasValue)
+            {
+                this.dropDownList.TabIndex = this.TabIndex.Value;
+            }
+
             // Filter button
             this.button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
             cell.Controls.Add(this.button);
