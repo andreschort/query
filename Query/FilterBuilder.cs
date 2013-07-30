@@ -204,7 +204,43 @@ namespace Query
 
             if (parts.Count() > 1)
             {
-                filter.Values.Add(StringUtil.ToInt(parts[1]));
+                filter.Values.Add(StringUtil.ToIntNullable(parts[1]));
+            }
+
+            filter.Valid = filter.Value != null;
+
+            if (filter.Operator.Equals(FilterOperator.Between))
+            {
+                filter.Valid = filter.Values.Count == 2 && filter.Values[0] != null && filter.Values[1] != null;
+            }
+
+            if (!filter.Valid)
+            {
+                filter.Operator = FilterOperator.None;
+            }
+
+            return filter;
+        }
+
+        public Filter Decimal(string name, string value)
+        {
+            Filter filter = new Filter {Name = name, OriginalText = value, Operator = GetOperator(value)};
+
+            if (filter.Operator.Equals(FilterOperator.None))
+            {
+                filter.Operator = FilterOperator.Equal;
+            }
+
+            var parts = value.Split(new[] { this.Symbols[filter.Operator] }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Any())
+            {
+                filter.Values.Add(StringUtil.ToDecimalNullable(parts[0]));
+            }
+
+            if (parts.Count() > 1)
+            {
+                filter.Values.Add(StringUtil.ToDecimalNullable(parts[1]));
             }
 
             filter.Valid = filter.Value != null;
