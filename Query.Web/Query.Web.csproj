@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateField.cs" />
     <Compile Include="DropDownField.cs" />
     <Compile Include="GridExtender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

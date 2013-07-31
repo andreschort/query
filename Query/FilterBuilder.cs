@@ -147,20 +147,21 @@ namespace Query
 
             filter.Valid = from.HasValue || to.HasValue;
 
-            filter.Values.Add(from);
-            filter.Values.Add(to);
-
             if (from.HasValue && to.HasValue)
             {
                 filter.Operator = FilterOperator.Between;
+                filter.Values.Add(from);
+                filter.Values.Add(to);
             }
             else if (from.HasValue)
             {
                 filter.Operator = FilterOperator.GreaterThanEqual;
+                filter.Values.Add(from);
             }
             else if (to.HasValue)
             {
                 filter.Operator = FilterOperator.LessThanEqual;
+                filter.Values.Add(to);
             }
 
             return filter;

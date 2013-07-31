@@ -79,3 +79,7 @@ var delay = (function () {
         timer = setTimeout(callback, ms);
     };
 })();
+
+function initDateFilter($element) {
+    $element.datepicker();
+}

@@ -35,6 +35,7 @@
             <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" />
             <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" />
             <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
+            <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" />
         </Columns>
     </asp:GridView>
     

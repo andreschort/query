@@ -63,6 +63,9 @@ namespace Query.Web
                                 $('.data-query-textFilter').each(function (index, element) {
                                     initTextFilter($(this));
                                 });
+                                $('.data-query-datepicker').each(function (index, element) {
+                                    initDateFilter($(this));
+                                });
                             });";
             JSUtil.AddLoad(this, "GridExtender", javascript);
         }
@@ -76,7 +79,7 @@ namespace Query.Web
                 field.AutoFilterDelay = this.AutoFilterDelay;
                 field.FilterCommand = FilterCommand;
                 field.SortCommand = SortCommand;
-                field.TabIndex = tabIndex++;
+                tabIndex = field.SetTabIndex(tabIndex);
             }
         }
 

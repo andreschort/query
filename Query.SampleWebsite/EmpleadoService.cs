@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Common.Extension;
@@ -17,6 +18,7 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
+            query.Fields.Add(fieldBuilder.Create(x => x.FechaNacimiento).Instance);
             query.Fields.Add(
                 fieldBuilder.Create("EstadoCivil")
                             .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero) // When using EntityFramework without enum support
@@ -39,9 +41,9 @@ namespace Query.SampleWebSite
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, Edad = 29, Salario = 150.33m},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, Edad = 35, Salario = 200.94m},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, Edad = 24, Salario = 300.44m},
+                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, Edad = 29, Salario = 150.33m, FechaNacimiento = DateTime.Today},
+                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, Edad = 35, Salario = 200.94m, FechaNacimiento = DateTime.Today.AddDays(1)},
+                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, Edad = 24, Salario = 300.44m, FechaNacimiento = DateTime.Today.AddDays(2)},
                 };
 
             return query.Apply(empleados.AsQueryable(), values).ToDataTable();

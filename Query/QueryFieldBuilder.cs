@@ -102,6 +102,11 @@ namespace Query
                 return FilterType.Decimal;
             }
 
+            if (type == typeof (DateTime))
+            {
+                return FilterType.Date;
+            }
+
             return FilterType.List;
         }
     }

@@ -34,11 +34,6 @@ namespace Query.Web
             return new DropDownField();
         }
 
-        protected override void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
-        {
-            
-        }
-
         protected override void InitHeaderCell(DataControlFieldCell cell)
         {
             // title with sorting

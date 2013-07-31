@@ -41,7 +41,7 @@ namespace Query
                 return query;
             }
 
-            if (this.When.ContainsKey(filter.Value))
+            if (filter.Values.Any(value => value != null && this.When.ContainsKey(value)))
             {
                 return query.Where(this.When[filter.Value]);
             }
