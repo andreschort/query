@@ -29,6 +29,7 @@ QueryFieldWhereBuilder
 fieldBuilder.Create(x => x.FechaNacimiento).Where().TruncateTime()
 -------------------------------------------------------------------------------------------------------------------
 
+[DONE]
 Facilidad para reducir este codigo
             query.Fields.Add(
                 fieldBuilder.Create("EstadoCivil")

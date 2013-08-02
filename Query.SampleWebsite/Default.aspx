@@ -26,10 +26,11 @@
 
     <h3>We suggest the following:</h3>
         <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
-                        OnFilter="GridExtender_Filter" />
+                            OnFilter="GridExtender_Filter" />
     <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
         <Columns>
-            <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre" />
+            <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
+                             UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Apellido" HeaderText="Apellido" DataField="Apellido" />
             <query:TextField Name="Dni" HeaderText="Dni" DataField="Dni" />
             <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" />

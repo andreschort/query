@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -23,6 +25,11 @@ namespace Query.Web
         public string FilterCommand { get; set; }
         public string SortCommand { get; set; }
 
+        [TypeConverterAttribute(typeof(StringArrayConverter))]
+        public string[] UrlFields { get; set; }
+
+        public string UrlFormat { get; set; }
+
         public override void InitializeCell(
             DataControlFieldCell cell,
             DataControlCellType cellType,
@@ -43,6 +50,12 @@ namespace Query.Web
             }
         }
 
+        public virtual short SetTabIndex(short tabIndex)
+        {
+            this.TabIndex = tabIndex;
+            return (short)(tabIndex + 1);
+        }
+
         protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
             // Override if you want to do something before the cell's databinding
@@ -61,10 +74,24 @@ namespace Query.Web
             TableCell cell = sender as TableCell;
             object dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
-            var view = dataItem as DataRowView;
-            cell.Text = view == null
-                            ? DataBinder.GetPropertyValue(dataItem, this.DataField, null)
-                            : view.Row[this.DataField].ToString();
+            var displayValue = this.Eval(dataItem, this.DataField).ToString();
+
+            if (string.IsNullOrEmpty(this.UrlFormat))
+            {
+                cell.Text = displayValue;
+            }
+            else
+            {
+                var linkButton = new HyperLink();
+                cell.Controls.Add(linkButton);
+                linkButton.Text = displayValue;
+
+                linkButton.NavigateUrl = this.UrlFields == null
+                                             ? this.UrlFormat
+                                             : string.Format(this.UrlFormat,
+                                                             this.UrlFields.Select(x => this.Eval(dataItem, x))
+                                                                 .ToArray());
+            }
         }
 
         protected bool HasFocus(string uniqueID)
@@ -74,10 +101,12 @@ namespace Query.Web
             return uniqueID.Equals(lastFocus);
         }
 
-        public virtual short SetTabIndex(short tabIndex)
+        private object Eval(object dataItem, string dataField)
         {
-            this.TabIndex = tabIndex;
-            return (short) (tabIndex+1);
+            var view = dataItem as DataRowView;
+            return view == null
+                       ? DataBinder.GetPropertyValue(dataItem, dataField, null)
+                       : view.Row[dataField].ToString();
         }
     }
 }

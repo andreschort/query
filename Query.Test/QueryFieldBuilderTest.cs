@@ -89,8 +89,7 @@ namespace Query.Test
 
             builder.Create(x => x.EstadoCivil_Id).SelectElse("Separado");
 
-            Assert.AreEqual(1, builder.Instance.SelectWhen.Count);
-            Assert.AreEqual("Separado", builder.Instance.SelectWhen[EstadoCivil.Separado]);
+            Assert.AreEqual("Separado", builder.Instance.SelectElse);
         }
     }
 }
