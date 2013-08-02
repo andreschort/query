@@ -69,5 +69,28 @@ namespace Query.Test
             Assert.AreEqual(typeof(int), builder.Instance.Where[0].ReturnType);
             Assert.AreEqual(FilterType.Integer, builder.Instance.FilterType);
         }
+
+        [TestMethod]
+        public void SelectWhen()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create(x => x.EstadoCivil_Id)
+                   .SelectWhen(EstadoCivil.Separado, "Separado");
+
+            Assert.AreEqual(1, builder.Instance.SelectWhen.Count);
+            Assert.AreEqual("Separado", builder.Instance.SelectWhen[EstadoCivil.Separado]);
+        }
+
+        [TestMethod]
+        public void SelectElse()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create(x => x.EstadoCivil_Id).SelectElse("Separado");
+
+            Assert.AreEqual(1, builder.Instance.SelectWhen.Count);
+            Assert.AreEqual("Separado", builder.Instance.SelectWhen[EstadoCivil.Separado]);
+        }
     }
 }

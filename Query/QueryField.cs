@@ -15,6 +15,10 @@ namespace Query
 
         public LambdaExpression Select { get; set; }
 
+        public Dictionary<object, object> SelectWhen { get; set; }
+
+        public object SelectElse { get; set; }
+
         /// <summary>
         /// Key: Filter value
         /// Value: Expression to apply as a filter to the IQueryable
@@ -32,6 +36,7 @@ namespace Query
         {
             this.When = new Dictionary<object, Expression<Func<T, bool>>>();
             this.Where = new List<LambdaExpression>();
+            this.SelectWhen = new Dictionary<object, object>();
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, Filter filter)

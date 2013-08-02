@@ -37,22 +37,26 @@ namespace Query
         /// <returns></returns>
         public IQueryable Project(IQueryable<T> queryable)
         {
-            var propertyInfos = this.Fields.ToDictionary(x => x.Name, y => y.Select.ReturnType);
+            var propertyInfos = this.Fields.ToDictionary(x => x.Name, y => y.SelectElse == null ? y.Select.ReturnType : y.SelectElse.GetType());
             var dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(propertyInfos);
-            var selectExpressions = this.Fields.ToDictionary(x => x.Name, x => x.Select);
 
             ParameterExpression parameter = Expression.Parameter(queryable.ElementType, "t");
             var bindings = dynamicType.GetFields()
                                       .Select(field =>
                                           {
+                                              var queryField = this.Fields.First(x => x.Name.Equals(field.Name));
+
                                               // Replace original parameter with our new parameter
-                                              var originalParameter = selectExpressions[field.Name].Parameters[0];
-                                              var expression =
-                                                  selectExpressions[field.Name].Body.Replace(originalParameter,
-                                                                                             parameter);
+                                              var originalParameter = queryField.Select.Parameters[0];
+                                              var expression = queryField.Select.Body.Replace(originalParameter, parameter);
 
                                               // Ensure the expression return type and the field type match
                                               //expression = Expression.Convert(expression, field.FieldType);
+
+                                              if (queryField.SelectElse != null)
+                                              {
+                                                  expression = this.CreateSelectWhen(expression, queryField);
+                                              }
 
                                               // Bind field with expression
                                               return Expression.Bind(field, expression);
@@ -65,6 +69,22 @@ namespace Query
             return queryable.Provider.CreateQuery(Expression.Call(typeof (Queryable), "Select",
                                                                   new[] {queryable.ElementType, dynamicType},
                                                                   Expression.Constant(queryable), selector));
+        }
+
+        private Expression CreateSelectWhen(Expression target, QueryField<T> field)
+        {
+            if (!field.SelectWhen.Any())
+            {
+                return Expression.Constant(field.SelectElse);
+            }
+
+            var keyValuePair = field.SelectWhen.ElementAt(0);
+            field.SelectWhen.Remove(keyValuePair.Key);
+
+            return Expression.Condition(
+                Expression.Equal(target, Expression.Constant(keyValuePair.Key)),
+                Expression.Constant(keyValuePair.Value),
+                this.CreateSelectWhen(target, field));
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)

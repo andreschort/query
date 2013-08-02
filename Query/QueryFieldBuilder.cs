@@ -46,6 +46,18 @@ namespace Query
             return this;
         }
 
+        public QueryFieldBuilder<T> SelectWhen(object value, object result)
+        {
+            this.Instance.SelectWhen.Add(value, result);
+            return this;
+        }
+
+        public QueryFieldBuilder<T> SelectElse(object selectElse)
+        {
+            this.Instance.SelectElse = selectElse;
+            return this;
+        }
+
         public QueryFieldBuilder<T> Where<E>(Expression<Func<T, E>> where)
         {
             if (!this.withManualWhere)

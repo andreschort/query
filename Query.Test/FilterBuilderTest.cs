@@ -129,8 +129,7 @@ namespace Query.Test
             var filter = builder.Date("name", value, separator);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(null, filter.Values[0]);
-            Assert.AreEqual(null, filter.Values[1]);
+            Assert.AreEqual(0, filter.Values.Count);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
@@ -147,8 +146,7 @@ namespace Query.Test
             var filter = builder.Date("name", value, separator);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(null, filter.Values[0]);
-            Assert.AreEqual(null, filter.Values[1]);
+            Assert.AreEqual(0, filter.Values.Count);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
@@ -168,7 +166,6 @@ namespace Query.Test
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(from, filter.Values[0]);
-            Assert.AreEqual(null, filter.Values[1]);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.GreaterThanEqual, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
@@ -187,8 +184,7 @@ namespace Query.Test
             var filter = builder.Date("name", value, separator);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(null, filter.Values[0]);
-            Assert.AreEqual(to, filter.Values[1]);
+            Assert.AreEqual(to, filter.Values[0]);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.LessThanEqual, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);
@@ -226,8 +222,7 @@ namespace Query.Test
             var filter = builder.Date("name", value, separator);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(null, filter.Values[0]);
-            Assert.AreEqual(null, filter.Values[1]);
+            Assert.AreEqual(0, filter.Values.Count);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(value, filter.OriginalText);

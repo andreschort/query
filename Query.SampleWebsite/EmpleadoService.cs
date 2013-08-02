@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Objects;
 using System.Linq;
 using Common.Extension;
 using Query.SampleModel;
@@ -20,22 +19,16 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
             query.Fields.Add(fieldBuilder.Create("FechaNacimiento").Select(x => x.FechaNacimiento.Date).Instance);
-            query.Fields.Add(
-                fieldBuilder.Create("EstadoCivil")
-                            .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero) // When using EntityFramework without enum support
-                                             ? "Soltero"
-                                             : x.EstadoCivil_Id.Equals((int) EstadoCivil.Casado)
-                                                   ? "Casado"
-                                                   : x.EstadoCivil_Id.Equals((int) EstadoCivil.Separado)
-                                                         ? "Separado"
-                                                         : x.EstadoCivil_Id.Equals((int) EstadoCivil.Divorciado)
-                                                               ? "Divorciado"
-                                                               : x.EstadoCivil_Id.Equals((int) EstadoCivil.Viudo)
-                                                                     ? "Viudo"
-                                                                     : string.Empty)
-                            .FilterAs(FilterType.List)
-                            .Where(x => x.EstadoCivil_Id)
-                            .Instance);
+            query.Fields.Add(fieldBuilder.Create("EstadoCivil")
+                .FilterAs(FilterType.List)
+                .Select(x => x.EstadoCivil_Id)
+                .SelectWhen((int)EstadoCivil.Soltero, "Soltero")
+                .SelectWhen((int)EstadoCivil.Casado, "Casado")
+                .SelectWhen((int)EstadoCivil.Separado, "Separado")
+                .SelectWhen((int)EstadoCivil.Divorciado, "Divorciado")
+                .SelectWhen((int)EstadoCivil.Viudo, "Viudo")
+                .SelectElse(string.Empty)
+                .Instance);
 
             query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
