@@ -84,10 +84,22 @@ var delay = (function () {
 
 function initDateFilter($element) {
     initTextFilter($element);
+    
+    var focus = $element.attr('data-query-focus');
+    focus = focus ? focus.toLowerCase() : 'false';
     $element.datepicker({
         onSelect: function () {
             document.getElementById('__LASTFOCUS').value = this.name;
             __doPostBack($(this).attr('data-query-postbackName'), '');
+        },
+        beforeShow: function (input, inst) {
+            // FIX IE: Do not show datepicker dialog after postback from this filter
+            if (focus == 'true') {
+                focus = 'false';
+                return false;
+            }
+
+            return focus;
         }
     });
 }
