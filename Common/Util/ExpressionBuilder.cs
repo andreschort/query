@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Objects;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -115,6 +116,14 @@ namespace Common.Util
             return new ExpressionBuilder(this.Param, this.Expression = exp);
         }
 
+        public ExpressionBuilder TruncateTime()
+        {
+            var exp = Expression.Call(typeof (EntityFunctions).GetMethod("TruncateTime", new[] {typeof (DateTime?)}),
+                                      Expression.Convert(this.Expression, typeof (DateTime?)));
+
+            return new ExpressionBuilder(this.Param, exp);
+        }
+
         public ExpressionBuilder Convert<T>()
         {
             return new ExpressionBuilder(this.Param, Expression.Convert(this.Expression, typeof(T)));
@@ -216,6 +225,11 @@ namespace Common.Util
         public Expression<Func<T, E>> Lambda<T, E>(Expression body)
         {
             return Expression.Lambda<Func<T, E>>(body, this.Param);
+        }
+
+        public LambdaExpression Lambda()
+        {
+            return Expression.Lambda(this.Expression, this.Param);
         }
 
         private static MemberExpression BuildPropertyExpression(ParameterExpression param, string propertyName)

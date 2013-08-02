@@ -34,7 +34,8 @@ function initTextFilter($element) {
     $element.attr("data-query-value", currentVal);
     
     // Restore focus
-    if (focus) {
+    focus = focus ? focus.toLowerCase() : 'false';
+    if (focus == 'true') {
         setFocus($element[0]);
     }
 
@@ -44,6 +45,7 @@ function initTextFilter($element) {
         e = (window.event) ? event : e;
         theKey = (e.keyCode) ? e.keyCode : e.charCode;
 
+        document.getElementById('__LASTFOCUS').value = this.name;
         if (theKey == "13") { // 13 ENTER key
             __doPostBack(postbackName, '');
         }
@@ -81,5 +83,25 @@ var delay = (function () {
 })();
 
 function initDateFilter($element) {
-    $element.datepicker();
+    initTextFilter($element);
+    $element.datepicker({
+        onSelect: function () {
+            document.getElementById('__LASTFOCUS').value = this.name;
+            __doPostBack($(this).attr('data-query-postbackName'), '');
+        }
+    });
+}
+
+function initDropDownFilter($element) {
+    var focus = $element.attr('data-query-focus');
+    // Restore focus
+    focus = focus ? focus.toLowerCase() : 'false';
+    if (focus == 'true') {
+        $element[0].focus();
+    }
+    
+    $element.change(function() {
+        document.getElementById('__LASTFOCUS').value = this.name;
+        __doPostBack($(this).attr('data-query-postbackName'), '');
+    });
 }

@@ -48,9 +48,8 @@ namespace Query.Web
 
             this.dropDownList = new DropDownList();
             cell.Controls.Add(this.dropDownList);
-
-            this.dropDownList.AutoPostBack = true;
-            this.dropDownList.SelectedIndexChanged += this.DropDownList_SelectedIndexChanged;
+            
+            this.dropDownList.Attributes["class"] = "data-query-dropdown";
 
             if (this.TabIndex.HasValue)
             {
@@ -60,11 +59,6 @@ namespace Query.Web
             // Filter button
             this.button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
             cell.Controls.Add(this.button);
-        }
-
-        private void DropDownList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ((IPostBackEventHandler) this.button).RaisePostBackEvent(null);
         }
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
@@ -85,6 +79,12 @@ namespace Query.Web
             {
                 this.dropDownList.SelectedValue = this.externalValue;
             }
+
+            // postback configuration, must be here to ensure UniqueID is not null
+            this.dropDownList.Attributes["data-query-postbackName"] = this.button.UniqueID;
+
+            // restore focus
+            this.dropDownList.Attributes["data-query-focus"] = this.HasFocus(this.dropDownList.UniqueID).ToString();
         }
     }
 }

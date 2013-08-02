@@ -150,18 +150,18 @@ namespace Query
             if (from.HasValue && to.HasValue)
             {
                 filter.Operator = FilterOperator.Between;
-                filter.Values.Add(from);
-                filter.Values.Add(to);
+                filter.Values.Add(from.Value.Date);
+                filter.Values.Add(to.Value.Date);
             }
             else if (from.HasValue)
             {
                 filter.Operator = FilterOperator.GreaterThanEqual;
-                filter.Values.Add(from);
+                filter.Values.Add(from.Value.Date);
             }
             else if (to.HasValue)
             {
                 filter.Operator = FilterOperator.LessThanEqual;
-                filter.Values.Add(to);
+                filter.Values.Add(to.Value.Date);
             }
 
             return filter;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -9,8 +10,9 @@ namespace Query.Web
     public abstract class QueryFieldBase : DataControlField
     {
         public string Name { get; set; }
+        
         public abstract string Value { get; set; }
-        public bool Focus { get; set; }
+        
         public short? TabIndex { get; protected set; }
 
         [Bindable(true)]
@@ -63,6 +65,13 @@ namespace Query.Web
             cell.Text = view == null
                             ? DataBinder.GetPropertyValue(dataItem, this.DataField, null)
                             : view.Row[this.DataField].ToString();
+        }
+
+        protected bool HasFocus(string uniqueID)
+        {
+            var lastFocus = HttpContext.Current.Request.Form["__LASTFOCUS"];
+
+            return uniqueID.Equals(lastFocus);
         }
 
         public virtual short SetTabIndex(short tabIndex)

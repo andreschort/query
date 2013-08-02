@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Common.Web.Util;
 
@@ -56,7 +57,7 @@ namespace Query.Web
             this.Grid.Init += this.Grid_Init;
             this.Grid.RowCommand += this.Grid_RowCommand;
 
-            var webResourceUrl = Page.ClientScript.GetWebResourceUrl(this.GetType(), "Query.Web.Query.js");
+            var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "Query.Web.Query.js");
             this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
 
             var javascript = @"$(document).ready(function () {
@@ -66,12 +67,18 @@ namespace Query.Web
                                 $('.data-query-datepicker').each(function (index, element) {
                                     initDateFilter($(this));
                                 });
+                                $('.data-query-dropdown').each(function (index, element) {
+                                    initDropDownFilter($(this));
+                                });
                             });";
             JSUtil.AddLoad(this, "GridExtender", javascript);
+
+            // Force that the hidden input __LASTFOCUS is rendered
+            this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(this) { TrackFocus = true });
         }
 
         private void Grid_Init(object sender, EventArgs e)
-        {   
+        {
             // Set fields parameters
             short tabIndex = 1;
             foreach (var field in this.Grid.Columns.OfType<QueryFieldBase>())
@@ -85,14 +92,6 @@ namespace Query.Web
 
         private void Grid_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            var field = this.Grid.Columns.OfType<QueryFieldBase>().FirstOrDefault(x => x.Name.Equals(e.CommandArgument));
-
-            // Restore focus
-            if (field != null)
-            {
-                field.Focus = true;
-            }
-
             if (e.CommandName.Equals(FilterCommand))
             {
                 this.RaiseFilter(sender, e);

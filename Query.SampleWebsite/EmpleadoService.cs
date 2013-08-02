@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Linq;
 using Common.Extension;
 using Query.SampleModel;
@@ -18,7 +19,7 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
-            query.Fields.Add(fieldBuilder.Create(x => x.FechaNacimiento).Instance);
+            query.Fields.Add(fieldBuilder.Create("FechaNacimiento").Select(x => x.FechaNacimiento.Date).Instance);
             query.Fields.Add(
                 fieldBuilder.Create("EstadoCivil")
                             .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero) // When using EntityFramework without enum support

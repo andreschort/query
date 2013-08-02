@@ -69,11 +69,6 @@ namespace Query.Web
                 this.textBox.TabIndex = this.TabIndex.Value;
             }
 
-            if (this.Focus)
-            {
-                this.textBox.Attributes["data-query-focus"] = true.ToString();
-            }
-
             // Filter button
             this.button = new LinkButton {CommandName = this.FilterCommand, CommandArgument = this.Name};
             cell.Controls.Add(this.button);
@@ -95,6 +90,9 @@ namespace Query.Web
 
             // postback configuration, must be here to ensure UniqueID is not null
             this.textBox.Attributes["data-query-postbackName"] = this.button.UniqueID;
+
+            // restore focus
+            this.textBox.Attributes["data-query-focus"] = this.HasFocus(this.textBox.UniqueID).ToString();
         }
     }
 }

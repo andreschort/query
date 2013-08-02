@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Common.Extension;
+using Common.Util;
 
 namespace Query
 {
@@ -70,6 +71,18 @@ namespace Query
             return this;
         }
         
+        public QueryFieldBuilder<T> TruncateTime()
+        {
+            var truncatedExpression =
+                ExpressionBuilder.New(this.Instance.Select.Parameters[0], this.Instance.Select.Body).TruncateTime().Lambda();
+
+            this.Instance.Select = truncatedExpression;
+            this.Instance.Where.Clear();
+            this.Instance.Where.Add(truncatedExpression);
+
+            return this;
+        }
+
         private FilterType GetFilterType(Type type)
         {
             if (type == null)

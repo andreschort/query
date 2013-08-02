@@ -108,6 +108,10 @@ namespace Query.Web
             // postback configuration, must be here to ensure UniqueID is not null
             this.textFrom.Attributes["data-query-postbackName"] = this.button.UniqueID;
             this.textTo.Attributes["data-query-postbackName"] = this.button.UniqueID;
+            
+            // restore focus
+            this.textFrom.Attributes["data-query-focus"] = this.HasFocus(this.textFrom.UniqueID).ToString();
+            this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
         }
     }
 }
