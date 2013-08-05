@@ -26,7 +26,7 @@
 
     <h3>We suggest the following:</h3>
         <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
-                            OnFilter="GridExtender_Filter" />
+                            OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
     <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
         <Columns>
             <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"

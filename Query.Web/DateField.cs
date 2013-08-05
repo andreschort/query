@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.UI.WebControls;
 
@@ -12,8 +9,6 @@ namespace Query.Web
         private TextBox textFrom;
 
         private TextBox textTo;
-
-        private LinkButton button;
 
         private string externalValue;
 
@@ -40,15 +35,7 @@ namespace Query.Web
 
         protected override void InitHeaderCell(DataControlFieldCell cell)
         {
-            // title with sorting
-            var lnkButtonTitle = new LinkButton
-            {
-                Text = this.HeaderText,
-                CommandName = this.SortCommand,
-                CommandArgument = this.Name
-            };
-
-            cell.Controls.Add(lnkButtonTitle);
+            base.InitHeaderCell(cell);
 
             this.textFrom = new TextBox();
             this.textTo = new TextBox();
@@ -76,10 +63,6 @@ namespace Query.Web
                 this.textFrom.TabIndex = this.TabIndex.Value;
                 this.textTo.TabIndex = (short) (this.TabIndex.Value + 1);
             }
-
-            // Filter button
-            this.button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
-            cell.Controls.Add(this.button);
         }
 
         public override short SetTabIndex(short tabIndex)
@@ -106,8 +89,8 @@ namespace Query.Web
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.textFrom.Attributes["data-query-postbackName"] = this.button.UniqueID;
-            this.textTo.Attributes["data-query-postbackName"] = this.button.UniqueID;
+            this.textFrom.Attributes["data-query-postbackName"] = this.Button.UniqueID;
+            this.textTo.Attributes["data-query-postbackName"] = this.Button.UniqueID;
             
             // restore focus
             this.textFrom.Attributes["data-query-focus"] = this.HasFocus(this.textFrom.UniqueID).ToString();

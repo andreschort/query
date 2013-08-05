@@ -14,8 +14,6 @@ namespace Query.Web
 
         private TextBox textBox;
 
-        private LinkButton button;
-
         /// <summary>
         /// Value given from outside of this component
         /// </summary>
@@ -40,15 +38,7 @@ namespace Query.Web
 
         protected override void InitHeaderCell(DataControlFieldCell cell)
         {
-            // title with sorting
-            var lnkButtonTitle = new LinkButton
-                {
-                    Text = this.HeaderText,
-                    CommandName = this.SortCommand,
-                    CommandArgument = this.Name
-                };
-
-            cell.Controls.Add(lnkButtonTitle);
+            base.InitHeaderCell(cell);
 
             // Filter textbox
             this.textBox = new TextBox();
@@ -68,10 +58,6 @@ namespace Query.Web
             {
                 this.textBox.TabIndex = this.TabIndex.Value;
             }
-
-            // Filter button
-            this.button = new LinkButton {CommandName = this.FilterCommand, CommandArgument = this.Name};
-            cell.Controls.Add(this.button);
         }
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
@@ -89,7 +75,7 @@ namespace Query.Web
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.textBox.Attributes["data-query-postbackName"] = this.button.UniqueID;
+            this.textBox.Attributes["data-query-postbackName"] = this.Button.UniqueID;
 
             // restore focus
             this.textBox.Attributes["data-query-focus"] = this.HasFocus(this.textBox.UniqueID).ToString();

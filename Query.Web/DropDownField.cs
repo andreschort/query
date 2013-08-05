@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace Query.Web
@@ -12,8 +11,6 @@ namespace Query.Web
 
         private string externalValue;
 
-        private LinkButton button;
-        
         public override string Value
         {
             get { return this.dropDownList == null ? this.externalValue ?? this.DefaultValue : this.dropDownList.SelectedValue; }
@@ -36,15 +33,7 @@ namespace Query.Web
 
         protected override void InitHeaderCell(DataControlFieldCell cell)
         {
-            // title with sorting
-            var lnkButtonTitle = new LinkButton
-            {
-                Text = this.HeaderText,
-                CommandName = this.SortCommand,
-                CommandArgument = this.Name
-            };
-
-            cell.Controls.Add(lnkButtonTitle);
+            base.InitHeaderCell(cell);
 
             this.dropDownList = new DropDownList();
             cell.Controls.Add(this.dropDownList);
@@ -55,10 +44,6 @@ namespace Query.Web
             {
                 this.dropDownList.TabIndex = this.TabIndex.Value;
             }
-
-            // Filter button
-            this.button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
-            cell.Controls.Add(this.button);
         }
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
@@ -81,7 +66,7 @@ namespace Query.Web
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.dropDownList.Attributes["data-query-postbackName"] = this.button.UniqueID;
+            this.dropDownList.Attributes["data-query-postbackName"] = this.Button.UniqueID;
 
             // restore focus
             this.dropDownList.Attributes["data-query-focus"] = this.HasFocus(this.dropDownList.UniqueID).ToString();

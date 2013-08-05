@@ -9,7 +9,7 @@ namespace Query.SampleWebSite
 {
     public class EmpleadoService
     {
-        public DataTable GetAll(Dictionary<string, string> values, int maximumRows, int startRowIndex)
+        public DataTable GetAll(Dictionary<string, string> filters, Dictionary<string, SortDirection> sortings,  int maximumRows, int startRowIndex)
         {
             var fieldBuilder = new QueryFieldBuilder<Empleado>();
             
@@ -40,12 +40,12 @@ namespace Query.SampleWebSite
                     new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, Edad = 24, Salario = 300.44m, FechaNacimiento = DateTime.Today.AddDays(2)},
                 };
 
-            return query.Apply(empleados.AsQueryable(), values).ToDataTable();
+            return query.Apply(empleados.AsQueryable(), filters).ToDataTable();
         }
 
-        public int GetCount(Dictionary<string, string> filters, int maximumRows, int startRowIndex)
+        public int GetCount(Dictionary<string, string> filters, Dictionary<string, SortDirection> sortings, int maximumRows, int startRowIndex)
         {
-            return this.GetAll(filters, maximumRows, startRowIndex).Rows.Count;
+            return this.GetAll(filters, null, maximumRows, startRowIndex).Rows.Count;
         }
     }
 }

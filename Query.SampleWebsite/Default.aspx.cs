@@ -47,6 +47,12 @@ namespace Query.SampleWebsite
             this.GridView.DataBind();
         }
 
+        protected void GridExtender_Sort(object sender, EventArgs e)
+        {
+            this.GridView.DataSourceID = this.OdsEmpleado.ID;
+            this.GridView.DataBind();
+        }
+
         protected void OdsEmpleado_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
             e.ObjectInstance = new EmpleadoService();
@@ -54,7 +60,8 @@ namespace Query.SampleWebsite
 
         protected void OdsEmpleado_ObjectSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
-            e.InputParameters["values"] = this.GridExtender.Filters;
+            e.InputParameters["filters"] = this.GridExtender.Filters;
+            e.InputParameters["sortings"] = this.GridExtender.Sortings;
         }
 
         protected void OdsEmpleado_ObjectSelected(object sender, ObjectDataSourceStatusEventArgs e)

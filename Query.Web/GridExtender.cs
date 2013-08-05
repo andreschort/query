@@ -24,6 +24,12 @@ namespace Query.Web
             set { this.SetFilters(value); }
         }
 
+        public Dictionary<string, SortDirection> Sortings
+        {
+            get { return this.GetSortings(); }
+            set { this.SetSortings(value); }
+        }
+
         public bool EnableFilters
         {
             get { return this.enableFilters; }
@@ -131,6 +137,21 @@ namespace Query.Web
         private Dictionary<string, string> GetFilters()
         {
             return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.Value);
+        }
+
+        private void SetSortings(Dictionary<string, SortDirection> sortings)
+        {
+            var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
+
+            foreach (var sorting in sortings)
+            {
+                fields.First(x => x.Name.Equals(sorting.Key)).Sorting = sorting.Value;
+            }
+        }
+
+        private Dictionary<string, SortDirection> GetSortings()
+        {
+            return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.Sorting);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -24,11 +23,14 @@ namespace Query.Web
         public int? AutoFilterDelay { get; set; }
         public string FilterCommand { get; set; }
         public string SortCommand { get; set; }
+        public SortDirection Sorting { get; set; }
 
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
 
         public string UrlFormat { get; set; }
+
+        protected LinkButton Button;
 
         public override void InitializeCell(
             DataControlFieldCell cell,
@@ -61,7 +63,23 @@ namespace Query.Web
             // Override if you want to do something before the cell's databinding
         }
 
-        protected abstract void InitHeaderCell(DataControlFieldCell cell);
+        protected virtual void InitHeaderCell(DataControlFieldCell cell)
+        {
+            // title with sorting
+            var lnkButtonTitle = new LinkButton
+            {
+                Text = this.HeaderText,
+                CommandName = this.SortCommand,
+                CommandArgument = this.Name
+            };
+
+            cell.Controls.Add(lnkButtonTitle);
+
+            // Filter button
+            this.Button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
+            cell.Controls.Add(this.Button);
+        }
+        
         protected abstract void HeaderCell_DataBinding(object sender, EventArgs e);
 
         /// <summary>
