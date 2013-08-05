@@ -73,6 +73,8 @@ namespace Query.Web
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
+            base.HeaderCell_DataBinding(sender, e);
+
             // Set textbox value
             if (string.IsNullOrEmpty(this.externalValue))
             {

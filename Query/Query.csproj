@@ -48,7 +48,6 @@
     <Compile Include="Query.cs" />
     <Compile Include="QueryField.cs" />
     <Compile Include="QueryFieldBuilder.cs" />
-    <Compile Include="SortDirection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

@@ -48,6 +48,8 @@ namespace Query.Web
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
+            base.HeaderCell_DataBinding(sender, e);
+
             this.dropDownList.DataSource = this.Items;
             this.dropDownList.DataTextField = "Text";
             this.dropDownList.DataValueField = "Value";

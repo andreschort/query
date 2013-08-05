@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using Common.Web.Util;
 
@@ -80,7 +79,7 @@ namespace Query.Web
             JSUtil.AddLoad(this, "GridExtender", javascript);
 
             // Force that the hidden input __LASTFOCUS is rendered
-            this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(this) { TrackFocus = true });
+            this.Page.ClientScript.GetPostBackEventReference(new System.Web.UI.PostBackOptions(this) { TrackFocus = true });
         }
 
         private void Grid_Init(object sender, EventArgs e)
@@ -151,7 +150,9 @@ namespace Query.Web
 
         private Dictionary<string, SortDirection> GetSortings()
         {
-            return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.Sorting);
+            return this.Grid.Columns.OfType<QueryFieldBase>()
+                       .Where(x => x.Sorting.HasValue)
+                       .ToDictionary(field => field.Name, field => field.Sorting.Value);
         }
     }
 }

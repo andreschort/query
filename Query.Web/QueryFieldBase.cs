@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace Query.Web
@@ -23,12 +24,22 @@ namespace Query.Web
         public int? AutoFilterDelay { get; set; }
         public string FilterCommand { get; set; }
         public string SortCommand { get; set; }
-        public SortDirection Sorting { get; set; }
+
+        public SortDirection? Sorting
+        {
+            get { return this.externalSorting ?? this.GetSorting(); }
+            set { this.externalSorting = value; }
+        }
 
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
 
         public string UrlFormat { get; set; }
+
+        private SortDirection? externalSorting;
+
+        private LinkButton sortButton;
+        private HtmlInputHidden sortHiddenInput;
 
         protected LinkButton Button;
 
@@ -66,21 +77,37 @@ namespace Query.Web
         protected virtual void InitHeaderCell(DataControlFieldCell cell)
         {
             // title with sorting
-            var lnkButtonTitle = new LinkButton
+            this.sortButton = new LinkButton
             {
                 Text = this.HeaderText,
                 CommandName = this.SortCommand,
                 CommandArgument = this.Name
             };
 
-            cell.Controls.Add(lnkButtonTitle);
+            this.sortHiddenInput = new HtmlInputHidden();
+
+            cell.Controls.Add(this.sortButton);
+            cell.Controls.Add(this.sortHiddenInput);
 
             // Filter button
             this.Button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
+            this.Button.Attributes["style"] = "display:none";
             cell.Controls.Add(this.Button);
         }
         
-        protected abstract void HeaderCell_DataBinding(object sender, EventArgs e);
+        protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
+        {
+            SortDirection? direction = this.Sorting;
+            
+            this.sortHiddenInput.Value = direction.ToString();
+
+            if (direction.HasValue)
+            {
+                DataControlFieldHeaderCell cell = (DataControlFieldHeaderCell) sender;
+                cell.CssClass = direction.Value.Equals(SortDirection.Ascending) ? "asc" : "desc";
+            }
+            
+        }
 
         /// <summary>
         /// Sets the cell text to the value of the field.
@@ -125,6 +152,45 @@ namespace Query.Web
             return view == null
                        ? DataBinder.GetPropertyValue(dataItem, dataField, null)
                        : view.Row[dataField].ToString();
+        }
+
+        private SortDirection? GetSorting()
+        {
+            var sortInputUniqueId = this.sortHiddenInput == null ? string.Empty : this.sortHiddenInput.UniqueID;
+            var form = HttpContext.Current.Request.Form;
+
+            if (string.IsNullOrEmpty(sortInputUniqueId) || !form.AllKeys.Contains(sortInputUniqueId))
+            {
+                return null;
+            }
+
+            var s = form[sortInputUniqueId];
+
+            SortDirection direction;
+            SortDirection? newDirection = null;
+            if (Enum.TryParse(s, out direction))
+            {
+                newDirection = direction;
+            }
+
+            var eventTarget = HttpContext.Current.Request.Form["__EVENTTARGET"];
+            if (this.sortButton.UniqueID.Equals(eventTarget))
+            {
+                if (newDirection.Equals(SortDirection.Ascending))
+                {
+                    newDirection = SortDirection.Descending;
+                }
+                else if (newDirection.Equals(SortDirection.Descending))
+                {
+                    newDirection = null;
+                }
+                else
+                {
+                    newDirection = SortDirection.Ascending;
+                }
+            }
+
+            return newDirection;
         }
     }
 }
