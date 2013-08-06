@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Common.Extension;
+using Common.Util;
 
 namespace Query.Web
 {
@@ -39,7 +41,7 @@ namespace Query.Web
 
         public string SortCommand { get; set; }
 
-        public SortDirection? SortDirection { get; set; }
+        public SortDirection? SortDir { get; set; }
 
         public int SortOrder { get; set; }
 
@@ -49,6 +51,8 @@ namespace Query.Web
         public string UrlFormat { get; set; }
 
         #endregion Published Properties
+
+        #region Published Methods
 
         public override void InitializeCell(
             DataControlFieldCell cell,
@@ -61,6 +65,7 @@ namespace Query.Web
             if (cellType == DataControlCellType.Header)
             {
                 cell.DataBinding += this.HeaderCell_DataBinding;
+                cell.PreRender += this.HeaderCell_PreRender;
                 this.InitHeaderCell(cell);
             }
             else if (cellType == DataControlCellType.DataCell)
@@ -70,11 +75,68 @@ namespace Query.Web
             }
         }
 
+        public Tuple<int, SortDirection?> ReadSort()
+        {
+            var sortInputUniqueId = this.sortInputHidden == null ? string.Empty : this.sortInputHidden.UniqueID;
+            var form = HttpContext.Current.Request.Form;
+
+            if (string.IsNullOrEmpty(sortInputUniqueId) || !form.AllKeys.Contains(sortInputUniqueId))
+            {
+                return Tuple.Create(0, (SortDirection?)null);
+            }
+
+            var s = form[sortInputUniqueId].Split(new[] { ';' }, 2);
+
+            this.SortOrder = StringUtil.ToInt(s[0]);
+            this.SortDir = s[1].ToEnum<SortDirection>();
+
+            return Tuple.Create(this.SortOrder, this.SortDir);
+
+            //var eventTarget = HttpContext.Current.Request.Form["__EVENTTARGET"];
+            //if (this.sortButton.UniqueID.Equals(eventTarget))
+            //{
+            //    if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Ascending))
+            //    {
+            //        newDirection = System.Web.UI.WebControls.SortDirection.Descending;
+            //    }
+            //    else if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Descending))
+            //    {
+            //        newDirection = null;
+            //    }
+            //    else
+            //    {
+            //        newDirection = System.Web.UI.WebControls.SortDirection.Ascending;
+            //    }
+            //}
+
+            //return newDirection;
+        }
+
+        public void CycleSort(int newSortOrder)
+        {
+            if (this.SortDir.Equals(SortDirection.Ascending))
+            {
+                this.SortDir = SortDirection.Descending;
+            }
+            else if (this.SortDir.Equals(SortDirection.Descending))
+            {
+                this.SortOrder = 0;
+                this.SortDir = null;
+            }
+            else
+            {
+                this.SortDir = SortDirection.Ascending;
+                this.SortOrder = newSortOrder;
+            }
+        }
+
         public virtual short SetTabIndex(short tabIndex)
         {
             this.TabIndex = tabIndex;
             return (short)(tabIndex + 1);
         }
+
+        #endregion Published Methods
 
         protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
@@ -100,6 +162,11 @@ namespace Query.Web
             this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
             this.FilterButton.Attributes["style"] = "display:none";
             cell.Controls.Add(this.FilterButton);
+        }
+
+        private void HeaderCell_PreRender(object sender, EventArgs e)
+        {
+            this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
         }
         
         protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
@@ -151,43 +218,8 @@ namespace Query.Web
                        : view.Row[dataField].ToString();
         }
 
-        private SortDirection? GetSorting()
-        {
-            var sortInputUniqueId = this.sortInputHidden == null ? string.Empty : this.sortInputHidden.UniqueID;
-            var form = HttpContext.Current.Request.Form;
+        
 
-            if (string.IsNullOrEmpty(sortInputUniqueId) || !form.AllKeys.Contains(sortInputUniqueId))
-            {
-                return null;
-            }
-
-            var s = form[sortInputUniqueId];
-
-            SortDirection direction;
-            SortDirection? newDirection = null;
-            if (Enum.TryParse(s, out direction))
-            {
-                newDirection = direction;
-            }
-
-            var eventTarget = HttpContext.Current.Request.Form["__EVENTTARGET"];
-            if (this.sortButton.UniqueID.Equals(eventTarget))
-            {
-                if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Ascending))
-                {
-                    newDirection = System.Web.UI.WebControls.SortDirection.Descending;
-                }
-                else if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Descending))
-                {
-                    newDirection = null;
-                }
-                else
-                {
-                    newDirection = System.Web.UI.WebControls.SortDirection.Ascending;
-                }
-            }
-
-            return newDirection;
-        }
+        
     }
 }

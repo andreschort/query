@@ -103,6 +103,11 @@ namespace Query.Web
             }
             else if (e.CommandName.Equals(SortCommand))
             {
+                var maxSortOrder = this.Grid.Columns.OfType<QueryFieldBase>()
+                                       .Select(field => field.ReadSort())
+                                       .Count(sort => sort.Item2.HasValue);
+                var sortingField = this.Grid.Columns.OfType<QueryFieldBase>().First(field => field.Name.Equals(e.CommandArgument));
+                sortingField.CycleSort(maxSortOrder+1);
                 this.RaiseSort(sender, e);
             }
         }
@@ -145,16 +150,15 @@ namespace Query.Web
             foreach (var sorting in sortings)
             {
                 fields.First(x => x.Name.Equals(sorting.Key)).SortOrder = sorting.Value.Item1;
-                fields.First(x => x.Name.Equals(sorting.Key)).SortDirection = sorting.Value.Item2;
+                fields.First(x => x.Name.Equals(sorting.Key)).SortDir = sorting.Value.Item2;
             }
         }
 
         private Dictionary<string, Tuple<int, SortDirection>> GetSortings()
         {
-            return null;
-            //return this.Grid.Columns.OfType<QueryFieldBase>()
-            //           .Where(x => x.SortDirection.HasValue)
-            //           .ToDictionary(field => field.Name, field => field.GetSorting());
+            return this.Grid.Columns.OfType<QueryFieldBase>()
+                       .Where(x => x.SortDir.HasValue)
+                       .ToDictionary(field => field.Name, field => Tuple.Create(field.SortOrder, field.SortDir.Value));
         }
     }
 }
