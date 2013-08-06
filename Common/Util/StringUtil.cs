@@ -64,6 +64,17 @@ namespace Common.Util
             return DateTime.TryParse(value, provider, styles, out val) ? val : (DateTime?)null;
         }
 
+        public static T? ParseEnum<T>(string value) where T : struct
+        {
+            T result;
+            if (Enum.TryParse(value, out result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
         public static Queue<string> SplitByDotToHeadAndTail(string s)
         {
             return string.IsNullOrEmpty(s) ? new Queue<string>() : new Queue<string>(s.Split('.'));

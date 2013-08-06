@@ -9,12 +9,12 @@ namespace Query.Web
     {
         private DropDownList dropDownList;
 
-        private string externalValue;
+        private string externalFilterValue;
 
-        public override string Value
+        public override string FilterValue
         {
-            get { return this.dropDownList == null ? this.externalValue ?? this.DefaultValue : this.dropDownList.SelectedValue; }
-            set { this.externalValue = value; }
+            get { return this.dropDownList == null ? this.externalFilterValue ?? this.DefaultValue : this.dropDownList.SelectedValue; }
+            set { this.externalFilterValue = value; }
         }
 
         public string DefaultValue { get; set; }
@@ -56,7 +56,7 @@ namespace Query.Web
             this.dropDownList.DataBind();
 
             // Set textbox value
-            if (string.IsNullOrEmpty(this.externalValue))
+            if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
                 var nameValueCollection = HttpContext.Current.Request.Form;
@@ -64,11 +64,11 @@ namespace Query.Web
             }
             else
             {
-                this.dropDownList.SelectedValue = this.externalValue;
+                this.dropDownList.SelectedValue = this.externalFilterValue;
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.dropDownList.Attributes["data-query-postbackName"] = this.Button.UniqueID;
+            this.dropDownList.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
 
             // restore focus
             this.dropDownList.Attributes["data-query-focus"] = this.HasFocus(this.dropDownList.UniqueID).ToString();

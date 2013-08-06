@@ -23,7 +23,7 @@ namespace Query.Web
             set { this.SetFilters(value); }
         }
 
-        public Dictionary<string, SortDirection> Sortings
+        public Dictionary<string, Tuple<int, SortDirection>> Sortings
         {
             get { return this.GetSortings(); }
             set { this.SetSortings(value); }
@@ -129,30 +129,32 @@ namespace Query.Web
 
             foreach (var filter in value)
             {
-                fields.First(x => x.Name.Equals(filter.Key)).Value = filter.Value;
+                fields.First(x => x.Name.Equals(filter.Key)).FilterValue = filter.Value;
             }
         }
 
         private Dictionary<string, string> GetFilters()
         {
-            return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.Value);
+            return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.FilterValue);
         }
 
-        private void SetSortings(Dictionary<string, SortDirection> sortings)
+        private void SetSortings(Dictionary<string, Tuple<int, SortDirection>> sortings)
         {
             var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
 
             foreach (var sorting in sortings)
             {
-                fields.First(x => x.Name.Equals(sorting.Key)).Sorting = sorting.Value;
+                fields.First(x => x.Name.Equals(sorting.Key)).SortOrder = sorting.Value.Item1;
+                fields.First(x => x.Name.Equals(sorting.Key)).SortDirection = sorting.Value.Item2;
             }
         }
 
-        private Dictionary<string, SortDirection> GetSortings()
+        private Dictionary<string, Tuple<int, SortDirection>> GetSortings()
         {
-            return this.Grid.Columns.OfType<QueryFieldBase>()
-                       .Where(x => x.Sorting.HasValue)
-                       .ToDictionary(field => field.Name, field => field.Sorting.Value);
+            return null;
+            //return this.Grid.Columns.OfType<QueryFieldBase>()
+            //           .Where(x => x.SortDirection.HasValue)
+            //           .ToDictionary(field => field.Name, field => field.GetSorting());
         }
     }
 }

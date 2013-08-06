@@ -11,9 +11,20 @@ namespace Query.Web
 {
     public abstract class QueryFieldBase : DataControlField
     {
+        #region Fields
+
+        protected LinkButton FilterButton;
+        
+        private LinkButton sortButton;
+        private HtmlInputHidden sortInputHidden;
+        
+        #endregion Fields
+
+        #region Published Properties
+
         public string Name { get; set; }
         
-        public abstract string Value { get; set; }
+        public abstract string FilterValue { get; set; }
         
         public short? TabIndex { get; protected set; }
 
@@ -21,27 +32,23 @@ namespace Query.Web
         public string DataField { get; set; }
 
         public string FilterPlaceholder { get; set; }
+
         public int? AutoFilterDelay { get; set; }
+
         public string FilterCommand { get; set; }
+
         public string SortCommand { get; set; }
 
-        public SortDirection? Sorting
-        {
-            get { return this.externalSorting ?? this.GetSorting(); }
-            set { this.externalSorting = value; }
-        }
+        public SortDirection? SortDirection { get; set; }
+
+        public int SortOrder { get; set; }
 
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
 
         public string UrlFormat { get; set; }
 
-        private SortDirection? externalSorting;
-
-        private LinkButton sortButton;
-        private HtmlInputHidden sortHiddenInput;
-
-        protected LinkButton Button;
+        #endregion Published Properties
 
         public override void InitializeCell(
             DataControlFieldCell cell,
@@ -84,29 +91,19 @@ namespace Query.Web
                 CommandArgument = this.Name
             };
 
-            this.sortHiddenInput = new HtmlInputHidden();
+            this.sortInputHidden = new HtmlInputHidden();
 
             cell.Controls.Add(this.sortButton);
-            cell.Controls.Add(this.sortHiddenInput);
+            cell.Controls.Add(this.sortInputHidden);
 
             // Filter button
-            this.Button = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
-            this.Button.Attributes["style"] = "display:none";
-            cell.Controls.Add(this.Button);
+            this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
+            this.FilterButton.Attributes["style"] = "display:none";
+            cell.Controls.Add(this.FilterButton);
         }
         
         protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
         {
-            SortDirection? direction = this.Sorting;
-            
-            this.sortHiddenInput.Value = direction.ToString();
-
-            if (direction.HasValue)
-            {
-                DataControlFieldHeaderCell cell = (DataControlFieldHeaderCell) sender;
-                cell.CssClass = direction.Value.Equals(SortDirection.Ascending) ? "asc" : "desc";
-            }
-            
         }
 
         /// <summary>
@@ -156,7 +153,7 @@ namespace Query.Web
 
         private SortDirection? GetSorting()
         {
-            var sortInputUniqueId = this.sortHiddenInput == null ? string.Empty : this.sortHiddenInput.UniqueID;
+            var sortInputUniqueId = this.sortInputHidden == null ? string.Empty : this.sortInputHidden.UniqueID;
             var form = HttpContext.Current.Request.Form;
 
             if (string.IsNullOrEmpty(sortInputUniqueId) || !form.AllKeys.Contains(sortInputUniqueId))
@@ -176,17 +173,17 @@ namespace Query.Web
             var eventTarget = HttpContext.Current.Request.Form["__EVENTTARGET"];
             if (this.sortButton.UniqueID.Equals(eventTarget))
             {
-                if (newDirection.Equals(SortDirection.Ascending))
+                if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Ascending))
                 {
-                    newDirection = SortDirection.Descending;
+                    newDirection = System.Web.UI.WebControls.SortDirection.Descending;
                 }
-                else if (newDirection.Equals(SortDirection.Descending))
+                else if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Descending))
                 {
                     newDirection = null;
                 }
                 else
                 {
-                    newDirection = SortDirection.Ascending;
+                    newDirection = System.Web.UI.WebControls.SortDirection.Ascending;
                 }
             }
 

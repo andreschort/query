@@ -10,27 +10,17 @@ namespace Query.Web
 
         private TextBox textTo;
 
-        private string externalValue;
+        private string externalFilterValue;
 
         protected override DataControlField CreateField()
         {
             return new DateField();
         }
 
-        public override string Value
+        public override string FilterValue
         {
-            get { return this.GetValue(); }
-            set { this.externalValue = value; }
-        }
-
-        private string GetValue()
-        {
-            if (this.textFrom == null)
-            {
-                return this.externalValue ?? string.Empty;
-            }
-
-            return this.textFrom.Text + ";" + this.textTo.Text;
+            get { return this.GetFilterValue(); }
+            set { this.externalFilterValue = value; }
         }
 
         protected override void InitHeaderCell(DataControlFieldCell cell)
@@ -76,7 +66,7 @@ namespace Query.Web
             base.HeaderCell_DataBinding(sender, e);
 
             // Set textbox value
-            if (string.IsNullOrEmpty(this.externalValue))
+            if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
                 var nameValueCollection = HttpContext.Current.Request.Form;
@@ -85,18 +75,28 @@ namespace Query.Web
             }
             else
             {
-                var parts = this.externalValue.Split(new[] {';'}, 2);
+                var parts = this.externalFilterValue.Split(new[] {';'}, 2);
                 this.textFrom.Text = parts[0];
                 this.textTo.Text = parts[1];
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.textFrom.Attributes["data-query-postbackName"] = this.Button.UniqueID;
-            this.textTo.Attributes["data-query-postbackName"] = this.Button.UniqueID;
+            this.textFrom.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
+            this.textTo.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
             
             // restore focus
             this.textFrom.Attributes["data-query-focus"] = this.HasFocus(this.textFrom.UniqueID).ToString();
             this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
+        }
+
+        private string GetFilterValue()
+        {
+            if (this.textFrom == null)
+            {
+                return this.externalFilterValue ?? string.Empty;
+            }
+
+            return this.textFrom.Text + ";" + this.textTo.Text;
         }
     }
 }

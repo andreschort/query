@@ -17,16 +17,16 @@ namespace Query.Web
         /// <summary>
         /// Value given from outside of this component
         /// </summary>
-        private string externalValue;
+        private string externalFilterValue;
 
         #endregion Fields
 
         #region Published Properties
 
-        public override string Value
+        public override string FilterValue
         {
-            get { return this.textBox == null ? this.externalValue ?? string.Empty : this.textBox.Text; }
-            set { this.externalValue = value; }
+            get { return this.textBox == null ? this.externalFilterValue ?? string.Empty : this.textBox.Text; }
+            set { this.externalFilterValue = value; }
         }
 
         #endregion Published Properties
@@ -65,7 +65,7 @@ namespace Query.Web
             base.HeaderCell_DataBinding(sender, e);
 
             // Set textbox value
-            if (string.IsNullOrEmpty(this.externalValue))
+            if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
                 var nameValueCollection = HttpContext.Current.Request.Form;
@@ -73,11 +73,11 @@ namespace Query.Web
             }
             else
             {
-                this.textBox.Text = this.externalValue;
+                this.textBox.Text = this.externalFilterValue;
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.textBox.Attributes["data-query-postbackName"] = this.Button.UniqueID;
+            this.textBox.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
 
             // restore focus
             this.textBox.Attributes["data-query-focus"] = this.HasFocus(this.textBox.UniqueID).ToString();
