@@ -80,33 +80,10 @@ namespace Query.Web
             }
         }
 
-        public Tuple<int, SortDirection?> ReadSort()
-        {
-            var hiddenFieldValue = HttpContext.Current.Request.Form[this.sortInputHidden.UniqueID];
-
-            if (this.sortHiddenInputRead)
-            {
-                return Tuple.Create(this.SortOrder, this.SortDir);
-            }
-
-            if (string.IsNullOrEmpty(hiddenFieldValue))
-            {
-                return Tuple.Create(0, (SortDirection?) null);
-            }
-
-            var parts = hiddenFieldValue.Split(new[] { ';' }, 2);
-
-            this.SortOrder = StringUtil.ToInt(parts[0]);
-            this.SortDir = parts[1].ToEnum<SortDirection>();
-
-            this.sortHiddenInputRead = true;
-
-            return Tuple.Create(this.SortOrder, this.SortDir);
-        }
-
         /// <summary>
         /// Moves the Sort Direction to then next value.
         /// In case this field was not sorting until now, it also sets the sort order to newSortOrder.
+        /// In case this field is no longer sorting, it also sets the sort order to zero.
         /// </summary>
         /// <param name="newSortOrder"></param>
         public void CycleSort(int newSortOrder)
@@ -127,6 +104,11 @@ namespace Query.Web
             }
         }
 
+        /// <summary>
+        /// Sets this tab index of the filtering controls
+        /// </summary>
+        /// <param name="tabIndex"></param>
+        /// <returns>The next tab index</returns>
         public virtual short SetTabIndex(short tabIndex)
         {
             this.TabIndex = tabIndex;
@@ -165,9 +147,34 @@ namespace Query.Web
 
         private void HeaderCell_Load(object sender, EventArgs e)
         {
-            this.ReadSort();
+            // read the sort order and direction from sortInputHidden
+            var hiddenFieldValue = HttpContext.Current.Request.Form[this.sortInputHidden.UniqueID];
+
+            // we should do this only one time in every postback
+            if (this.sortHiddenInputRead)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(hiddenFieldValue))
+            {
+                return;
+            }
+
+            var parts = hiddenFieldValue.Split(new[] { ';' }, 2);
+
+            this.SortOrder = StringUtil.ToInt(parts[0]);
+            this.SortDir = parts[1].ToEnum<SortDirection>();
+
+            this.sortHiddenInputRead = true;
         }
 
+        /// <summary>
+        /// Save sort order and direction to sortInputHidden.
+        /// Set sort order in sortOrderLabel only if it is greater than zero.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HeaderCell_PreRender(object sender, EventArgs e)
         {
             this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
@@ -209,6 +216,11 @@ namespace Query.Web
             }
         }
 
+        /// <summary>
+        /// Tells if the control with the indicated unique ID was the last control with the focus before the postback
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <returns></returns>
         protected bool HasFocus(string uniqueID)
         {
             var lastFocus = HttpContext.Current.Request.Form["__LASTFOCUS"];
