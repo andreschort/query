@@ -20,6 +20,7 @@ namespace Query.Web
         
         private LinkButton sortButton;
         private HtmlInputHidden sortInputHidden;
+        private Label sortOrderLabel;
 
         private bool sortHiddenInputRead;
         
@@ -116,8 +117,8 @@ namespace Query.Web
             }
             else if (this.SortDir.Equals(SortDirection.Descending))
             {
-                this.SortOrder = 0;
                 this.SortDir = null;
+                this.SortOrder = 0;
             }
             else
             {
@@ -150,9 +151,11 @@ namespace Query.Web
             };
 
             this.sortInputHidden = new HtmlInputHidden();
+            this.sortOrderLabel = new Label();
 
             cell.Controls.Add(this.sortButton);
             cell.Controls.Add(this.sortInputHidden);
+            cell.Controls.Add(this.sortOrderLabel);
 
             // Filter button
             this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
@@ -168,6 +171,8 @@ namespace Query.Web
         private void HeaderCell_PreRender(object sender, EventArgs e)
         {
             this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
+
+            this.sortOrderLabel.Text = this.SortOrder > 0 ? this.SortOrder.ToString() : string.Empty;
         }
         
         protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)

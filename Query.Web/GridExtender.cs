@@ -109,13 +109,18 @@ namespace Query.Web
                 var maxSortOrder = sortingFields.Count;
                 var sortingField = fields.First(field => field.Name.Equals(e.CommandArgument));
 
+                var sortOrder = sortingField.SortOrder;
+
                 // move the direction to the next value
                 sortingField.CycleSort(maxSortOrder+1);
-                
+
+                // update greater sort orders if the field does not sort anymore
                 if (!sortingField.SortDir.HasValue)
                 {
-                    // the field is no more sorting, we have one less sort order
-                    sortingFields.ForEach(field => field.SortOrder--);
+                    foreach (var field in sortingFields.Where(field => field.SortOrder > sortOrder))
+                    {
+                        field.SortOrder--;
+                    }
                 }
 
                 this.RaiseSort(sender, e);
