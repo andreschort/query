@@ -103,11 +103,21 @@ namespace Query.Web
             }
             else if (e.CommandName.Equals(SortCommand))
             {
-                var maxSortOrder = this.Grid.Columns.OfType<QueryFieldBase>()
-                                       .Select(field => field.ReadSort())
-                                       .Count(sort => sort.Item2.HasValue);
-                var sortingField = this.Grid.Columns.OfType<QueryFieldBase>().First(field => field.Name.Equals(e.CommandArgument));
+                var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
+                var sortingFields = fields.Where(field => field.SortDir.HasValue).ToList();
+
+                var maxSortOrder = sortingFields.Count;
+                var sortingField = fields.First(field => field.Name.Equals(e.CommandArgument));
+
+                // move the direction to the next value
                 sortingField.CycleSort(maxSortOrder+1);
+                
+                if (!sortingField.SortDir.HasValue)
+                {
+                    // the field is no more sorting, we have one less sort order
+                    sortingFields.ForEach(field => field.SortOrder--);
+                }
+
                 this.RaiseSort(sender, e);
             }
         }

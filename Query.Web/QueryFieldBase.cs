@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace Query.Web
         
         private LinkButton sortButton;
         private HtmlInputHidden sortInputHidden;
+
+        private bool sortHiddenInputRead;
         
         #endregion Fields
 
@@ -65,6 +68,7 @@ namespace Query.Web
             if (cellType == DataControlCellType.Header)
             {
                 cell.DataBinding += this.HeaderCell_DataBinding;
+                cell.Load += this.HeaderCell_Load;
                 cell.PreRender += this.HeaderCell_PreRender;
                 this.InitHeaderCell(cell);
             }
@@ -77,41 +81,33 @@ namespace Query.Web
 
         public Tuple<int, SortDirection?> ReadSort()
         {
-            var sortInputUniqueId = this.sortInputHidden == null ? string.Empty : this.sortInputHidden.UniqueID;
-            var form = HttpContext.Current.Request.Form;
+            var hiddenFieldValue = HttpContext.Current.Request.Form[this.sortInputHidden.UniqueID];
 
-            if (string.IsNullOrEmpty(sortInputUniqueId) || !form.AllKeys.Contains(sortInputUniqueId))
+            if (this.sortHiddenInputRead)
             {
-                return Tuple.Create(0, (SortDirection?)null);
+                return Tuple.Create(this.SortOrder, this.SortDir);
             }
 
-            var s = form[sortInputUniqueId].Split(new[] { ';' }, 2);
+            if (string.IsNullOrEmpty(hiddenFieldValue))
+            {
+                return Tuple.Create(0, (SortDirection?) null);
+            }
 
-            this.SortOrder = StringUtil.ToInt(s[0]);
-            this.SortDir = s[1].ToEnum<SortDirection>();
+            var parts = hiddenFieldValue.Split(new[] { ';' }, 2);
+
+            this.SortOrder = StringUtil.ToInt(parts[0]);
+            this.SortDir = parts[1].ToEnum<SortDirection>();
+
+            this.sortHiddenInputRead = true;
 
             return Tuple.Create(this.SortOrder, this.SortDir);
-
-            //var eventTarget = HttpContext.Current.Request.Form["__EVENTTARGET"];
-            //if (this.sortButton.UniqueID.Equals(eventTarget))
-            //{
-            //    if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Ascending))
-            //    {
-            //        newDirection = System.Web.UI.WebControls.SortDirection.Descending;
-            //    }
-            //    else if (newDirection.Equals(System.Web.UI.WebControls.SortDirection.Descending))
-            //    {
-            //        newDirection = null;
-            //    }
-            //    else
-            //    {
-            //        newDirection = System.Web.UI.WebControls.SortDirection.Ascending;
-            //    }
-            //}
-
-            //return newDirection;
         }
 
+        /// <summary>
+        /// Moves the Sort Direction to then next value.
+        /// In case this field was not sorting until now, it also sets the sort order to newSortOrder.
+        /// </summary>
+        /// <param name="newSortOrder"></param>
         public void CycleSort(int newSortOrder)
         {
             if (this.SortDir.Equals(SortDirection.Ascending))
@@ -162,6 +158,11 @@ namespace Query.Web
             this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
             this.FilterButton.Attributes["style"] = "display:none";
             cell.Controls.Add(this.FilterButton);
+        }
+
+        private void HeaderCell_Load(object sender, EventArgs e)
+        {
+            this.ReadSort();
         }
 
         private void HeaderCell_PreRender(object sender, EventArgs e)
@@ -217,9 +218,5 @@ namespace Query.Web
                        ? DataBinder.GetPropertyValue(dataItem, dataField, null)
                        : view.Row[dataField].ToString();
         }
-
-        
-
-        
     }
 }
