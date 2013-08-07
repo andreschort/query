@@ -37,8 +37,8 @@ namespace Query
         /// <returns></returns>
         public IQueryable Project(IQueryable<T> queryable)
         {
-            var propertyInfos = this.Fields.ToDictionary(x => x.Name, y => y.SelectElse == null ? y.Select.ReturnType : y.SelectElse.GetType());
-            var dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(propertyInfos);
+            var fields = this.Fields.ToDictionary(x => x.Name, y => y.SelectElse == null ? y.Select.ReturnType : y.SelectElse.GetType());
+            var dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(fields);
 
             ParameterExpression parameter = Expression.Parameter(queryable.ElementType, "t");
             var bindings = dynamicType.GetFields()
@@ -55,7 +55,10 @@ namespace Query
 
                                               if (queryField.SelectElse != null)
                                               {
-                                                  expression = this.CreateSelectWhen(expression, queryField);
+                                                  expression = this.CreateSelectWhen(
+                                                      expression,
+                                                      new Dictionary<object, object>(queryField.SelectWhen),
+                                                      queryField.SelectElse);
                                               }
 
                                               // Bind field with expression
@@ -71,20 +74,20 @@ namespace Query
                                                                   Expression.Constant(queryable), selector));
         }
 
-        private Expression CreateSelectWhen(Expression target, QueryField<T> field)
+        private Expression CreateSelectWhen(Expression target, Dictionary<object, object> selectWhen, object selectElse)
         {
-            if (!field.SelectWhen.Any())
+            if (!selectWhen.Any())
             {
-                return Expression.Constant(field.SelectElse);
+                return Expression.Constant(selectElse);
             }
 
-            var keyValuePair = field.SelectWhen.ElementAt(0);
-            field.SelectWhen.Remove(keyValuePair.Key);
+            var keyValuePair = selectWhen.ElementAt(0);
+            selectWhen.Remove(keyValuePair.Key);
 
             return Expression.Condition(
                 Expression.Equal(target, Expression.Constant(keyValuePair.Key)),
                 Expression.Constant(keyValuePair.Value),
-                this.CreateSelectWhen(target, field));
+                this.CreateSelectWhen(target, selectWhen, selectElse));
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)

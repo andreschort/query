@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.SampleModel;
 
 namespace Query.Test
@@ -90,6 +91,28 @@ namespace Query.Test
             builder.Create(x => x.EstadoCivil_Id).SelectElse("Separado");
 
             Assert.AreEqual("Separado", builder.Instance.SelectElse);
+        }
+
+        [TestMethod]
+        public void SelectWhenDictionary()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create(x => x.EstadoCivil_Id).SelectWhen(this.GetEstadoCivilTranslations());
+
+            Assert.AreEqual(this.GetEstadoCivilTranslations().Count, builder.Instance.SelectWhen.Count);
+        }
+
+        private Dictionary<object, object> GetEstadoCivilTranslations()
+        {
+            return new Dictionary<object, object>
+                {
+                    {EstadoCivil.Soltero, "Soltero"},
+                    {EstadoCivil.Casado, "Casado"},
+                    {EstadoCivil.Separado, "Separado"},
+                    {EstadoCivil.Divorciado, "Divorciado"},
+                    {EstadoCivil.Viudo, "Viudo"}
+                };
         }
     }
 }

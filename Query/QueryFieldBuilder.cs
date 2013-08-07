@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Common.Extension;
 using Common.Util;
@@ -49,6 +50,12 @@ namespace Query
         public QueryFieldBuilder<T> SelectWhen(object value, object result)
         {
             this.Instance.SelectWhen.Add(value, result);
+            return this;
+        }
+
+        public QueryFieldBuilder<T> SelectWhen(Dictionary<object, object> transformation)
+        {
+            this.Instance.SelectWhen = transformation;
             return this;
         }
 
