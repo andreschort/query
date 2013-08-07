@@ -20,7 +20,7 @@ namespace Query.SampleWebSite
         /// <returns></returns>
         public DataTable GetAll(
             Dictionary<string, string> filters,
-            Dictionary<string, Tuple<int, SortDirection>> sortings,
+            List<KeyValuePair<string, SortDirection>> sortings,
             int maximumRows,
             int startRowIndex)
         {
@@ -58,7 +58,11 @@ namespace Query.SampleWebSite
             return query.Apply(empleados.AsQueryable(), filters).ToDataTable();
         }
 
-        public int GetCount(Dictionary<string, string> filters, Dictionary<string, Tuple<int, SortDirection>> sortings, int maximumRows, int startRowIndex)
+        public int GetCount(
+            Dictionary<string, string> filters,
+            List<KeyValuePair<string, SortDirection>> sortings,
+            int maximumRows,
+            int startRowIndex)
         {
             return this.GetAll(filters, null, maximumRows, startRowIndex).Rows.Count;
         }

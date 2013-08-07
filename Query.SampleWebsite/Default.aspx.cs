@@ -13,6 +13,7 @@ namespace Query.SampleWebsite
     {
         protected void Page_Init(object sender, EventArgs e)
         {
+            // Databind of a drop down filter. The value of the ListItem will be the value of the filter.
             var field = (DropDownField)this.GridView.Columns[3];
             field.Items = new List<ListItem>
                 {
@@ -39,9 +40,9 @@ namespace Query.SampleWebsite
                 };
 
             // initial sortings
-            this.GridExtender.Sortings = new Dictionary<string, Tuple<int, SortDirection>>
+            this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
                 {
-                    {"Nombre", Tuple.Create(1, SortDirection.Ascending)}
+                    new KeyValuePair<string, SortDirection>("Nombre", SortDirection.Ascending)
                 };
 
             this.GridView.DataSourceID = this.OdsEmpleado.ID;

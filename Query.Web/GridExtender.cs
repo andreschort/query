@@ -23,7 +23,7 @@ namespace Query.Web
             set { this.SetFilters(value); }
         }
 
-        public Dictionary<string, Tuple<int, SortDirection>> Sortings
+        public List<KeyValuePair<string, SortDirection>> Sortings
         {
             get { return this.GetSortings(); }
             set { this.SetSortings(value); }
@@ -158,22 +158,25 @@ namespace Query.Web
             return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.FilterValue);
         }
 
-        private void SetSortings(Dictionary<string, Tuple<int, SortDirection>> sortings)
+        private void SetSortings(IList<KeyValuePair<string, SortDirection>> sortings)
         {
             var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
 
-            foreach (var sorting in sortings)
+            for (int index = 0; index < sortings.Count; index++)
             {
-                fields.First(x => x.Name.Equals(sorting.Key)).SortOrder = sorting.Value.Item1;
-                fields.First(x => x.Name.Equals(sorting.Key)).SortDir = sorting.Value.Item2;
+                var field = fields.First(x => x.Name.Equals(sortings[index].Key));
+                field.SortOrder = index+1;
+                field.SortDir = sortings[index].Value;
             }
         }
 
-        private Dictionary<string, Tuple<int, SortDirection>> GetSortings()
+        private List<KeyValuePair<string, SortDirection>> GetSortings()
         {
             return this.Grid.Columns.OfType<QueryFieldBase>()
                        .Where(x => x.SortDir.HasValue)
-                       .ToDictionary(field => field.Name, field => Tuple.Create(field.SortOrder, field.SortDir.Value));
+                       .OrderBy(field => field.SortOrder)
+                       .Select(field => new KeyValuePair<string, SortDirection>(field.Name, field.SortDir.Value))
+                       .ToList();
         }
     }
 }
