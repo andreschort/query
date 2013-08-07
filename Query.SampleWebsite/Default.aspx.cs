@@ -32,9 +32,16 @@ namespace Query.SampleWebsite
                 return;
             }
 
+            // initial filters
             this.GridExtender.Filters = new Dictionary<string, string>
                 {
                     {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
+                };
+
+            // initial sortings
+            this.GridExtender.Sortings = new Dictionary<string, Tuple<int, SortDirection>>
+                {
+                    {"Nombre", Tuple.Create(1, SortDirection.Ascending)}
                 };
 
             this.GridView.DataSourceID = this.OdsEmpleado.ID;
