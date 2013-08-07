@@ -41,13 +41,7 @@ namespace Query.SampleWebSite
                 .Select(x => x.EstadoCivil_Id)  // enums in EF5 for .NET 4.0
                 .FilterAs(FilterType.List)      // since the select targets an int we need this to force a list filter instead of an integer filter.
                 // Return constants for specific values of the target, not necesary but allows us to translates the enum values.
-                .SelectWhen((int)EstadoCivil.Soltero, "Soltero")
-                .SelectWhen((int)EstadoCivil.Casado, "Casado")
-                .SelectWhen((int)EstadoCivil.Separado, "Separado")
-                .SelectWhen((int)EstadoCivil.Divorciado, "Divorciado")
-                .SelectWhen((int)EstadoCivil.Viudo, "Viudo")
-                // (mandatory when using SelectWhen) if the target value is non of the above return this
-                .SelectElse(string.Empty)
+                .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
                 .Instance);
 
             query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
@@ -104,5 +98,16 @@ namespace Query.SampleWebSite
                 };
         }
 
+        private Dictionary<object, object> GetEstadoCivilTranslations()
+        {
+            return new Dictionary<object, object>
+                {
+                    {(int)EstadoCivil.Soltero, "Soltero"},
+                    {(int)EstadoCivil.Casado, "Casado"},
+                    {(int)EstadoCivil.Separado, "Separado"},
+                    {(int)EstadoCivil.Divorciado, "Divorciado"},
+                    {(int)EstadoCivil.Viudo, "Viudo"}
+                };
+        }
     }
 }

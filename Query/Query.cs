@@ -74,6 +74,30 @@ namespace Query
                                                                   Expression.Constant(queryable), selector));
         }
 
+        public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)
+        {
+            return filters.Aggregate(query, this.Filter);
+        }
+
+        public IQueryable<T> Filter(IQueryable<T> query, Filter filter)
+        {
+            var field = this.Fields.FirstOrDefault(x => x.Name.Equals(filter.Name));
+
+            return field == null ? query : field.Filter(query, filter);
+        }
+
+        /// <summary>
+        /// Creates an Expression of the form:
+        /// target.Equals(key1)
+        ///     ? value1
+        ///     : target.Equals(key2)
+        ///         ? value2
+        ///         : selectElse
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="selectWhen"></param>
+        /// <param name="selectElse"></param>
+        /// <returns></returns>
         private Expression CreateSelectWhen(Expression target, Dictionary<object, object> selectWhen, object selectElse)
         {
             if (!selectWhen.Any())
@@ -90,16 +114,5 @@ namespace Query
                 this.CreateSelectWhen(target, selectWhen, selectElse));
         }
 
-        public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)
-        {
-            return filters.Aggregate(query, this.Filter);
-        }
-
-        public IQueryable<T> Filter(IQueryable<T> query, Filter filter)
-        {
-            var field = this.Fields.FirstOrDefault(x => x.Name.Equals(filter.Name));
-
-            return field == null ? query : field.Filter(query, filter);
-        }
     }
 }

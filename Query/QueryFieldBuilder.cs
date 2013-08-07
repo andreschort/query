@@ -53,9 +53,10 @@ namespace Query
             return this;
         }
 
-        public QueryFieldBuilder<T> SelectWhen(Dictionary<object, object> transformation)
+        public QueryFieldBuilder<T> SelectWhen(Dictionary<object, object> transformation, object selectElse)
         {
             this.Instance.SelectWhen = transformation;
+            this.Instance.SelectElse = selectElse;
             return this;
         }
 
