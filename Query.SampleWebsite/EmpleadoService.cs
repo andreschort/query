@@ -29,7 +29,7 @@ namespace Query.SampleWebSite
 
             // Simple text and integer fields. The field names come from the select expression.
             query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance); // Field name = "Nombre"
-            query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance); // Field name = "Apellido"
+            query.Fields.Add(fieldBuilder.Create(x => x.Apellido).CaseSensitive().Instance); // Field name = "Apellido" - case sensitive
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
 
             // Date filter with truncated time. We need to specify the name of the field because we can not get it from the select expression.

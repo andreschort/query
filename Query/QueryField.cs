@@ -32,6 +32,8 @@ namespace Query
         /// </summary>
         public List<LambdaExpression> Where { get; set; }
 
+        public bool? CaseSensitive { get; set; }
+
         public QueryField()
         {
             this.When = new Dictionary<object, Expression<Func<T, bool>>>();
@@ -46,44 +48,52 @@ namespace Query
                 return query;
             }
 
-            if (filter.Values.Any(value => value != null && this.When.ContainsKey(value)))
+            if (filter.Values.Where(v => v != null).Any(v => this.When.ContainsKey(v)))
             {
                 return query.Where(this.When[filter.Value]);
             }
 
-            Func<ExpressionBuilder, Filter, ExpressionBuilder> operatorFunction;
-
+            Func<ExpressionBuilder, Filter, ExpressionBuilder> opFunction;
             switch (filter.Operator)
             {
                 case FilterOperator.Equal:
-                    operatorFunction = (b, f) => b.EqualTo(f.Value);
+                    opFunction = (b, f) => b.EqualTo(f.Value);
                     break;
                 case FilterOperator.NotEqual:
-                    operatorFunction = (b, f) => b.NotEqualTo(f.Value);
+                    opFunction = (b, f) => b.NotEqualTo(f.Value);
                     break;
                 case FilterOperator.GreaterThan:
-                    operatorFunction = (b, f) => b.GreaterThanThis(f.Value);
+                    opFunction = (b, f) => b.GreaterThanThis(f.Value);
                     break;
                 case FilterOperator.GreaterThanEqual:
-                    operatorFunction = (b, f) => b.GreaterThanOrEqualTo(f.Value);
+                    opFunction = (b, f) => b.GreaterThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.LessThan:
-                    operatorFunction = (b, f) => b.LessThanThis(f.Value);
+                    opFunction = (b, f) => b.LessThanThis(f.Value);
                     break;
                 case FilterOperator.LessThanEqual:
-                    operatorFunction = (b, f) => b.LessThanOrEqualTo(f.Value);
+                    opFunction = (b, f) => b.LessThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.Between:
-                    operatorFunction = (b, f) => b.Between(f.Values[0], f.Values[1]);
+                    opFunction = (b, f) => b.Between(f.Values[0], f.Values[1]);
                     break;
                 case FilterOperator.Contains:
-                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("Contains", f.Value.ToString().ToLower());
+                    if (this.CaseSensitive.GetValueOrDefault())
+                        opFunction = (b, f) => b.Call<string>("Contains", f.Value.ToString());
+                    else
+                        opFunction = (b, f) => b.Call<string>("ToLower").Call<string>("Contains", f.Value.ToString().ToLower());
                     break;
                 case FilterOperator.StartsWith:
-                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("StartsWith", f.Value.ToString().ToLower());
+                    if (this.CaseSensitive.GetValueOrDefault())
+                        opFunction = (b, f) => b.Call<string>("StartsWith", f.Value.ToString());
+                    else
+                        opFunction = (b, f) => b.Call<string>("ToLower").Call<string>("StartsWith", f.Value.ToString().ToLower());
                     break;
                 case FilterOperator.EndsWith:
-                    operatorFunction = (b, f) => b.Call<string>("ToLower").Call<string>("EndsWith", f.Value.ToString().ToLower());
+                    if (this.CaseSensitive.GetValueOrDefault())
+                        opFunction = (b, f) => b.Call<string>("EndsWith", f.Value.ToString());
+                    else
+                        opFunction = (b, f) => b.Call<string>("ToLower").Call<string>("EndsWith", f.Value.ToString().ToLower());
                     break;
                 default:
                     throw new Exception("Unkown operator: " + filter.Operator);
@@ -94,7 +104,7 @@ namespace Query
                 ExpressionBuilder.False(),
                 (current, key) =>
                 current.OrElse(
-                    operatorFunction(
+                    opFunction(
                         ExpressionBuilder.New(builder.Param, key.Body.Replace(key.Parameters[0], builder.Param)),
                         filter)
                     .Expression));

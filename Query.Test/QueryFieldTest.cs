@@ -12,9 +12,9 @@ namespace Query.Test
         [TestMethod]
         public void FilterNotValidFilter()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
@@ -29,11 +29,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhenCasado()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.When.Add(EstadoCivil.Casado, empleado => empleado.EstadoCivil.Equals(EstadoCivil.Casado));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
@@ -51,11 +51,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntEqual()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -74,11 +74,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntNotEqual()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -97,11 +97,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntGreaterThan()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -119,11 +119,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntGreaterThanEqual()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -142,11 +142,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntLessThan()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -164,11 +164,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntLessThanEqual()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 1},
                 new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 2},
@@ -187,11 +187,11 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereIntBetween()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
 
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Dni = 1},
                 new Empleado {Dni = 2},
@@ -215,10 +215,10 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereContains()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
@@ -237,10 +237,10 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereContainsCaseInsensitive()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
@@ -259,10 +259,10 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereStartsWith()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
@@ -282,10 +282,10 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereStartsWithCaseInsensitive()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
@@ -305,10 +305,10 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereEndsWith()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
@@ -328,15 +328,15 @@ namespace Query.Test
         [TestMethod]
         public void FilterWhereEndsWithCaseInsensitive()
         {
-            QueryField<Empleado> field = new QueryField<Empleado>();
+            var field = new QueryField<Empleado>();
             
             field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
-            List<Empleado> empleados = new List<Empleado>
+            var empleados = new List<Empleado>
             {
                 new Empleado {Apellido = "Chort", Dni = 1},
                 new Empleado {Apellido = "Gieco", Dni = 2},
                 new Empleado {Apellido = "Diaz", Dni = 3},
-                new Empleado {Apellido = "Dominguez", Dni = 4},
+                new Empleado {Apellido = "DomingueZ", Dni = 4},
             };
 
             var filter = new Filter {Valid = true, Value = "Z", Operator = FilterOperator.EndsWith};
@@ -345,7 +345,28 @@ namespace Query.Test
 
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual("Diaz", result[0].Apellido);
-            Assert.AreEqual("Dominguez", result[1].Apellido);
+            Assert.AreEqual("DomingueZ", result[1].Apellido);
+        }
+
+        [TestMethod]
+        public void FilterCaseSensitive()
+        {
+            var field = new QueryField<Empleado> {CaseSensitive = true};
+            field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
+            var empleados = new List<Empleado>
+            {
+                new Empleado {Apellido = "Chort", Dni = 1},
+                new Empleado {Apellido = "Gieco", Dni = 2},
+                new Empleado {Apellido = "Diaz", Dni = 3},
+                new Empleado {Apellido = "DomingueZ", Dni = 4},
+            };
+
+            var filter = new Filter { Valid = true, Value = "Z", Operator = FilterOperator.EndsWith };
+
+            var result = field.Filter(empleados.AsQueryable(), filter).ToList();
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("DomingueZ", result[0].Apellido);
         }
     }
 }

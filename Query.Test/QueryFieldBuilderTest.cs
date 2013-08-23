@@ -102,6 +102,16 @@ namespace Query.Test
 
             Assert.AreEqual(this.GetEstadoCivilTranslations().Count, builder.Instance.SelectWhen.Count);
         }
+        
+        [TestMethod]
+        public void CaseSensitive()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create(x => x.EstadoCivil_Id).CaseSensitive();
+
+            Assert.AreEqual(true, builder.Instance.CaseSensitive);
+        }
 
         private Dictionary<object, object> GetEstadoCivilTranslations()
         {

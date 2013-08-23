@@ -142,5 +142,12 @@ namespace Query
 
             return FilterType.List;
         }
+
+        public QueryFieldBuilder<T> CaseSensitive()
+        {
+            this.Instance.CaseSensitive = true;
+
+            return this;
+        }
     }
 }
