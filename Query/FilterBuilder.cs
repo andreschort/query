@@ -54,7 +54,7 @@ namespace Query
 
         public Filter Text(string name, string value)
         {
-            Filter filter = new Filter { Name = name, OriginalText = value };
+            var filter = new Filter { Name = name, OriginalText = value };
 
             var text = value ?? string.Empty;
 
@@ -222,7 +222,7 @@ namespace Query
 
         public Filter Decimal(string name, string value)
         {
-            Filter filter = new Filter {Name = name, OriginalText = value, Operator = GetOperator(value)};
+            var filter = new Filter {Name = name, OriginalText = value, Operator = GetOperator(value)};
 
             if (filter.Operator.Equals(FilterOperator.None))
             {

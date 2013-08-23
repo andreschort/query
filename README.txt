@@ -1,13 +1,12 @@
-http://www.google.com.ar|urlize
-
 TODO's
 ======
 [DONE]Disparar el filtrado con la tecla enter en DateField
 [DONE]Auto filter en DateField
 [DONE]Links en la celda de datos
-Ordenamiento
-Flechas de ordenamiento en las cabeceras
+[DONE]Ordenamiento
+[DONE]Flechas de ordenamiento en las cabeceras
 Estilos
+Ejemplos con EntityFramework
 
 Issues
 ======
@@ -28,25 +27,3 @@ QueryFieldWhereBuilder
 	
 fieldBuilder.Create(x => x.FechaNacimiento).Where().TruncateTime()
 -------------------------------------------------------------------------------------------------------------------
-
-[DONE]
-Facilidad para reducir este codigo
-            query.Fields.Add(
-                fieldBuilder.Create("EstadoCivil")
-                            .Select(x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Soltero) // When using EntityFramework without enum support
-                                             ? "Soltero"
-                                             : x.EstadoCivil_Id.Equals((int) EstadoCivil.Casado)
-                                                   ? "Casado"
-                                                   : x.EstadoCivil_Id.Equals((int) EstadoCivil.Separado)
-                                                         ? "Separado"
-                                                         : x.EstadoCivil_Id.Equals((int) EstadoCivil.Divorciado)
-                                                               ? "Divorciado"
-                                                               : x.EstadoCivil_Id.Equals((int) EstadoCivil.Viudo)
-                                                                     ? "Viudo"
-                                                                     : string.Empty)
-																	 
-Se me ocurre algo similar al filtrado con When.
-fieldBuilder.Create("EstadoCivil")
-			.Select(x => x.EstadoCivil_Id)
-			.SelectWhen((int) EstadoCivil.Soltero, "Soltero")
-			etc
