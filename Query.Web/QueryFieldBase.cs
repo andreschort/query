@@ -180,6 +180,12 @@ namespace Query.Web
             this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
 
             this.sortOrderLabel.Text = this.SortOrder > 0 ? this.SortOrder.ToString() : string.Empty;
+
+            if (this.SortDir.HasValue)
+            {
+                var header = (DataControlFieldHeaderCell) sender;
+                header.CssClass = this.SortDir.Equals(SortDirection.Ascending) ? "asc" : "desc";
+            }
         }
         
         protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)

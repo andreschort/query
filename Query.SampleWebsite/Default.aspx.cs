@@ -34,16 +34,17 @@ namespace Query.SampleWebsite
             }
 
             // initial filters
-            this.GridExtender.Filters = new Dictionary<string, string>
-                {
-                    {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
-                };
+            //this.GridExtender.Filters = new Dictionary<string, string>
+            //    {
+            //        {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
+            //    };
 
             // initial sortings
-            this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
-                {
-                    new KeyValuePair<string, SortDirection>("Nombre", SortDirection.Ascending)
-                };
+            //this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
+            //    {
+            //        new KeyValuePair<string, SortDirection>("Salario", SortDirection.Descending),
+            //        new KeyValuePair<string, SortDirection>("Edad", SortDirection.Ascending)
+            //    };
 
             this.GridView.DataSourceID = this.OdsEmpleado.ID;
             this.GridView.DataBind();

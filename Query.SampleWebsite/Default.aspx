@@ -27,7 +27,7 @@
     <h3>We suggest the following:</h3>
         <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
                             OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
-    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True">
+    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False">
         <Columns>
             <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
@@ -41,7 +41,9 @@
     </asp:GridView>
     
     <asp:ObjectDataSource ID="OdsEmpleado" runat="server" EnablePaging="True"
-            SelectMethod="GetAll" SelectCountMethod="GetAllCount"
+            SelectMethod="GetAll" SelectCountMethod="GetCount"
+            MaximumRowsParameterName="maximumRows"
+            StartRowIndexParameterName="startRowIndex"
             TypeName="Query.SampleWebSite.EmpleadoService"
             OnObjectCreating="OdsEmpleado_ObjectCreating"
             OnSelecting="OdsEmpleado_ObjectSelecting"

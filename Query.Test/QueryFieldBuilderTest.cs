@@ -98,7 +98,7 @@ namespace Query.Test
         {
             var builder = new QueryFieldBuilder<Empleado>();
 
-            builder.Create(x => x.EstadoCivil_Id).SelectWhen(this.GetEstadoCivilTranslations());
+            builder.Create(x => x.EstadoCivil_Id).SelectWhen(this.GetEstadoCivilTranslations(), string.Empty);
 
             Assert.AreEqual(this.GetEstadoCivilTranslations().Count, builder.Instance.SelectWhen.Count);
         }

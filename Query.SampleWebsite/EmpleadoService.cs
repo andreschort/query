@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web.UI.WebControls;
 using Common.Extension;
 using Query.SampleModel;
 
@@ -29,36 +28,44 @@ namespace Query.SampleWebSite
             var query = new Query<Empleado>();
 
             // Simple text and integer fields. The field names come from the select expression.
-            query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance);
-            query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance);
+            query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance); // Field name = "Nombre"
+            query.Fields.Add(fieldBuilder.Create(x => x.Apellido).Instance); // Field name = "Apellido"
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
 
-            // Date filter with truncated time. We need to specify the name of the field because of the select expression.
+            // Date filter with truncated time. We need to specify the name of the field because we can not get it from the select expression.
             query.Fields.Add(fieldBuilder.Create("FechaNacimiento").Select(x => x.FechaNacimiento.Date).Instance);
 
             // List filter targeting an enum
             query.Fields.Add(fieldBuilder.Create("EstadoCivil")
                 .Select(x => x.EstadoCivil_Id)  // enums in EF5 for .NET 4.0
                 .FilterAs(FilterType.List)      // since the select targets an int we need this to force a list filter instead of an integer filter.
-                // Return constants for specific values of the target, not necesary but allows us to translates the enum values.
+                // Return constants for specific values of the target, not necesary but allows us to translates the enum values that will be shown.
                 .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
                 .Instance);
 
             query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
 
-            var empleados = this.GetEmpleados();
+            var empleados = this.GetEmpleados().AsQueryable();
 
-            return query.Apply(empleados.AsQueryable(), filters).ToDataTable();
+            empleados = query.Filter(empleados, filters);
+            empleados = query.OrderBy(empleados, sortings);
+
+            if (maximumRows > 0)
+            {
+                empleados = empleados.Skip(startRowIndex).Take(maximumRows);
+            }
+
+            var projection = query.Project(empleados);
+
+            return projection.ToDataTable();
         }
 
         public int GetCount(
             Dictionary<string, string> filters,
-            List<KeyValuePair<string, SortDirection>> sortings,
-            int maximumRows,
-            int startRowIndex)
+            List<KeyValuePair<string, SortDirection>> sortings)
         {
-            return this.GetAll(filters, null, maximumRows, startRowIndex).Rows.Count;
+            return this.GetAll(filters, null, 0, 0).Rows.Count;
         }
 
         private IEnumerable<Empleado> GetEmpleados()

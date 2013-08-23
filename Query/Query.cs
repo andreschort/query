@@ -15,16 +15,6 @@ namespace Query
 
         public List<QueryField<T>> Fields { get; set; }
 
-        public IQueryable Apply(IQueryable<T> query, Dictionary<string, string> values)
-        {
-            FilterBuilder filterBuilder = new FilterBuilder();
-            var filters = from value in values
-                          let field = this.Fields.Find(x => x.Name.Equals(value.Key))
-                          select filterBuilder.Create(field, value.Value);
-
-            return this.Apply(query, filters);
-        }
-
         public IQueryable Apply(IQueryable<T> query, IEnumerable<Filter> filters)
         {
             return this.Project(this.Filter(query, filters));
@@ -74,6 +64,16 @@ namespace Query
                                                                   Expression.Constant(queryable), selector));
         }
 
+        public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
+        {
+            var filterBuilder = new FilterBuilder();
+            var filters = from value in values
+                          let field = this.Fields.Find(x => x.Name.Equals(value.Key))
+                          select filterBuilder.Create(field, value.Value);
+
+            return this.Filter(query, filters);
+        }
+
         public IQueryable<T> Filter(IQueryable<T> query, IEnumerable<Filter> filters)
         {
             return filters.Aggregate(query, this.Filter);
@@ -84,6 +84,49 @@ namespace Query
             var field = this.Fields.FirstOrDefault(x => x.Name.Equals(filter.Name));
 
             return field == null ? query : field.Filter(query, filter);
+        }
+
+        public IQueryable<T> OrderBy(IQueryable<T> query, List<KeyValuePair<string, SortDirection>> sortings)
+        {
+            if (sortings == null || !sortings.Any())
+            {
+                return query;
+            }
+
+            // first sorting
+            var orderedQuery = this.OrderBy(query, sortings[0].Key, sortings[0].Value);
+
+            // the rest
+            return sortings.GetRange(1, sortings.Count - 1)
+                .Aggregate(orderedQuery, (current, sorting) => this.ThenBy(current, sorting.Key, sorting.Value));
+        }
+
+        public IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection)
+        {
+            return this.OrderBy(query, fieldName, sortDirection, "OrderBy");
+        }
+
+        public IOrderedQueryable<T> ThenBy(IQueryable<T> query, string fieldName, SortDirection sortDirection)
+        {
+            return this.OrderBy(query, fieldName, sortDirection, "ThenBy");
+        }
+
+        private IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection, string methodName) 
+        {
+            var field = this.Fields.First(x => x.Name.Equals(fieldName));
+            
+            if (sortDirection.Equals(SortDirection.Descending))
+            {
+                methodName += "Descending";
+            }
+
+            var methodInfo = typeof(Queryable).GetMethods().Single(
+                method => method.Name == methodName
+                          && method.IsGenericMethodDefinition
+                          && method.GetGenericArguments().Length == 2
+                          && method.GetParameters().Length == 2);
+
+            return (IOrderedQueryable<T>)methodInfo.MakeGenericMethod(typeof(T), field.Select.ReturnType).Invoke(null, new object[] { query, field.Select });
         }
 
         /// <summary>
@@ -113,6 +156,5 @@ namespace Query
                 Expression.Constant(keyValuePair.Value),
                 this.CreateSelectWhen(target, selectWhen, selectElse));
         }
-
     }
 }
