@@ -7,11 +7,13 @@ TODO's
 [DONE]Flechas de ordenamiento en las cabeceras
 Estilos
 Ejemplos con EntityFramework
+MVC Helpers
 
 Issues
 ======
 Como manejar los nombres de attributes? Estan repetidos en codigo y en js
 DateField: Como manejar el separador en los valores from y to del filtro? Ahora esta hardcodeado y repetido ";"
+DropDownField: Default value
 
 Ideas
 =====
