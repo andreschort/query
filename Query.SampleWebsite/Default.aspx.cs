@@ -53,6 +53,7 @@ namespace Query.SampleWebsite
         protected void GridExtender_Filter(object sender, EventArgs e)
         {
             this.GridView.DataSourceID = this.OdsEmpleado.ID;
+            this.GridView.PageIndex = 0;
             this.GridView.DataBind();
         }
 

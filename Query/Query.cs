@@ -55,13 +55,18 @@ namespace Query
                                               return Expression.Bind(field, expression);
                                           });
 
-            Expression selector = Expression.Lambda(
+            LambdaExpression selector = Expression.Lambda(
                 Expression.MemberInit(Expression.New(dynamicType), bindings),
                 parameter);
 
-            return queryable.Provider.CreateQuery(Expression.Call(typeof (Queryable), "Select",
-                                                                  new[] {queryable.ElementType, dynamicType},
-                                                                  Expression.Constant(queryable), selector));
+            var selectExpression = Expression.Call(
+                typeof (Queryable),
+                "Select",
+                new[] { queryable.ElementType, dynamicType },
+                queryable.Expression,
+                Expression.Quote(selector));
+            
+            return queryable.Provider.CreateQuery(selectExpression);
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)

@@ -24,10 +24,9 @@
         th input { width: 90%; }
     </style>
 
-    <h3>We suggest the following:</h3>
-        <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
-                            OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
-    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False">
+    <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
+                        OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
+    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="3">
         <Columns>
             <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
@@ -38,6 +37,7 @@
             <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
             <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" />
         </Columns>
+        <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>
     
     <asp:ObjectDataSource ID="OdsEmpleado" runat="server" EnablePaging="True"

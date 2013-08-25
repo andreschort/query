@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -36,6 +37,11 @@ namespace Common.Extension
             }
 
             return dataTable;
+        }
+
+        public static List<dynamic> ToDynamic(this IQueryable list)
+        {
+            return Enumerable.Cast<object>(list).Cast<dynamic>().ToList();
         }
     }
 }

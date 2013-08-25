@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Common.Extension;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.SampleModel;
@@ -194,6 +196,85 @@ namespace Query.Test
 
             // Assertions for the target method
             Assert.AreEqual(empleados[0].Nombre, result[0].Nombre);
+        }
+
+        [TestMethod]
+        public void ProjectResultingTypeEF()
+        {
+            var query = new Query<Empleado>();
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "FullName",
+                Select = ExpressionBuilder.Build<Empleado, string>(x => x.Nombre + " " + x.Apellido)
+            });
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "Dni",
+                Select = ExpressionBuilder.Build<Empleado, int>(x => x.Dni)
+            });
+
+            List<dynamic> dynamic;
+            using (var db = new SampleContext())
+            {
+                db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
+                db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
+                db.Empleados.Add(new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
+                db.SaveChanges();
+
+                //var @select = db.Empleados.Select(x => new {FullName = x.Nombre + " " + x.Apellido, Dni = x.Dni});
+                
+                // Test target method
+                var queryable = query.Project(db.Empleados);
+                dynamic = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
+            }
+            
+            // Assertions for the target method
+            var fields = @dynamic[0].GetType().GetFields();
+
+            Assert.AreEqual("FullName", fields[0].Name);
+            Assert.AreEqual(typeof(string), fields[0].FieldType);
+            Assert.AreEqual("Dni", fields[1].Name);
+            Assert.AreEqual(typeof(int), fields[1].FieldType);
+        }
+
+        [TestMethod]
+        public void ProjectResultingProjectionEF()
+        {
+            // Init test vars
+            var query = new Query<Empleado>();
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "FullName",
+                Select = ExpressionBuilder.Build<Empleado, string>(x => x.Nombre + " " + x.Apellido)
+            });
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "Dni",
+                Select = ExpressionBuilder.Build<Empleado, int>(x => x.Dni)
+            });
+
+            List<dynamic> result;
+            using (var db = new SampleContext())
+            {
+                db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
+                db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
+                db.Empleados.Add(new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
+                db.SaveChanges();
+
+                //var @select = db.Empleados.Select(x => new {FullName = x.Nombre + " " + x.Apellido, Dni = x.Dni});
+
+                // Test target method
+                var queryable = query.Project(db.Empleados);
+                result = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
+            }
+
+            // Assertions for the target method
+            Assert.AreEqual("Andres Chort", result[0].FullName);
+            Assert.AreEqual(31333555, result[0].Dni);
         }
     }
 }

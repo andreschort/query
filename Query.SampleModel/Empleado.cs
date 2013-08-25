@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Query.SampleModel
 {
     public class Empleado
     {
+        public int Id { get; set; }
+
         public string Nombre { get; set; }
 
         public string Apellido { get; set; }
@@ -18,6 +21,7 @@ namespace Query.SampleModel
 
         public int EstadoCivil_Id { get; set; }
 
+        [NotMapped]
         public EstadoCivil EstadoCivil
         {
             get { return (EstadoCivil)this.EstadoCivil_Id; }

@@ -33,7 +33,7 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
 
             // Date filter with truncated time. We need to specify the name of the field because we can not get it from the select expression.
-            query.Fields.Add(fieldBuilder.Create("FechaNacimiento").Select(x => x.FechaNacimiento.Date).Instance);
+            query.Fields.Add(fieldBuilder.Create(x => x.FechaNacimiento).Instance);
 
             // List filter targeting an enum
             query.Fields.Add(fieldBuilder.Create("EstadoCivil")
@@ -46,19 +46,23 @@ namespace Query.SampleWebSite
             query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
 
-            var empleados = this.GetEmpleados().AsQueryable();
+            var empleados = this.GetEmpleados();
 
             empleados = query.Filter(empleados, filters);
             empleados = query.OrderBy(empleados, sortings);
 
             if (maximumRows > 0)
             {
+                // To use .Skip and .Take the IQueryable must be ordered.
+                if (!sortings.Any())
+                {
+                    empleados = empleados.OrderBy(x => x.Id);
+                }
+
                 empleados = empleados.Skip(startRowIndex).Take(maximumRows);
             }
 
-            var projection = query.Project(empleados);
-
-            return projection.ToDataTable();
+            return query.Project(empleados).ToDataTable();
         }
 
         public int GetCount(
@@ -68,7 +72,7 @@ namespace Query.SampleWebSite
             return this.GetAll(filters, null, 0, 0).Rows.Count;
         }
 
-        private IEnumerable<Empleado> GetEmpleados()
+        private List<Empleado> GetEmpleadosMock()
         {
             return new List<Empleado>
                 {
@@ -103,6 +107,27 @@ namespace Query.SampleWebSite
                             FechaNacimiento = DateTime.Today.AddDays(2)
                         },
                 };
+        }
+
+        private void CreateEmpleados()
+        {
+            using (var db = new SampleContext())
+            {
+                db.Empleados.Add(this.GetEmpleadosMock()[0]);
+                db.Empleados.Add(this.GetEmpleadosMock()[1]);
+                db.Empleados.Add(this.GetEmpleadosMock()[2]);
+                db.SaveChanges();
+            }
+        }
+
+        private IQueryable<Empleado> GetEmpleados()
+        {
+            var db = new SampleContext();
+
+            var queryable = db.Empleados.Select(x => new { Lala = x.Nombre }).ToList();
+
+            return db.Set<Empleado>();
+            //return from empleado in db.Empleados select empleado;
         }
 
         private Dictionary<object, object> GetEstadoCivilTranslations()
