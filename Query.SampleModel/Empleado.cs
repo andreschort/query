@@ -20,12 +20,32 @@ namespace Query.SampleModel
         public decimal Salario { get; set; }
 
         public int EstadoCivil_Id { get; set; }
-
+        
         [NotMapped]
         public EstadoCivil EstadoCivil
         {
             get { return (EstadoCivil)this.EstadoCivil_Id; }
             set { this.EstadoCivil_Id = (int)value; }
         }
+
+        public string Company { get; set; }
+
+        public string Address { get; set; }
+
+        public string City { get; set; }
+
+        public string Country { get; set; }
+
+        public string State { get; set; }
+
+        public string Zip { get; set; }
+
+        public string Phone { get; set; }
+
+        public string Fax { get; set; }
+
+        public string Email { get; set; }
+
+        public string Web { get; set; }
     }
 }
