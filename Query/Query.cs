@@ -86,6 +86,11 @@ namespace Query
 
         public IQueryable<T> Filter(IQueryable<T> query, Filter filter)
         {
+            if (filter == null)
+            {
+                return query;
+            }
+
             var field = this.Fields.FirstOrDefault(x => x.Name.Equals(filter.Name));
 
             return field == null ? query : field.Filter(query, filter);

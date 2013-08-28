@@ -45,24 +45,29 @@ namespace Query.SampleWebSite
 
             query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
             query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
+            query.Fields.Add(fieldBuilder.Create("AttachmentCount")
+                .Select(x => x.Attachment.Items.Count(item => !item.Deleted && item.Location_Id.Equals((int)AttachmentLocation.Creation))).Instance);
 
-            var empleados = this.GetEmpleados();
-
-            empleados = query.Filter(empleados, filters);
-            empleados = query.OrderBy(empleados, sortings);
-
-            if (maximumRows > 0)
+            using (var db = new SampleContext())
             {
-                // To use .Skip and .Take the IQueryable must be ordered.
-                if (!sortings.Any())
+                var empleados = (IQueryable<Empleado>)db.Set<Empleado>();
+
+                empleados = query.Filter(empleados, filters);
+                empleados = query.OrderBy(empleados, sortings);
+
+                if (maximumRows > 0)
                 {
-                    empleados = empleados.OrderBy(x => x.Id);
+                    // To use .Skip and .Take the IQueryable must be ordered.
+                    if (!sortings.Any())
+                    {
+                        empleados = empleados.OrderBy(x => x.Id);
+                    }
+
+                    empleados = empleados.Skip(startRowIndex).Take(maximumRows);
                 }
 
-                empleados = empleados.Skip(startRowIndex).Take(maximumRows);
+                return query.Project(empleados).ToDataTable();
             }
-
-            return query.Project(empleados).ToDataTable();
         }
 
         public int GetCount(
@@ -118,16 +123,6 @@ namespace Query.SampleWebSite
                 db.Empleados.Add(this.GetEmpleadosMock()[2]);
                 db.SaveChanges();
             }
-        }
-
-        private IQueryable<Empleado> GetEmpleados()
-        {
-            var db = new SampleContext();
-
-            var queryable = db.Empleados.Select(x => new { Lala = x.Nombre }).ToList();
-
-            return db.Set<Empleado>();
-            //return from empleado in db.Empleados select empleado;
         }
 
         private Dictionary<object, object> GetEstadoCivilTranslations()

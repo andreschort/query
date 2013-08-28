@@ -22,6 +22,7 @@
             <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" />
             <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
             <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" />
+            <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

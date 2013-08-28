@@ -258,6 +258,11 @@ namespace Query
 
         public Filter Create<T>(QueryField<T> field, string value)
         {
+            if (field == null)
+            {
+                return null;
+            }
+
             switch (field.FilterType)
             {
                 case FilterType.Text:

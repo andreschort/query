@@ -47,5 +47,7 @@ namespace Query.SampleModel
         public string Email { get; set; }
 
         public string Web { get; set; }
+
+        public Attachment Attachment { get; set; }
     }
 }

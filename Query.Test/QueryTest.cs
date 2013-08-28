@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Common.Extension;
 using Common.Util;
@@ -215,8 +216,10 @@ namespace Query.Test
                 Select = ExpressionBuilder.Build<Empleado, int>(x => x.Dni)
             });
 
-            List<dynamic> dynamic;
-            using (var db = new SampleContext())
+            var connection = Effort.DbConnectionFactory.CreateTransient();
+
+            List<dynamic> result;
+            using (var db = new SampleContext(connection))
             {
                 db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
@@ -227,11 +230,11 @@ namespace Query.Test
                 
                 // Test target method
                 var queryable = query.Project(db.Empleados);
-                dynamic = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
+                result = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
             }
             
             // Assertions for the target method
-            var fields = @dynamic[0].GetType().GetFields();
+            var fields = result[0].GetType().GetFields();
 
             Assert.AreEqual("FullName", fields[0].Name);
             Assert.AreEqual(typeof(string), fields[0].FieldType);
@@ -257,8 +260,10 @@ namespace Query.Test
                 Select = ExpressionBuilder.Build<Empleado, int>(x => x.Dni)
             });
 
+            var connection = Effort.DbConnectionFactory.CreateTransient();
+
             List<dynamic> result;
-            using (var db = new SampleContext())
+            using (var db = new SampleContext(connection))
             {
                 db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });

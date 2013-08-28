@@ -1,0 +1,13 @@
+﻿using System.Collections.Generic;
+
+namespace Query.SampleModel
+{
+    public class Attachment
+    {
+        public int Id { get; set; }
+
+        public List<AttachmentItem> Items { get; set; }
+
+        public bool Deleted { get; set; }
+    }
+}

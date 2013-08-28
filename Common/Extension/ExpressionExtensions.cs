@@ -11,7 +11,7 @@ namespace Common.Extension
         {
             if (expression.NodeType == ExpressionType.Lambda)
             {
-                LambdaExpression lambdaExpression = (LambdaExpression)expression;
+                var lambdaExpression = (LambdaExpression)expression;
                 return GetPropertyInfo(lambdaExpression.Body);
             }
 
@@ -37,7 +37,7 @@ namespace Common.Extension
         {
             if (expression.NodeType == ExpressionType.Lambda)
             {
-                LambdaExpression lambdaExpression = (LambdaExpression)expression;
+                var lambdaExpression = (LambdaExpression)expression;
                 return GetMemberInfo(lambdaExpression.Body);
             }
 
