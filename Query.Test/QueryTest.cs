@@ -44,12 +44,12 @@ namespace Query.Test
             // Assertions for the target method
             Assert.AreEqual(empleados.Count, result.Count);
 
-            var fields = result[0].GetType().GetFields();
+            var fields = result[0].GetType().GetProperties();
 
             Assert.AreEqual("FullName", fields[0].Name);
-            Assert.AreEqual(typeof(string), fields[0].FieldType);
+            Assert.AreEqual(typeof(string), fields[0].PropertyType);
             Assert.AreEqual("Dni", fields[1].Name);
-            Assert.AreEqual(typeof(int), fields[1].FieldType);
+            Assert.AreEqual(typeof(int), fields[1].PropertyType);
         }
 
         [TestMethod]
@@ -218,7 +218,7 @@ namespace Query.Test
 
             var connection = Effort.DbConnectionFactory.CreateTransient();
 
-            List<dynamic> result;
+            List<object> result;
             using (var db = new SampleContext(connection))
             {
                 db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
@@ -226,20 +226,18 @@ namespace Query.Test
                 db.Empleados.Add(new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.SaveChanges();
 
-                //var @select = db.Empleados.Select(x => new {FullName = x.Nombre + " " + x.Apellido, Dni = x.Dni});
-                
                 // Test target method
                 var queryable = query.Project(db.Empleados);
-                result = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
+                result = Enumerable.Cast<object>(queryable).ToList();
             }
             
             // Assertions for the target method
-            var fields = result[0].GetType().GetFields();
+            var fields = result[0].GetType().GetProperties();
 
             Assert.AreEqual("FullName", fields[0].Name);
-            Assert.AreEqual(typeof(string), fields[0].FieldType);
+            Assert.AreEqual(typeof(string), fields[0].PropertyType);
             Assert.AreEqual("Dni", fields[1].Name);
-            Assert.AreEqual(typeof(int), fields[1].FieldType);
+            Assert.AreEqual(typeof(int), fields[1].PropertyType);
         }
 
         [TestMethod]
@@ -269,8 +267,6 @@ namespace Query.Test
                 db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
                 db.Empleados.Add(new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.SaveChanges();
-
-                //var @select = db.Empleados.Select(x => new {FullName = x.Nombre + " " + x.Apellido, Dni = x.Dni});
 
                 // Test target method
                 var queryable = query.Project(db.Empleados);

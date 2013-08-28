@@ -17,56 +17,54 @@ namespace Query.SampleWebSite
         /// <param name="maximumRows"></param>
         /// <param name="startRowIndex"></param>
         /// <returns></returns>
-        public DataTable GetAll(
+        public List<object> GetAll(
             Dictionary<string, string> filters,
             List<KeyValuePair<string, SortDirection>> sortings,
             int maximumRows,
             int startRowIndex)
         {
             var fieldBuilder = new QueryFieldBuilder<Empleado>();
-            
-            var query = new Query<Empleado>();
+
+            var query = new Query<Empleado>(fieldBuilder);
 
             // Simple text and integer fields. The field names come from the select expression.
-            query.Fields.Add(fieldBuilder.Create(x => x.Nombre).Instance); // Field name = "Nombre"
-            query.Fields.Add(fieldBuilder.Create(x => x.Apellido).CaseSensitive().Instance); // Field name = "Apellido" - case sensitive
-            query.Fields.Add(fieldBuilder.Create(x => x.Dni).Instance);
+            query.AddField(x => x.Nombre); // Field name = "Nombre"
+            query.AddField(x => x.Apellido).CaseSensitive(); // Field name = "Apellido" - case sensitive
+            query.AddField(x => x.Dni);
 
             // Date filter with truncated time. We need to specify the name of the field because we can not get it from the select expression.
-            query.Fields.Add(fieldBuilder.Create(x => x.FechaNacimiento).Instance);
+            query.AddField(x => x.FechaNacimiento).TruncateTime();
 
             // List filter targeting an enum
-            query.Fields.Add(fieldBuilder.Create("EstadoCivil")
-                .Select(x => x.EstadoCivil_Id)  // enums in EF5 for .NET 4.0
-                .FilterAs(FilterType.List)      // since the select targets an int we need this to force a list filter instead of an integer filter.
+            query.AddField("EstadoCivil")
+                .Select(x => x.EstadoCivil_Id) // enums in EF5 for .NET 4.0
+                .FilterAs(FilterType.List) // since the select targets an int we need this to force a list filter instead of an integer filter.
                 // Return constants for specific values of the target, not necesary but allows us to translates the enum values that will be shown.
-                .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
-                .Instance);
+                .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty);
 
-            query.Fields.Add(fieldBuilder.Create(x => x.Edad).Instance);
-            query.Fields.Add(fieldBuilder.Create(x => x.Salario).Instance);
-            query.Fields.Add(fieldBuilder.Create("AttachmentCount")
-                .Select(x => x.Attachment.Items.Count(item => !item.Deleted && item.Location_Id.Equals((int)AttachmentLocation.Creation))).Instance);
+            query.AddField(x => x.Edad);
+            query.AddField(x => x.Salario);
+            query.AddField("AttachmentCount").Select(x => x.Attachment.Items.Count(item => !item.Deleted && item.Location_Id.Equals((int) AttachmentLocation.Creation)));
 
             using (var db = new SampleContext())
             {
                 var empleados = (IQueryable<Empleado>)db.Set<Empleado>();
 
+                // Filtering
                 empleados = query.Filter(empleados, filters);
-                empleados = query.OrderBy(empleados, sortings);
 
+                // Sorting and pagination
                 if (maximumRows > 0)
                 {
-                    // To use .Skip and .Take the IQueryable must be ordered.
-                    if (!sortings.Any())
-                    {
-                        empleados = empleados.OrderBy(x => x.Id);
-                    }
-
+                    empleados = query.OrderBy(empleados, sortings, x => x.Id); // x => x.Id acts as default sort when sortings is empty, required to use Skip and Take on EF
                     empleados = empleados.Skip(startRowIndex).Take(maximumRows);
                 }
 
-                return query.Project(empleados).ToDataTable();
+                // Projection. theResult is an untyped IQueryable. The ElementType is an annonymous type based in the defined fields
+                var theResult = query.Project(empleados);
+
+                // Converting to datatable to use in GridView - not required
+                return Enumerable.Cast<object>(theResult).ToList();
             }
         }
 
@@ -74,7 +72,7 @@ namespace Query.SampleWebSite
             Dictionary<string, string> filters,
             List<KeyValuePair<string, SortDirection>> sortings)
         {
-            return this.GetAll(filters, null, 0, 0).Rows.Count;
+            return this.GetAll(filters, null, 0, 0).Count;
         }
 
         private List<Empleado> GetEmpleadosMock()

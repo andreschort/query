@@ -47,7 +47,7 @@ namespace Common.Util
                 TypeBuilder typeBuilder = moduleBuilder.DefineType(className, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable);
 
                 foreach (var field in fields)
-                    typeBuilder.DefineField(field.Key, field.Value, FieldAttributes.Public);
+                    CreateProperty(typeBuilder, field.Key, field.Value);
 
                 builtTypes[className] = typeBuilder.CreateType();
 
@@ -61,10 +61,42 @@ namespace Common.Util
             {
                 Monitor.Exit(builtTypes);
             }
-
-            return null;
         }
 
+        private static void CreateProperty(TypeBuilder typeBuilder, string name, Type type)
+        {
+            FieldBuilder fieldBuilder = typeBuilder.DefineField("_" + name, type, FieldAttributes.Private);
+
+            // The last argument of DefineProperty is null, because the
+            // property has no parameters. (If you don't specify null, you must
+            // specify an array of Type objects. For a parameterless property,
+            // use an array with no elements: new Type[] {})
+            PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(name, PropertyAttributes.HasDefault, type, null);
+
+            // The property set and property get methods require a special
+            // set of attributes.
+            MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+
+            // Define the "get" accessor method for CustomerName.
+            MethodBuilder getMethodBuilder = typeBuilder.DefineMethod("get_" + name, getSetAttr, type, Type.EmptyTypes);
+            ILGenerator getIl = getMethodBuilder.GetILGenerator();
+            getIl.Emit(OpCodes.Ldarg_0);
+            getIl.Emit(OpCodes.Ldfld, fieldBuilder);
+            getIl.Emit(OpCodes.Ret);
+
+            // Define the "set" accessor method.
+            MethodBuilder setMethodBuilder = typeBuilder.DefineMethod("set_" + name, getSetAttr, null, new[] { type });
+            ILGenerator setIl = setMethodBuilder.GetILGenerator();
+            setIl.Emit(OpCodes.Ldarg_0);
+            setIl.Emit(OpCodes.Ldarg_1);
+            setIl.Emit(OpCodes.Stfld, fieldBuilder);
+            setIl.Emit(OpCodes.Ret);
+
+            // Last, we must map the two methods created above to our PropertyBuilder to 
+            // their corresponding behaviors, "get" and "set" respectively. 
+            propertyBuilder.SetGetMethod(getMethodBuilder);
+            propertyBuilder.SetSetMethod(setMethodBuilder);
+        }
 
         private static string GetTypeKey(IEnumerable<PropertyInfo> fields)
         {

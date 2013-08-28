@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Common.Extension;
@@ -13,7 +14,14 @@ namespace Query
             this.Fields = new List<QueryField<T>>();
         }
 
+        public Query(QueryFieldBuilder<T> fieldBuilder) : this()
+        {
+            this.FieldBuilder = fieldBuilder;
+        }
+
         public List<QueryField<T>> Fields { get; set; }
+
+        public QueryFieldBuilder<T> FieldBuilder { get; set; }
 
         public IQueryable Apply(IQueryable<T> query, IEnumerable<Filter> filters)
         {
@@ -31,7 +39,7 @@ namespace Query
             var dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(fields);
 
             ParameterExpression parameter = Expression.Parameter(queryable.ElementType, "t");
-            var bindings = dynamicType.GetFields()
+            var bindings = dynamicType.GetProperties()
                                       .Select(field =>
                                           {
                                               var queryField = this.Fields.First(x => x.Name.Equals(field.Name));
@@ -98,9 +106,14 @@ namespace Query
 
         public IQueryable<T> OrderBy(IQueryable<T> query, List<KeyValuePair<string, SortDirection>> sortings)
         {
+            return this.OrderBy<int>(query, sortings);
+        }
+
+        public IQueryable<T> OrderBy<E>(IQueryable<T> query, List<KeyValuePair<string, SortDirection>> sortings, Expression<Func<T, E>> defaultSort = null)
+        {
             if (sortings == null || !sortings.Any())
             {
-                return query;
+                return defaultSort == null ? query : query.OrderBy(defaultSort);
             }
 
             // first sorting
@@ -121,7 +134,25 @@ namespace Query
             return this.OrderBy(query, fieldName, sortDirection, "ThenBy");
         }
 
-        private IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection, string methodName) 
+        public QueryFieldBuilder<T> AddField(string name)
+        {
+            this.FieldBuilder.Create(name);
+
+            this.Fields.Add(this.FieldBuilder.Instance);
+
+            return this.FieldBuilder;
+        }
+
+        public QueryFieldBuilder<T> AddField<E>(Expression<Func<T, E>> select)
+        {
+            this.FieldBuilder.Create(select);
+
+            this.Fields.Add(this.FieldBuilder.Instance);
+
+            return this.FieldBuilder;
+        }
+
+        private IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection, string methodName)
         {
             var field = this.Fields.First(x => x.Name.Equals(fieldName));
             
