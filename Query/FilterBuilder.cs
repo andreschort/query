@@ -233,12 +233,12 @@ namespace Query
 
             if (parts.Any())
             {
-                filter.Values.Add(StringUtil.ToDecimalNullable(parts[0]));
+                filter.Values.Add(StringUtil.ToDecimalNullable(parts[0], NumberStyles.Float));
             }
 
             if (parts.Count() > 1)
             {
-                filter.Values.Add(StringUtil.ToDecimalNullable(parts[1]));
+                filter.Values.Add(StringUtil.ToDecimalNullable(parts[1], NumberStyles.Float));
             }
 
             filter.Valid = filter.Value != null;

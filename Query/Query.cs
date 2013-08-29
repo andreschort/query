@@ -14,14 +14,7 @@ namespace Query
             this.Fields = new List<QueryField<T>>();
         }
 
-        public Query(QueryFieldBuilder<T> fieldBuilder) : this()
-        {
-            this.FieldBuilder = fieldBuilder;
-        }
-
         public List<QueryField<T>> Fields { get; set; }
-
-        public QueryFieldBuilder<T> FieldBuilder { get; set; }
 
         public IQueryable Apply(IQueryable<T> query, IEnumerable<Filter> filters)
         {
@@ -136,20 +129,20 @@ namespace Query
 
         public QueryFieldBuilder<T> AddField(string name)
         {
-            this.FieldBuilder.Create(name);
+            var builder = new QueryFieldBuilder<T>();
 
-            this.Fields.Add(this.FieldBuilder.Instance);
+            this.Fields.Add(builder.Create(name).Instance);
 
-            return this.FieldBuilder;
-        }
+            return builder;
+        }   
 
         public QueryFieldBuilder<T> AddField<E>(Expression<Func<T, E>> select)
         {
-            this.FieldBuilder.Create(select);
+            var builder = new QueryFieldBuilder<T>();
 
-            this.Fields.Add(this.FieldBuilder.Instance);
+            this.Fields.Add(builder.Create(select).Instance);
 
-            return this.FieldBuilder;
+            return builder;
         }
 
         private IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection, string methodName)

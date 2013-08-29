@@ -38,6 +38,12 @@ namespace Common.Util
             return ToBoolNullable(value) ?? false;
         }
 
+        public static decimal? ToDecimalNullable(string value, NumberStyles style)
+        {
+            decimal val;
+            return decimal.TryParse(value, style, CultureInfo.CurrentCulture, out val) ? val : (decimal?)null;
+        }
+
         public static decimal? ToDecimalNullable(string value)
         {
             decimal val;

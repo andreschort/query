@@ -23,9 +23,7 @@ namespace Query.SampleWebSite
             int maximumRows,
             int startRowIndex)
         {
-            var fieldBuilder = new QueryFieldBuilder<Empleado>();
-
-            var query = new Query<Empleado>(fieldBuilder);
+            var query = new Query<Empleado>();
 
             // Simple text and integer fields. The field names come from the select expression.
             query.AddField(x => x.Nombre); // Field name = "Nombre"
