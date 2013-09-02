@@ -30,15 +30,18 @@ namespace Query.SampleWebSite
             query.AddField(x => x.Apellido).CaseSensitive(); // Field name = "Apellido" - case sensitive
             query.AddField(x => x.Dni);
 
-            // Date filter with truncated time. We need to specify the name of the field because we can not get it from the select expression.
+            // Date filter with truncated time.
             query.AddField(x => x.FechaNacimiento).TruncateTime();
 
             // List filter targeting an enum
             query.AddField("EstadoCivil")
                 .Select(x => x.EstadoCivil_Id) // enums in EF5 for .NET 4.0
-                .FilterAs(FilterType.List) // since the select targets an int we need this to force a list filter instead of an integer filter.
+                .FilterAs(FilterType.List)
+                // since the select targets an int we need this to force a list filter instead of an integer filter.
                 // Return constants for specific values of the target, not necesary but allows us to translates the enum values that will be shown.
-                .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty);
+                .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
+                .FilterWhen(10, x => x.EstadoCivil_Id.Equals((int) EstadoCivil.Casado) || // custom value filter
+                                       x.EstadoCivil_Id.Equals((int) EstadoCivil.Separado));
 
             query.AddField(x => x.Edad);
             query.AddField(x => x.Salario);

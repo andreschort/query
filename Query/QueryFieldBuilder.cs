@@ -90,7 +90,14 @@ namespace Query
             this.withManualFilterType = true;
             return this;
         }
-        
+
+        public QueryFieldBuilder<T> FilterWhen(object filterValue, Expression<Func<T, bool>> when)
+        {
+            this.Instance.When[filterValue] = when;
+
+            return this;
+        }
+
         public QueryFieldBuilder<T> TruncateTime()
         {
             var truncatedExpression =

@@ -21,6 +21,7 @@ namespace Query.SampleWebsite
                     new ListItem("Soltero", EstadoCivil.Soltero.ToOrdinalString()),
                     new ListItem("Casado", EstadoCivil.Casado.ToOrdinalString()),
                     new ListItem("Separado", EstadoCivil.Separado.ToOrdinalString()),
+                    new ListItem("Casado/Separado", "10"),
                     new ListItem("Divorciado", EstadoCivil.Divorciado.ToOrdinalString()),
                     new ListItem("Viudo", EstadoCivil.Viudo.ToOrdinalString()),
                 };
