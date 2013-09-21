@@ -199,11 +199,12 @@ namespace Query.Web
         /// <param name="eventArgs"></param>
         protected virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
-            TableCell cell = sender as TableCell;
+            var cell = sender as TableCell;
             object dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
-            var displayValue = this.Eval(dataItem, this.DataField).ToString();
-
+            var value = this.Eval(dataItem, this.DataField);
+            var displayValue = this.FormatValue(value);
+            
             if (string.IsNullOrEmpty(this.UrlFormat))
             {
                 cell.Text = displayValue;
@@ -217,8 +218,7 @@ namespace Query.Web
                 linkButton.NavigateUrl = this.UrlFields == null
                                              ? this.UrlFormat
                                              : string.Format(this.UrlFormat,
-                                                             this.UrlFields.Select(x => this.Eval(dataItem, x))
-                                                                 .ToArray());
+                                                             this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
             }
         }
 
@@ -234,12 +234,17 @@ namespace Query.Web
             return uniqueID.Equals(lastFocus);
         }
 
+        protected virtual string FormatValue(object val)
+        {
+            return val.ToString();
+        }
+
         private object Eval(object dataItem, string dataField)
         {
             var view = dataItem as DataRowView;
             return view == null
-                       ? DataBinder.GetPropertyValue(dataItem, dataField, null)
-                       : view.Row[dataField].ToString();
+                       ? DataBinder.Eval(dataItem, dataField)
+                       : view.Row[dataField];
         }
     }
 }

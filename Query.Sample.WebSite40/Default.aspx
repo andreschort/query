@@ -3,25 +3,13 @@
 <%@ Register TagPrefix="query" Namespace="Query.Web" Assembly="Query.Web" %>
 
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1><%: Title %>.</h1>
-                <h2>Modify this template to jump-start your ASP.NET application.</h2>
-            </hgroup>
-            <p>
-                To learn more about ASP.NET, visit <a href="http://asp.net" title="ASP.NET Website">http://asp.net</a>.
-                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET.
-                If you have any questions about ASP.NET visit
-                <a href="http://forums.asp.net/18.aspx" title="ASP.NET Forum">our forums</a>.
-            </p>
-        </div>
-    </section>
 </asp:Content>
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
     <style>
         table { width:960px; }
         th input { width: 90%; }
+        th { white-space: nowrap; border: 1px solid transparent}
+        .data-query-datepicker { width: 40%; }
     </style>
 
     <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
@@ -35,7 +23,7 @@
             <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" />
             <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" />
             <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
-            <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" />
+            <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" Format="d" />
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>

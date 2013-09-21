@@ -12,6 +12,8 @@ namespace Query.Web
 
         private string externalFilterValue;
 
+        public string Format { get; set; }
+
         protected override DataControlField CreateField()
         {
             return new DateField();
@@ -87,6 +89,13 @@ namespace Query.Web
             // restore focus
             this.textFrom.Attributes["data-query-focus"] = this.HasFocus(this.textFrom.UniqueID).ToString();
             this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
+        }
+
+        protected override string FormatValue(object val)
+        {
+            var date = val as DateTime?;
+
+            return date.HasValue ? date.Value.ToString(this.Format) : base.FormatValue(val);
         }
 
         private string GetFilterValue()
