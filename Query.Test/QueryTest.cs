@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Common.Extension;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Query.Core;
 using Query.SampleModel;
 
 namespace Query.Test

@@ -57,9 +57,9 @@
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Query\Query.csproj">
+    <ProjectReference Include="..\Query.Core\Query.Core.csproj">
       <Project>{a3c233f5-977a-4877-845c-317c9a2bb968}</Project>
-      <Name>Query</Name>
+      <Name>Query.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

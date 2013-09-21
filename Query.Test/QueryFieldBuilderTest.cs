@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Query.Core;
 using Query.SampleModel;
 
 namespace Query.Test

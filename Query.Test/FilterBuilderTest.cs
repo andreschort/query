@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Query.SampleModel;
+using Query.Core;
 
 namespace Query.Test
 {

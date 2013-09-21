@@ -2,6 +2,7 @@
 using System.Linq;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Query.Core;
 using Query.SampleModel;
 
 namespace Query.Test

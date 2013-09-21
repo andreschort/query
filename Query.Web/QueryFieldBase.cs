@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Common.Extension;
 using Common.Util;
+using SortDirection = Query.Core.SortDirection;
 
 namespace Query.Web
 {

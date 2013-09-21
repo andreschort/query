@@ -75,13 +75,13 @@
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Query.SampleModel\Query.SampleModel.csproj">
+    <ProjectReference Include="..\Query.Sample.Model\Query.Sample.Model.csproj">
       <Project>{F6B6FC52-EF63-4B12-BAC8-EE4854DA6A55}</Project>
-      <Name>Query.SampleModel</Name>
+      <Name>Query.Sample.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Query\Query.csproj">
+    <ProjectReference Include="..\Query.Core\Query.Core.csproj">
       <Project>{A3C233F5-977A-4877-845C-317C9A2BB968}</Project>
-      <Name>Query</Name>
+      <Name>Query.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
