@@ -8,24 +8,27 @@ Basic projection
 Let's say you have this Employee class:  
 ```csharp
 public class Employee  
-   {  
-      public string Name { get; set; }  
-      public string LastName { get; set; }  
-    }
+{  
+  public string Name { get; set; }  
+  public string LastName { get; set; }  
+}
 ```
 
 You create a Query object like this:
 ```csharp
 var query = new Query<Employee>();
 query.AddField("FullName", x => x.Name + " " + x.LastName); // FieldName = "FullName"
-```
 
-Then take an IEqueryable<Employee> and apply the projection:
-```csharp
-IQueryable<Employee> employees = ...
+var employees = //some IQueryable<Employee>
 IQueryable theResult = query.Project(employees);
 ```
-theResult is an untyped IQueryable. The ElementType is an annonymous type based in the defined fields.
+theResult is an untyped IQueryable. The ElementType is an annonymous type of the form:
+```chsarp
+public class FullName;String;
+{
+  public string FullName;
+}
+```
 
 Basic filtering
 ---------------
