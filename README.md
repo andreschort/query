@@ -7,7 +7,7 @@ Basic projection
 ----------------
 Let's say you have this Employee class:  
 ```csharp
-public class Empleado  
+public class Employee  
    {  
       public string Name { get; set; }  
       public string LastName { get; set; }  
