@@ -3,6 +3,7 @@ query
 
 A small library that transforms IQueryable objects and a set of ASP.NET WebForms controls that extend GridView with filtering features.
 
+
 Basic projection
 ----------------
 Let's say you have this Employee class:  
@@ -57,3 +58,24 @@ This is equivalent to:
 employees = employees.OrderByDescending(x => x.Name + " " + x.LastName);
 ```
 Multiple sortings are supported.
+
+WebForms controls
+=================
+Query includes a set of `DataControlField` classes that enables a GridView with filtering fields right below each header.
+The project Query.Sample.WebSite40 has plenty of examples:
+```aspx
+<asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
+              AllowPaging="True" AllowSorting="False" PageSize="8">
+    <Columns>
+        <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
+                         UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
+        <query:TextField Name="Apellido" HeaderText="Apellido" DataField="Apellido" />
+        <query:TextField Name="Dni" HeaderText="Dni" DataField="Dni" />
+        <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" />
+        <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" />
+        <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
+        <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" Format="d" />
+        <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" />
+    </Columns>
+</asp:GridView>
+```
