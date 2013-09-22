@@ -42,6 +42,7 @@ This is equivalent to:
 ```csharp
 employees = employees.Where(x => x.LastName.StartsWith("Car"));
 ```
+
 Basic sorting
 -------------
 You can also apply sorting to an IQueryable pretty much the same way that you apply filters:
