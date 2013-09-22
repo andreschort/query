@@ -7,11 +7,11 @@ A small library that transforms IQueryable objects and a set of ASP.NET WebForms
 Basic projection
 ================
 Let's say you have this Employee class:
-public class Empleado
+`public class Empleado
 {
   public string Name { get; set; }
   public string LastName { get; set; }
-}
+}`
 
 You create a Query object like this:
 
