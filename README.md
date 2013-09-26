@@ -74,11 +74,18 @@ The main entry point to this project is the GridExtender control:
                     OnSort="GridExtender_Sort" />
 ```
 These are the more important properties:
--GridViewId (string - Required): The ID of the GridView.
--AutoFilterDelay (int - Optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
--EnableFilters (bool - Optional): Determines wheather the filter elements are shown (Default: True)
--OnFilter (Event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
--OnSort (Event): Triggered when the user clicks on a header's title.
+- GridViewId (string - Required): The ID of the GridView.
+- AutoFilterDelay (int - Optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
+- EnableFilters (bool - Optional): Determines wheather the filter elements are shown (Default: True)
+- OnFilter (Event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
+- OnSort (Event): Triggered when the user clicks on a header's title.
+
+There are three kinds of `DataControlField`'s:
+- TextField: Renders an text field as the filter UI element.
+- DateField: Renders two text fields as the filter UI elements (we need two elements to filter by a range of dates). Both elements have jquery datepicker.
+- DropDownField: Renders a select as the filter UI element.
+
+All fields have a anchor as title above them which when clicked triggers sorting on that field.
 
 This is an example of a GridView using the `DataControlField`'s provided:
 
