@@ -2,7 +2,7 @@ query
 =====
 
 A small library that transforms IQueryable objects and a set of ASP.NET WebForms controls that extend GridView with filtering features.
-
+Look for the project Query.Sample.WebSite40 for a full example.
 
 Basic projection
 ----------------
@@ -61,8 +61,27 @@ Multiple sortings are supported.
 
 WebForms controls
 =================
-Query includes a set of `DataControlField` classes that enables a GridView with filtering fields right below each header.
-The project Query.Sample.WebSite40 has plenty of examples:
+Query includes a set of `DataControlField` classes that enables a GridView with filtering fields right below each header. Multiple sorting is also supported.
+This project relies on jquery so you should include it in your page.
+
+The main entry point to this project is the GridExtender control:
+```aspx
+<query:GridExtender ID="GridExtender" runat="server"
+                    GridViewId="GridView"
+                    AutoFilterDelay="2000"
+                    EnableFilters="True"
+                    OnFilter="GridExtender_Filter"
+                    OnSort="GridExtender_Sort" />
+```
+These are the more important properties:
+-GridViewId (string - Required): The ID of the GridView.
+-AutoFilterDelay (int - Optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
+-EnableFilters (bool - Optional): Determines wheather the filter elements are shown (Default: True)
+-OnFilter (Event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
+-OnSort (Event): Triggered when the user clicks on a header's title.
+
+This is an example of a GridView using the `DataControlField`'s provided:
+
 ```aspx
 <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True"
               AllowPaging="True" AllowSorting="False" PageSize="8">
