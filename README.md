@@ -4,6 +4,11 @@ query
 A small library that transforms IQueryable objects and a set of ASP.NET WebForms controls that extend GridView with filtering features.
 Look for the project Query.Sample.WebSite40 for a full example.
 
+TODO
+----
+- [] DropDownField.BooleanList
+- [] Styles
+
 Basic projection
 ----------------
 Let's say you have this Employee class:  
