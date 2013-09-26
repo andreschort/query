@@ -86,7 +86,10 @@ function initDateFilter($element) {
     initTextFilter($element);
     
     var focus = $element.attr('data-query-focus');
-    focus = focus ? focus.toLowerCase() : 'false';
+    var datepickerBackoff = focus ? focus.toLowerCase() : 'false';
+    
+    // set timeout to disable datepickerBackoff in case it is not disabled by the beforeShow. (needed if browser is not IE)
+    setTimeout(function () { datepickerBackoff = 'false'; }, 10);
     $element.datepicker({
         onSelect: function () {
             document.getElementById('__LASTFOCUS').value = this.name;
@@ -94,12 +97,12 @@ function initDateFilter($element) {
         },
         beforeShow: function (input, inst) {
             // FIX IE: Do not show datepicker dialog after postback from this filter
-            if (focus == 'true') {
-                focus = 'false';
+            if (datepickerBackoff == 'true') {
+                datepickerBackoff = 'false';
                 return false;
             }
 
-            return focus;
+            return true;
         }
     });
 }
