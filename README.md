@@ -6,8 +6,8 @@ Look for the project Query.Sample.WebSite40 for a full example.
 
 TODO
 ----
-- [] DropDownField.BooleanList
-- [] Styles
+- [ ] DropDownField.BooleanList
+- [ ] Styles
 
 Basic projection
 ----------------
