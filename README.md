@@ -74,11 +74,11 @@ The main entry point to this project is the GridExtender control:
                     OnSort="GridExtender_Sort" />
 ```
 These are the more important properties:
-- GridViewId (string - Required): The ID of the GridView.
-- AutoFilterDelay (int - Optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
-- EnableFilters (bool - Optional): Determines wheather the filter elements are shown (Default: True)
-- OnFilter (Event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
-- OnSort (Event): Triggered when the user clicks on a header's title.
+- GridViewId (string - required): The ID of the GridView.
+- AutoFilterDelay (int - optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
+- EnableFilters (bool - optional): Determines wheather the filter elements are shown (default: True)
+- OnFilter (event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
+- OnSort (event): Triggered when the user clicks on a header's title.
 
 There are three kinds of `DataControlField`'s:
 - TextField: Renders an text field as the filter UI element.
@@ -86,6 +86,13 @@ There are three kinds of `DataControlField`'s:
 - DropDownField: Renders a select as the filter UI element.
 
 All fields have a anchor as title above them which when clicked triggers sorting on that field.
+
+These are the properties in common between the three fields:
+- Name (string - required): The name of the field. Used to identify the field's filter value and sorting direction (if any)
+- DataField (string - required): The name of the property bound to the field.The field uses this to get the value to display in each cell.
+- FilterPlaceholder (string - optional): The placeholder to show in the filter UI element.
+- UrlFormat (string - optional): Turns the text in the cell into a link. The string is used as the url of the link.
+- UrlFields (string, optional): A comma separated list of properties to use with UrlFormat. This allows to generate an url customized for each row.
 
 This is an example of a GridView using the `DataControlField`'s provided:
 
