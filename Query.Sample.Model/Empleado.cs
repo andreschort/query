@@ -21,6 +21,8 @@ namespace Query.Sample.Model
 
         public decimal Salario { get; set; }
 
+        public double AverageHourlyWage { get; set; }
+
         public int EstadoCivil_Id { get; set; }
         
         [NotMapped]

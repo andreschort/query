@@ -9,7 +9,7 @@
         table { width:960px; }
         th input { width: 90%; }
         th { white-space: nowrap; border: 1px solid transparent}
-        .data-query-datepicker { width: 40%; }
+        .data-query-datepicker { width: 40%;font-size: small; }
     </style>
 
     <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
@@ -26,6 +26,7 @@
             <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" Format="d" />
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" />
             <query:TextField Name="Cuit" HeaderText="CUIT" DataField="Cuit" />
+            <query:TextField Name="AverageHourlyWage" HeaderText="Wage" DataField="AverageHourlyWage" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

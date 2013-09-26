@@ -68,6 +68,10 @@
     <Compile Include="Migrations\201309260023478_AddCuitToEmpleado.Designer.cs">
       <DependentUpon>201309260023478_AddCuitToEmpleado.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309262253081_AddAverageHourlyWateToEmpleado.cs" />
+    <Compile Include="Migrations\201309262253081_AddAverageHourlyWateToEmpleado.Designer.cs">
+      <DependentUpon>201309262253081_AddAverageHourlyWateToEmpleado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleContext.cs" />
@@ -90,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309260023478_AddCuitToEmpleado.resx">
       <DependentUpon>201309260023478_AddCuitToEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309262253081_AddAverageHourlyWateToEmpleado.resx">
+      <DependentUpon>201309262253081_AddAverageHourlyWateToEmpleado.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

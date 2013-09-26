@@ -398,5 +398,32 @@ namespace Query.Test
             Assert.IsTrue(result.Any(x => x.Apellido.Equals("Chort")));
             Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
         }
+
+        [TestMethod]
+        public void FilterDouble()
+        {
+            var field = new QueryField<Empleado>();
+            field.Where.Add(ExpressionBuilder.Build<Empleado, double>(x => x.AverageHourlyWage));
+            var empleados = new List<Empleado>
+            {
+                new Empleado {Apellido = "Chort", AverageHourlyWage = 10},
+                new Empleado {Apellido = "Gieco", AverageHourlyWage = 20},
+                new Empleado {Apellido = "Diaz",  AverageHourlyWage = 30},
+                new Empleado {Apellido = "DomingueZ", AverageHourlyWage = 40},
+            };
+
+            var filter = new Filter
+            {
+                Valid = true,
+                Value = 20d,
+                Operator = FilterOperator.GreaterThan
+            };
+
+            var result = field.Filter(empleados.AsQueryable(), filter).ToList();
+
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(x => x.Apellido.Equals("Diaz")));
+            Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
+        }
     }
 }
