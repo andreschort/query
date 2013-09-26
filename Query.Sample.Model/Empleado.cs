@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Query.SampleModel
+namespace Query.Sample.Model
 {
     public class Empleado
     {
@@ -14,6 +14,8 @@ namespace Query.SampleModel
         public int Dni { get; set; }
 
         public int Edad { get; set; }
+
+        public int? Cuit { get; set; }
 
         public DateTime FechaNacimiento { get; set; }
 

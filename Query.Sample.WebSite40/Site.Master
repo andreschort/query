@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     <title><%: Page.Title %> - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" /> 
+    <link href="~/Content/themes/base/minified/jquery-ui.min.css" rel="stylesheet" /> 
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <asp:PlaceHolder runat="server">        
         <script src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>

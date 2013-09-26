@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Common.Extension;
-using Query.SampleModel;
+using Query.Sample.Model;
 using Query.Web;
 
 namespace Query.Sample.WebSite40

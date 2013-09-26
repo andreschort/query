@@ -14,7 +14,7 @@
 
     <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
                         OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
-    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8">
+    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8" CssClass="bordered">
         <Columns>
             <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
@@ -25,6 +25,7 @@
             <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" />
             <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" Format="d" />
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" />
+            <query:TextField Name="Cuit" HeaderText="CUIT" DataField="Cuit" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

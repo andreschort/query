@@ -131,7 +131,8 @@ namespace Common.Util
 
         public ExpressionBuilder Equal(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.Equal(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.Equal(this.Expression, converted));
         }
 
         public ExpressionBuilder EqualTo<T>(T right)
@@ -141,7 +142,8 @@ namespace Common.Util
 
         public ExpressionBuilder NotEqual(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.NotEqual(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.NotEqual(this.Expression, converted));
         }
 
         public ExpressionBuilder NotEqualTo<T>(T right)
@@ -151,7 +153,8 @@ namespace Common.Util
 
         public ExpressionBuilder GreaterThan(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.GreaterThan(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.GreaterThan(this.Expression, converted));
         }
 
         public ExpressionBuilder GreaterThanThis<T>(T right)
@@ -161,7 +164,8 @@ namespace Common.Util
 
         public ExpressionBuilder GreaterThanOrEqual(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.GreaterThanOrEqual(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.GreaterThanOrEqual(this.Expression, converted));
         }
 
         public ExpressionBuilder GreaterThanOrEqualTo<T>(T right)
@@ -171,7 +175,8 @@ namespace Common.Util
 
         public ExpressionBuilder LessThan(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.LessThan(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.LessThan(this.Expression, converted));
         }
 
         public ExpressionBuilder LessThanThis<T>(T right)
@@ -181,7 +186,8 @@ namespace Common.Util
 
         public ExpressionBuilder LessThanOrEqual(Expression right)
         {
-            return new ExpressionBuilder(this.Param, Expression.LessThanOrEqual(this.Expression, right));
+            var converted = Expression.Convert(right, this.Expression.Type); // convert to ensure the expressions types match
+            return new ExpressionBuilder(this.Param, Expression.LessThanOrEqual(this.Expression, converted));
         }
 
         public ExpressionBuilder LessThanOrEqualTo<T>(T right)

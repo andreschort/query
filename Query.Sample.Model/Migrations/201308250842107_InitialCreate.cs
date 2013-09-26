@@ -1,4 +1,4 @@
-namespace Query.SampleModel.Migrations
+namespace Query.Sample.Model.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
-using Query.SampleModel;
+using Query.Sample.Model;
 
 namespace Query.Test
 {
@@ -28,6 +28,18 @@ namespace Query.Test
             Assert.AreEqual("Apellido", builder.Instance.Name);
             Assert.AreEqual(typeof(string), builder.Instance.Select.ReturnType);
             Assert.AreEqual(FilterType.Text, builder.Instance.FilterType);
+        }
+
+        [TestMethod]
+        public void CreateWithExpressionNullableInt()
+        {
+            var builder = new QueryFieldBuilder<Empleado>();
+
+            builder.Create(x => x.Cuit);
+
+            Assert.AreEqual("Cuit", builder.Instance.Name);
+            Assert.AreEqual(typeof(int?), builder.Instance.Select.ReturnType);
+            Assert.AreEqual(FilterType.Integer, builder.Instance.FilterType);
         }
 
         [TestMethod]

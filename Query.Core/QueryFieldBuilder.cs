@@ -122,12 +122,12 @@ namespace Query.Core
                 return FilterType.Text;
             }
 
-            if (type == typeof(int))
+            if (type == typeof(int) || type == typeof(int?))
             {
                 return FilterType.Integer;
             }
 
-            if (type == typeof(bool))
+            if (type == typeof(bool) || type == typeof(bool?))
             {
                 return FilterType.Boolean;
             }
@@ -137,12 +137,12 @@ namespace Query.Core
                 return FilterType.List;
             }
 
-            if (type == typeof(decimal) || type == typeof(double))
+            if (type == typeof(decimal) || type == typeof(double) || type == typeof(decimal?) || type == typeof(double?))
             {
                 return FilterType.Decimal;
             }
 
-            if (type == typeof (DateTime))
+            if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
                 return FilterType.Date;
             }

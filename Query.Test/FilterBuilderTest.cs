@@ -553,7 +553,7 @@ namespace Query.Test
         {
             var builder = new FilterBuilder();
 
-            const string value = "2.1";
+            var value = 2.1m.ToString();
             var filter = builder.Decimal("name", value);
 
             Assert.AreEqual("name", filter.Name);

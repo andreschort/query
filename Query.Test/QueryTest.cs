@@ -5,7 +5,7 @@ using Common.Extension;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
-using Query.SampleModel;
+using Query.Sample.Model;
 
 namespace Query.Test
 {

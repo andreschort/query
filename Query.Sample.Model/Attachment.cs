@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Query.SampleModel
+namespace Query.Sample.Model
 {
     public class Attachment
     {

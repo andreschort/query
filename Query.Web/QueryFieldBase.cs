@@ -236,7 +236,7 @@ namespace Query.Web
 
         protected virtual string FormatValue(object val)
         {
-            return val.ToString();
+            return val == null ? string.Empty : val.ToString();
         }
 
         private object Eval(object dataItem, string dataField)

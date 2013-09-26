@@ -1,4 +1,4 @@
-﻿namespace Query.SampleModel
+﻿namespace Query.Sample.Model
 {
     public enum EstadoCivil
     {

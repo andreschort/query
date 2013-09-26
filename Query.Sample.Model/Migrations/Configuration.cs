@@ -1,18 +1,15 @@
-namespace Query.SampleModel.Migrations
+namespace Query.Sample.Model.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Query.SampleModel.SampleContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Sample.Model.SampleContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Query.SampleModel.SampleContext context)
+        protected override void Seed(Query.Sample.Model.SampleContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Query.SampleModel;
+using Query.Sample.Model;
 using Query.Core;
 
 namespace Query.Sample.WebSite40
@@ -45,11 +45,12 @@ namespace Query.Sample.WebSite40
             query.AddField(x => x.Edad);
             query.AddField(x => x.Salario);
             query.AddField("AttachmentCount").Select(x => x.Attachment.Items.Count(item => !item.Deleted && item.Location_Id.Equals((int)AttachmentLocation.Creation)));
+            query.AddField(x => x.Cuit);
 
             using (var db = new SampleContext())
             {
                 var empleados = (IQueryable<Empleado>)db.Set<Empleado>();
-
+                empleados.OrderByDescending(x => x.Nombre + " " + x.Apellido);
                 // Filtering
                 empleados = query.Filter(empleados, filters);
 

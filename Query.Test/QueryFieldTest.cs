@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Objects;
 using System.Linq;
 using Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
-using Query.SampleModel;
+using Query.Sample.Model;
 
 namespace Query.Test
 {
@@ -368,6 +370,33 @@ namespace Query.Test
 
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("DomingueZ", result[0].Apellido);
+        }
+
+        [TestMethod]
+        public void FilterDate()
+        {
+            var field = new QueryField<Empleado>();
+            field.Where.Add(ExpressionBuilder.Build<Empleado, DateTime?>(x => x.FechaNacimiento.Date as DateTime?));
+            var empleados = new List<Empleado>
+            {
+                new Empleado {Apellido = "Chort", FechaNacimiento = DateTime.Today},
+                new Empleado {Apellido = "Gieco", FechaNacimiento = DateTime.Today.AddDays(-1)},
+                new Empleado {Apellido = "Diaz", FechaNacimiento = DateTime.Today.AddDays(-2)},
+                new Empleado {Apellido = "DomingueZ", FechaNacimiento = DateTime.Today},
+            };
+
+            var filter = new Filter
+            {
+                Valid = true,
+                Value = (DateTime?)DateTime.Today,
+                Operator = FilterOperator.GreaterThanEqual
+            };
+
+            var result = field.Filter(empleados.AsQueryable(), filter).ToList();
+
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(x => x.Apellido.Equals("Chort")));
+            Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
         }
     }
 }
