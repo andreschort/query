@@ -6,9 +6,9 @@ Look for the project Query.Sample.WebSite40 for a full example.
 
 TODO
 ----
-- DropDownField.BooleanList
-- Styles
-- Describe operators here.
+- Implement DropDownField.BooleanList.
+- Improve the way you can apply styles to the Query.Web controls.
+- Describe filter operators here.
 - Check filter value conversions problem for targets other than int and decimal.
 
 Basic projection
