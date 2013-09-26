@@ -93,6 +93,15 @@ These are the properties in common between the three fields:
 - FilterPlaceholder (string - optional): The placeholder to show in the filter UI element.
 - UrlFormat (string - optional): Turns the text in the cell into a link. The string is used as the url of the link.
 - UrlFields (string, optional): A comma separated list of properties to use with UrlFormat. This allows to generate an url customized for each row.
+- AutoFilterDelay (int - optional): Same as GridExtender but affects only this field.
+
+The following are properties specific to DateField:
+- Format (string - optional): Used to format the date shown in the cell. Must be one of the standard date and time formats. (see http://msdn.microsoft.com/en-us/library/az4se3k1.aspx)
+
+The following are properties specific to DropDownField:
+- Items (List<ListItem> - required): Describes the list of options to put in the select element. (can be ommited when BooleanList="True")
+- DefaultValue (string - required): Indicates the id of the "all" value in the list. When this option is selected the filter is not applied.
+- BooleanList (bool - optional): Shortcut to create a select with Yes/No/All options
 
 This is an example of a GridView using the `DataControlField`'s provided:
 
