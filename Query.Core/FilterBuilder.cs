@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Common.Util;
+using Query.Common.Util;
 
 namespace Query.Core
 {

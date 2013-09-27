@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 
-namespace Common.Util
+namespace Query.Common.Util
 {
     public static class LinqRuntimeTypeBuilder
     {

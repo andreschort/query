@@ -49,13 +49,13 @@
     <Compile Include="TextField.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Web\Common.Web.csproj">
+    <ProjectReference Include="..\Common.Web\Query.Common.Web.csproj">
       <Project>{F3F2AC0F-0707-4007-B952-F82CE9759FCE}</Project>
-      <Name>Common.Web</Name>
+      <Name>Query.Common.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common\Common.csproj">
+    <ProjectReference Include="..\Common\Query.Common.csproj">
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
-      <Name>Common</Name>
+      <Name>Query.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Query.Core\Query.Core.csproj">
       <Project>{a3c233f5-977a-4877-845c-317c9a2bb968}</Project>

@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Threading;
-using Common.Util;
+using Query.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Test
+namespace Query.Common.Test
 {
     [TestClass]
     public class StringUtilTest

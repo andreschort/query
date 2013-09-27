@@ -6,8 +6,8 @@
     <ProjectGuid>{C9502884-52D8-4FC5-8AB4-5165BF420109}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Test</RootNamespace>
-    <AssemblyName>Common.Test</AssemblyName>
+    <RootNamespace>Query.Common.Test</RootNamespace>
+    <AssemblyName>Query.Common.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
+    <ProjectReference Include="..\Common\Query.Common.csproj">
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
-      <Name>Common</Name>
+      <Name>Query.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

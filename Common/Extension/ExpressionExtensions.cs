@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Common.Util;
+using Query.Common.Util;
 
-namespace Common.Extension
+namespace Query.Common.Extension
 {
     public static class ExpressionExtensions
     {

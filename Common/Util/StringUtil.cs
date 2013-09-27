@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Common.Util
+namespace Query.Common.Util
 {
     public class StringUtil
     {

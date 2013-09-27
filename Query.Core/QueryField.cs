@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Common.Extension;
-using Common.Util;
+using Query.Common.Extension;
+using Query.Common.Util;
 
 namespace Query.Core
 {

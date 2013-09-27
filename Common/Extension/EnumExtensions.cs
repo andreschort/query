@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Extension
+namespace Query.Common.Extension
 {
     public static class EnumExtensions
     {

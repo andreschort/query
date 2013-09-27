@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Common.Util
+namespace Query.Common.Util
 {
     public static class JavaScriptUtil
     {

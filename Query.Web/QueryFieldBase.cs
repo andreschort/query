@@ -6,8 +6,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Common.Extension;
-using Common.Util;
+using Query.Common.Extension;
+using Query.Common.Util;
 using SortDirection = Query.Core.SortDirection;
 
 namespace Query.Web

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Extension;
-using Common.Util;
+using Query.Common.Extension;
+using Query.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
 using Query.Sample.Model;

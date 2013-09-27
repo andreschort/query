@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.UI;
 
-namespace Common.Web.Extension
+namespace Query.Common.Web.Extension
 {
     public static class StateBagExtensions
     {

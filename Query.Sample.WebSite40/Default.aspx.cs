@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Common.Extension;
+using Query.Common.Extension;
 using Query.Sample.Model;
 using Query.Web;
+using SortDirection = Query.Core.SortDirection;
 
 namespace Query.Sample.WebSite40
 {
@@ -34,17 +35,17 @@ namespace Query.Sample.WebSite40
             }
 
             // initial filters
-            //this.GridExtender.Filters = new Dictionary<string, string>
-            //    {
-            //        {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
-            //    };
+            this.GridExtender.Filters = new Dictionary<string, string>
+                {
+                    {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
+                };
 
             // initial sortings
-            //this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
-            //    {
-            //        new KeyValuePair<string, SortDirection>("Salario", SortDirection.Descending),
-            //        new KeyValuePair<string, SortDirection>("Edad", SortDirection.Ascending)
-            //    };
+            this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
+                {
+                    new KeyValuePair<string, SortDirection>("Salario", SortDirection.Descending),
+                    new KeyValuePair<string, SortDirection>("Edad", SortDirection.Ascending)
+                };
 
             this.GridView.DataSourceID = this.OdsEmpleado.ID;
             this.GridView.DataBind();
