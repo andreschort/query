@@ -84,6 +84,13 @@ namespace Query.Core
             return this;
         }
 
+        public QueryFieldBuilder<T> AddWhere<E>(Expression<Func<T, E>> where)
+        {
+            this.Instance.Where.Add(where);
+
+            return this;
+        }
+
         public QueryFieldBuilder<T> FilterAs(FilterType filterType)
         {
             this.Instance.FilterType = filterType;

@@ -35,8 +35,12 @@ namespace Query.Web
         {
             base.InitHeaderCell(cell);
 
+            var pnl = new Panel();
+            pnl.CssClass = "query-filter";
+            cell.Controls.Add(pnl);
+
             this.dropDownList = new DropDownList();
-            cell.Controls.Add(this.dropDownList);
+            pnl.Controls.Add(this.dropDownList);
             
             this.dropDownList.Attributes["class"] = "data-query-dropdown";
 

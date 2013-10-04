@@ -124,6 +124,9 @@ namespace Query.Web
 
         protected virtual void InitHeaderCell(DataControlFieldCell cell)
         {
+            var pnl = new Panel();
+            pnl.CssClass = "query-header";
+            cell.Controls.Add(pnl);
             // title with sorting
             this.sortButton = new LinkButton
             {
@@ -135,9 +138,9 @@ namespace Query.Web
             this.sortInputHidden = new HtmlInputHidden();
             this.sortOrderLabel = new Label();
 
-            cell.Controls.Add(this.sortButton);
-            cell.Controls.Add(this.sortInputHidden);
-            cell.Controls.Add(this.sortOrderLabel);
+            pnl.Controls.Add(this.sortButton);
+            pnl.Controls.Add(this.sortInputHidden);
+            pnl.Controls.Add(this.sortOrderLabel);
 
             // Filter button
             this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };

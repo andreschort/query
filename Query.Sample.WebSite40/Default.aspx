@@ -5,17 +5,12 @@
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 </asp:Content>
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-    <style>
-        table { width:960px; }
-        th input { width: 90%; }
-        th { white-space: nowrap; border: 1px solid transparent}
-        .data-query-datepicker { width: 40%;font-size: small; }
-    </style>
-
     <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
                         OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
     <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8" CssClass="bordered">
         <Columns>
+            <query:TextField Name="FullName" HeaderText="Full name" DataField="FullName"
+                             UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Apellido" HeaderText="Apellido" DataField="Apellido" />

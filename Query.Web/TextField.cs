@@ -40,9 +40,13 @@ namespace Query.Web
         {
             base.InitHeaderCell(cell);
 
+            var pnl = new Panel();
+            pnl.CssClass = "query-filter";
+            cell.Controls.Add(pnl);
+
             // Filter textbox
             this.textBox = new TextBox();
-            cell.Controls.Add(textBox);
+            pnl.Controls.Add(textBox);
 
             this.textBox.Attributes["class"] = "data-query-textFilter";
             this.textBox.AutoCompleteType = AutoCompleteType.Disabled;

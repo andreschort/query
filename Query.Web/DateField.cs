@@ -29,10 +29,14 @@ namespace Query.Web
         {
             base.InitHeaderCell(cell);
 
+            var pnl = new Panel();
+            pnl.CssClass = "query-date-filter";
+            cell.Controls.Add(pnl);
+
             this.textFrom = new TextBox();
             this.textTo = new TextBox();
-            cell.Controls.Add(this.textFrom);
-            cell.Controls.Add(this.textTo);
+            pnl.Controls.Add(this.textFrom);
+            pnl.Controls.Add(this.textTo);
 
             this.textFrom.Attributes["class"] = "data-query-datepicker";
             this.textFrom.AutoCompleteType = AutoCompleteType.Disabled;

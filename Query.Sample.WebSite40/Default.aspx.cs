@@ -14,7 +14,7 @@ namespace Query.Sample.WebSite40
         protected void Page_Init(object sender, EventArgs e)
         {
             // Databind of a drop down filter. The value of the ListItem will be the value of the filter.
-            var field = (DropDownField)this.GridView.Columns[3];
+            var field = (DropDownField)this.GridView.Columns[4];
             field.Items = new List<ListItem>
                 {
                     new ListItem("", "-1"),

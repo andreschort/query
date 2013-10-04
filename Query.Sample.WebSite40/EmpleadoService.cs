@@ -25,8 +25,9 @@ namespace Query.Sample.WebSite40
             var query = new Query<Empleado>();
 
             // Simple text and integer fields. The field names come from the select expression.
-            query.AddField(x => x.Nombre); // Field name = "Nombre"
-            query.AddField(x => x.Apellido).CaseSensitive(); // Field name = "Apellido" - case sensitive
+            query.AddField("FullName").Select(x => x.Nombre + " " + x.Apellido);
+            query.AddField(x => x.Nombre).AddWhere(x => x.Apellido); // Field name = "Nombre"
+            query.AddField(x => x.Apellido).AddWhere(x => x.Nombre).CaseSensitive(); // Field name = "Apellido" - case sensitive
             query.AddField(x => x.Dni);
 
             // Date filter with truncated time.
