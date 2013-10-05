@@ -28,9 +28,8 @@ th {
 }
 
 .query-header span {
-        color: #FFFFFF;
+    color: #FFFFFF;
     font-size: 0.83em;
-    position: fixed;
     text-align: right !important;
     vertical-align: super;
 }
@@ -79,4 +78,16 @@ th {
     line-height: 12px;
     padding: 0 0 0 0;
     display: block;
+}
+
+th.asc span, th.desc span {
+    float: right;
+}
+
+th.asc .query-header a:after {
+    content: "▲";
+}
+
+th.desc .query-header a:after {
+    content: "▼";
 }

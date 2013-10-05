@@ -111,6 +111,10 @@
     <Content Include="Account\OpenAuthProviders.ascx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
+    <Content Include="App_Data\Query.Sample.Model.SampleContext.mdf" />
+    <Content Include="App_Data\Query.Sample.Model.SampleContext_log.ldf">
+      <DependentUpon>Query.Sample.Model.SampleContext.mdf</DependentUpon>
+    </Content>
     <Content Include="Contact.aspx" />
     <Content Include="Content\query.css" />
     <Content Include="Content\Site.css" />
@@ -284,9 +288,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Account\Web.config" />
     <Content Include="Site.Master" />
