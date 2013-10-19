@@ -26,10 +26,7 @@ function initTextFilter($element) {
     var postbackName = $element.attr('data-query-postbackName');
     var focus = $element.attr('data-query-focus');
     
-    // Store initial value ignoring the default (placeholder)
-    if (currentVal == defaultValue) {
-        currentVal = "";
-    }
+    // Store initial value
     $element.attr("data-query-value", currentVal);
     
     // Restore focus
