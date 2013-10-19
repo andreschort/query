@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Core", "Query.Core\Query.Core.csproj", "{A3C233F5-977A-4877-845C-317C9A2BB968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common", "Common\Query.Common.csproj", "{322B2398-6E88-4644-8040-CF5B25408811}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common", "Query.Common\Query.Common.csproj", "{322B2398-6E88-4644-8040-CF5B25408811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common.Web", "Common.Web\Query.Common.Web.csproj", "{F3F2AC0F-0707-4007-B952-F82CE9759FCE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common.Web", "Query.Common.Web\Query.Common.Web.csproj", "{F3F2AC0F-0707-4007-B952-F82CE9759FCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Test", "Query.Test\Query.Test.csproj", "{13068568-94A0-4093-B051-D819CF205AD1}"
 EndProject
@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{684B97
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common.Test", "Common.Test\Query.Common.Test.csproj", "{C9502884-52D8-4FC5-8AB4-5165BF420109}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common.Test", "Query.Common.Test\Query.Common.Test.csproj", "{C9502884-52D8-4FC5-8AB4-5165BF420109}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Sample.WebSite40", "Query.Sample.WebSite40\Query.Sample.WebSite40.csproj", "{4E83F8BF-7DF4-4B56-B42B-C4DA9F5C52F7}"
 EndProject

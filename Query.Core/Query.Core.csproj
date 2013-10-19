@@ -53,7 +53,7 @@
     <Compile Include="SortDirection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Query.Common.csproj">
+    <ProjectReference Include="..\Query.Common\Query.Common.csproj">
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
       <Name>Query.Common</Name>
     </ProjectReference>
