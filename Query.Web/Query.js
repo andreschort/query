@@ -22,7 +22,6 @@
 
 function initTextFilter($element) {
     var currentVal = $element.val();
-    var defaultValue = $element.attr('data-query-placeholder');
     var delayMs = $element.attr('data-query-filterDelay');
     var postbackName = $element.attr('data-query-postbackName');
     var focus = $element.attr('data-query-focus');

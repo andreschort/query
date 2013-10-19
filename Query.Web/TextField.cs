@@ -51,7 +51,7 @@ namespace Query.Web
             this.textBox.Attributes["class"] = "data-query-textFilter";
             this.textBox.AutoCompleteType = AutoCompleteType.Disabled;
             this.textBox.Attributes["autocomplete"] = "off";
-            this.textBox.Attributes["data-query-placeholder"] = this.FilterPlaceholder;
+            this.textBox.Attributes["placeholder"] = this.FilterPlaceholder;
 
             if (this.AutoFilterDelay.HasValue)
             {

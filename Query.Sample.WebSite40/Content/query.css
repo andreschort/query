@@ -1,5 +1,5 @@
 ﻿tbody tr:first-child {
-    background-color: #C5DBF9;
+    background-color: #ce8d7e;
     vertical-align: bottom;
 }
 
@@ -36,10 +36,10 @@ th {
 
 .query-filter,
 .query-date-filter {
-    background-color: #C2C2C2;
     border-top: 1px solid #FFFFFF;
     margin: 0;
     padding: 0;
+    background-color: white;
 }
 
 .query-filter input,
@@ -48,12 +48,10 @@ th {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    background-color: #C2C2C2;
     border-color: -moz-use-text-color;
     border-image: initial;
     border-style: none;
     border-width: 0;
-    color: #FFFFFF;
     cursor: auto;
     padding: 5px 0 5px 5%;
     margin: 0;
@@ -66,8 +64,6 @@ th {
 .query-filter select {
     height: 30px;
     line-height: 30px;
-    background: none repeat scroll 0 0 #C2C2C2;
-    color: #FFFFFF;
     margin: 0;
     padding: 0;
     width: 100%;

@@ -41,12 +41,12 @@ namespace Query.Web
             this.textFrom.Attributes["class"] = "data-query-datepicker";
             this.textFrom.AutoCompleteType = AutoCompleteType.Disabled;
             this.textFrom.Attributes["autocomplete"] = "off";
-            this.textFrom.Attributes["data-query-placeholder"] = this.FilterPlaceholder;
+            this.textFrom.Attributes["placeholder"] = this.FilterPlaceholder;
 
             this.textTo.Attributes["class"] = "data-query-datepicker";
             this.textTo.AutoCompleteType = AutoCompleteType.Disabled;
             this.textTo.Attributes["autocomplete"] = "off";
-            this.textTo.Attributes["data-query-placeholder"] = this.FilterPlaceholder;
+            this.textTo.Attributes["placeholder"] = this.FilterPlaceholder;
 
             if (this.AutoFilterDelay.HasValue)
             {
