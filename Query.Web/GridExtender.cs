@@ -12,9 +12,9 @@ namespace Query.Web
         public const string FilterCommand = "Filter";
         public const string SortCommand = "Sort";
 
-        #region Published Properties
-
         private bool enableFilters = true;
+
+        #region Published Properties
 
         public string GridViewId { get; set; }
         
@@ -36,7 +36,15 @@ namespace Query.Web
             set { this.enableFilters = value; }
         }
 
+        /// <summary>
+        /// The number of milliseconds to wait after the user enters some text in the filter UI control.
+        /// </summary>
         public int? AutoFilterDelay { get; set; }
+        
+        /// <summary>
+        /// The text to show when the filter is empty
+        /// </summary>
+        public string Placeholder { get; set; }
 
         #endregion Published Properties
 
@@ -66,17 +74,7 @@ namespace Query.Web
             var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "Query.Web.Query.js");
             this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
 
-            var javascript = @"$(document).ready(function () {
-                                $('.data-query-textFilter').each(function (index, element) {
-                                    initTextFilter($(this));
-                                });
-                                $('.data-query-datepicker').each(function (index, element) {
-                                    initDateFilter($(this));
-                                });
-                                $('.data-query-dropdown').each(function (index, element) {
-                                    initDropDownFilter($(this));
-                                });
-                            });";
+            var javascript = @"$(document).ready(function () { initGridExtender(); });";
             JSUtil.AddLoad(this, "GridExtender", javascript);
 
             // Force that the hidden input __LASTFOCUS is rendered
@@ -89,7 +87,8 @@ namespace Query.Web
             short tabIndex = 1;
             foreach (var field in this.Grid.Columns.OfType<QueryFieldBase>())
             {
-                field.AutoFilterDelay = this.AutoFilterDelay;
+                field.AutoFilterDelay = field.AutoFilterDelay ?? this.AutoFilterDelay;
+                field.Placeholder = field.Placeholder ?? this.Placeholder;
                 field.FilterCommand = FilterCommand;
                 field.SortCommand = SortCommand;
                 tabIndex = field.SetTabIndex(tabIndex);

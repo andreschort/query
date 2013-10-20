@@ -21,15 +21,11 @@ namespace Query.Web
 
         #endregion Fields
 
-        #region Published Properties
-
-        public override string FilterValue
+        protected internal override string FilterValue
         {
             get { return this.textBox == null ? this.externalFilterValue ?? string.Empty : this.textBox.Text; }
             set { this.externalFilterValue = value; }
         }
-
-        #endregion Published Properties
 
         protected override DataControlField CreateField()
         {
@@ -40,8 +36,7 @@ namespace Query.Web
         {
             base.InitHeaderCell(cell);
 
-            var pnl = new Panel();
-            pnl.CssClass = "query-filter";
+            var pnl = new Panel {CssClass = "query-filter"};
             cell.Controls.Add(pnl);
 
             // Filter textbox
@@ -51,7 +46,7 @@ namespace Query.Web
             this.textBox.Attributes["class"] = "data-query-textFilter";
             this.textBox.AutoCompleteType = AutoCompleteType.Disabled;
             this.textBox.Attributes["autocomplete"] = "off";
-            this.textBox.Attributes["placeholder"] = this.FilterPlaceholder;
+            this.textBox.Attributes["placeholder"] = this.Placeholder;
 
             if (this.AutoFilterDelay.HasValue)
             {
@@ -72,8 +67,7 @@ namespace Query.Web
             if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
-                var nameValueCollection = HttpContext.Current.Request.Form;
-                this.textBox.Text = nameValueCollection[this.textBox.UniqueID];
+                this.textBox.Text = HttpContext.Current.Request.Form[this.textBox.UniqueID];
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI.WebControls;
 
@@ -11,14 +12,12 @@ namespace Query.Web
 
         private string externalFilterValue;
 
-        public override string FilterValue
+        protected internal override string FilterValue
         {
-            get { return this.dropDownList == null ? this.externalFilterValue ?? this.DefaultValue : this.dropDownList.SelectedValue; }
+            get { return this.dropDownList == null ? this.externalFilterValue ?? string.Empty : this.dropDownList.SelectedValue; }
             set { this.externalFilterValue = value; }
         }
-
-        public string DefaultValue { get; set; }
-
+        
         /// <summary>
         /// Set the filters options to Yes/No/Null
         /// </summary>
@@ -54,17 +53,18 @@ namespace Query.Web
         {
             base.HeaderCell_DataBinding(sender, e);
 
+            this.Items.Insert(0, new ListItem(string.Empty, string.Empty)); // add empty option
+            
             this.dropDownList.DataSource = this.Items;
             this.dropDownList.DataTextField = "Text";
             this.dropDownList.DataValueField = "Value";
             this.dropDownList.DataBind();
 
-            // Set textbox value
+            // set selected value
             if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
-                var nameValueCollection = HttpContext.Current.Request.Form;
-                this.dropDownList.SelectedValue = nameValueCollection[this.dropDownList.UniqueID];
+                this.dropDownList.SelectedValue = HttpContext.Current.Request.Form[this.dropDownList.UniqueID];
             }
             else
             {

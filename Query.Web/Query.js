@@ -20,6 +20,20 @@
     } // if
 } // SetCaretAtEnd()
 
+var delay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
+
+function initGridExtender() {
+    $('.data-query-textFilter').each(function () { initTextFilter($(this)); });
+    $('.data-query-datepicker').each(function () { initDateFilter($(this)); });
+    $('.data-query-dropdown').each(function () { initDropDownFilter($(this)); });
+}
+
 function initTextFilter($element) {
     var currentVal = $element.val();
     var delayMs = $element.attr('data-query-filterDelay');
@@ -69,14 +83,6 @@ function initTextFilter($element) {
         }
     });
 }
-
-var delay = (function () {
-    var timer = 0;
-    return function (callback, ms) {
-        clearTimeout(timer);
-        timer = setTimeout(callback, ms);
-    };
-})();
 
 function initDateFilter($element) {
     initTextFilter($element);

@@ -6,11 +6,15 @@ namespace Query.Web
 {
     public class DateField : QueryFieldBase
     {
+        #region Fields
+
         private TextBox textFrom;
 
         private TextBox textTo;
 
         private string externalFilterValue;
+
+        #endregion Fields
 
         public string Format { get; set; }
 
@@ -19,7 +23,7 @@ namespace Query.Web
             return new DateField();
         }
 
-        public override string FilterValue
+        protected internal override string FilterValue
         {
             get { return this.GetFilterValue(); }
             set { this.externalFilterValue = value; }
@@ -29,8 +33,7 @@ namespace Query.Web
         {
             base.InitHeaderCell(cell);
 
-            var pnl = new Panel();
-            pnl.CssClass = "query-date-filter";
+            var pnl = new Panel {CssClass = "query-date-filter"};
             cell.Controls.Add(pnl);
 
             this.textFrom = new TextBox();
@@ -41,12 +44,12 @@ namespace Query.Web
             this.textFrom.Attributes["class"] = "data-query-datepicker";
             this.textFrom.AutoCompleteType = AutoCompleteType.Disabled;
             this.textFrom.Attributes["autocomplete"] = "off";
-            this.textFrom.Attributes["placeholder"] = this.FilterPlaceholder;
+            this.textFrom.Attributes["placeholder"] = this.Placeholder;
 
             this.textTo.Attributes["class"] = "data-query-datepicker";
             this.textTo.AutoCompleteType = AutoCompleteType.Disabled;
             this.textTo.Attributes["autocomplete"] = "off";
-            this.textTo.Attributes["placeholder"] = this.FilterPlaceholder;
+            this.textTo.Attributes["placeholder"] = this.Placeholder;
 
             if (this.AutoFilterDelay.HasValue)
             {
@@ -71,13 +74,12 @@ namespace Query.Web
         {
             base.HeaderCell_DataBinding(sender, e);
 
-            // Set textbox value
+            // set value
             if (string.IsNullOrEmpty(this.externalFilterValue))
             {
                 // restore the value from the form
-                var nameValueCollection = HttpContext.Current.Request.Form;
-                this.textFrom.Text = nameValueCollection[this.textFrom.UniqueID];
-                this.textTo.Text = nameValueCollection[this.textTo.UniqueID];
+                this.textFrom.Text = HttpContext.Current.Request.Form[this.textFrom.UniqueID];
+                this.textTo.Text = HttpContext.Current.Request.Form[this.textTo.UniqueID];
             }
             else
             {

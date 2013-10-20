@@ -29,32 +29,45 @@ namespace Query.Web
         #region Published Properties
 
         public string Name { get; set; }
-        
-        public abstract string FilterValue { get; set; }
-        
-        public short? TabIndex { get; protected set; }
 
-        [Bindable(true)]
-        public string DataField { get; set; }
+        /// <summary>
+        /// The text to show when the filter is empty
+        /// </summary>
+        public string Placeholder { get; set; }
 
-        public string FilterPlaceholder { get; set; }
-
+        /// <summary>
+        /// The number of milliseconds to wait after the user enters some text in the filter UI control.
+        /// </summary>
         public int? AutoFilterDelay { get; set; }
 
-        public string FilterCommand { get; set; }
-
-        public string SortCommand { get; set; }
-
-        public SortDirection? SortDir { get; set; }
-
-        public int SortOrder { get; set; }
-
+        /// <summary>
+        /// A comma separeted list of properties to use as parameters to UrlFormat.
+        /// </summary>
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
 
+        /// <summary>
+        /// Makes the text in the cell a link to this url
+        /// </summary>
         public string UrlFormat { get; set; }
 
         #endregion Published Properties
+
+        #region Internal Properties
+
+        protected internal abstract string FilterValue { get; set; }
+
+        protected internal string FilterCommand { get; set; }
+
+        protected internal string SortCommand { get; set; }
+
+        protected internal SortDirection? SortDir { get; set; }
+
+        protected internal int SortOrder { get; set; }
+
+        protected short? TabIndex { get; set; }
+
+        #endregion Internal Properties
 
         #region Published Methods
 
@@ -124,10 +137,10 @@ namespace Query.Web
 
         protected virtual void InitHeaderCell(DataControlFieldCell cell)
         {
-            var pnl = new Panel();
-            pnl.CssClass = "query-header";
-            cell.Controls.Add(pnl);
             // title with sorting
+            var pnl = new Panel {CssClass = "query-header"};
+            cell.Controls.Add(pnl);
+            
             this.sortButton = new LinkButton
             {
                 Text = this.HeaderText,
@@ -205,7 +218,7 @@ namespace Query.Web
             var cell = sender as TableCell;
             object dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
-            var value = this.Eval(dataItem, this.DataField);
+            var value = this.Eval(dataItem, this.Name);
             var displayValue = this.FormatValue(value);
             
             if (string.IsNullOrEmpty(this.UrlFormat))

@@ -5,23 +5,23 @@
 <asp:Content runat="server" ID="FeaturedContent" ContentPlaceHolderID="FeaturedContent">
 </asp:Content>
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-    <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000"
+    <query:GridExtender ID="GridExtender" runat="server" GridViewId="GridView" AutoFilterDelay="2000" Placeholder="Filter..."
                         OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
-    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8" CssClass="bordered">
+    <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8">
         <Columns>
-            <query:TextField Name="FullName" HeaderText="Full name" DataField="FullName" FilterPlaceholder="Filter"
+            <query:TextField Name="FullName" HeaderText="Full name"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
-            <query:TextField Name="Nombre" HeaderText="Nombre" DataField="Nombre" FilterPlaceholder="Filter"
+            <query:TextField Name="Nombre" HeaderText="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
-            <query:TextField Name="Apellido" HeaderText="Apellido" DataField="Apellido" FilterPlaceholder="Filter" />
-            <query:TextField Name="Dni" HeaderText="Dni" DataField="Dni" FilterPlaceholder="Filter" />
-            <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" DataField="EstadoCivil" DefaultValue="-1" FilterPlaceholder="Filter" />
-            <query:TextField Name="Edad" HeaderText="Edad" DataField="Edad" FilterPlaceholder="Filter" />
-            <query:TextField Name="Salario" HeaderText="Salario" DataField="Salario" FilterPlaceholder="Filter" />
-            <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" DataField="FechaNacimiento" Format="d" FilterPlaceholder="Filter" />
-            <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" DataField="AttachmentCount" FilterPlaceholder="Filter" />
-            <query:TextField Name="Cuit" HeaderText="CUIT" DataField="Cuit" FilterPlaceholder="Filter" />
-            <query:TextField Name="AverageHourlyWage" HeaderText="Wage" DataField="AverageHourlyWage" FilterPlaceholder="Filter" />
+            <query:TextField Name="Apellido" HeaderText="Apellido" />
+            <query:TextField Name="Dni" HeaderText="Dni" />
+            <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" />
+            <query:TextField Name="Edad" HeaderText="Edad" />
+            <query:TextField Name="Salario" HeaderText="Salario" />
+            <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" Format="d" />
+            <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" />
+            <query:TextField Name="Cuit" HeaderText="CUIT" />
+            <query:TextField Name="AverageHourlyWage" HeaderText="Wage" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

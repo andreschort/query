@@ -25,10 +25,12 @@ namespace Query.Sample.WebSite40
             var query = new Query<Empleado>();
 
             // Simple text and integer fields. The field names come from the select expression.
-            query.AddField("FullName").Select(x => x.Nombre + " " + x.Apellido);
             query.AddField(x => x.Nombre).AddWhere(x => x.Apellido); // Field name = "Nombre"
             query.AddField(x => x.Apellido).AddWhere(x => x.Nombre).CaseSensitive(); // Field name = "Apellido" - case sensitive
             query.AddField(x => x.Dni);
+
+            // A field that concatenates two properties.
+            query.AddField("FullName").Select(x => x.Nombre + " " + x.Apellido);
 
             // Date filter with truncated time.
             query.AddField(x => x.FechaNacimiento).TruncateTime();
@@ -36,8 +38,8 @@ namespace Query.Sample.WebSite40
             // List filter targeting an enum
             query.AddField("EstadoCivil")
                 .Select(x => x.EstadoCivil_Id) // enums in EF5 for .NET 4.0
+                // since the select targets an int we need the following to force a list filter instead of an integer filter.
                 .FilterAs(FilterType.List)
-                // since the select targets an int we need this to force a list filter instead of an integer filter.
                 // Return constants for specific values of the target, not necesary but allows us to translates the enum values that will be shown.
                 .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
                 .FilterWhen(10, x => x.EstadoCivil_Id.Equals((int)EstadoCivil.Casado) || // custom value filter
@@ -65,8 +67,8 @@ namespace Query.Sample.WebSite40
 
                 // Projection. theResult is an untyped IQueryable. The ElementType is an annonymous type based in the defined fields
                 var theResult = query.Project(empleados);
-
-                // Converting to datatable to use in GridView - not required
+                
+                // Calling ToList on the final IQueryable so the SQL query is performed by EF.
                 return Enumerable.Cast<object>(theResult).ToList();
             }
         }

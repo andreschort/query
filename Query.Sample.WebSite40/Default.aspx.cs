@@ -14,10 +14,10 @@ namespace Query.Sample.WebSite40
         protected void Page_Init(object sender, EventArgs e)
         {
             // Databind of a drop down filter. The value of the ListItem will be the value of the filter.
+            // No need to include the empty option, it will be added automatically.
             var field = (DropDownField)this.GridView.Columns[4];
             field.Items = new List<ListItem>
                 {
-                    new ListItem("", "-1"),
                     new ListItem("Soltero", EstadoCivil.Soltero.ToOrdinalString()),
                     new ListItem("Casado", EstadoCivil.Casado.ToOrdinalString()),
                     new ListItem("Separado", EstadoCivil.Separado.ToOrdinalString()),
