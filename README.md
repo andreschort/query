@@ -1,12 +1,14 @@
 query
 =====
 
-A small library that transforms IQueryable objects and a set of ASP.NET WebForms controls that extend GridView with filtering features.
-Look for the project Query.Sample.WebSite40 for a full example.
+query can:
+- Transform an IQueryable<T> with projections into an anonymous type, apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.
+- Easily create a GridView which gets the data from an IQueryable using the transformations provided.
+
+You can find an example application in Query.Sample.WebSite40.
 
 TODO
 ----
-- Implement DropDownField.BooleanList.
 - Improve the way you can apply styles to the Query.Web controls.
 
 Basic projection
