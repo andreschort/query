@@ -51,6 +51,11 @@ namespace Query.Web
         /// </summary>
         public string UrlFormat { get; set; }
 
+        [BrowsableAttribute(false)]
+        [PersistenceModeAttribute(PersistenceMode.InnerProperty)]
+        [TemplateContainerAttribute(typeof(IDataItemContainer), BindingDirection.TwoWay)]
+        public virtual ITemplate ItemTemplate { get; set; }
+
         #endregion Published Properties
 
         #region Internal Properties
@@ -216,6 +221,12 @@ namespace Query.Web
         protected virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
             var cell = sender as TableCell;
+            if (this.ItemTemplate != null)
+            {
+                this.ItemTemplate.InstantiateIn(cell);
+                return;
+            }
+            
             object dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
             var value = this.Eval(dataItem, this.Name);

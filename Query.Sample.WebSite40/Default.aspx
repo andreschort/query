@@ -9,8 +9,11 @@
                         OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
     <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8">
         <Columns>
-            <query:TextField Name="FullName" HeaderText="Full name"
-                             UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
+            <query:TextField Name="FullName" HeaderText="Full name">
+                <ItemTemplate>
+                    <asp:Label runat="server" Text='<%# Eval("FullName") %>' ID="DaLabel"></asp:Label>
+                </ItemTemplate>
+            </query:TextField>
             <query:TextField Name="Nombre" HeaderText="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Apellido" HeaderText="Apellido" />
