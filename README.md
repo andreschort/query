@@ -9,6 +9,13 @@ You can find an example application in Query.Sample.WebSite40.
 
 TODO
 ----
+- Posibilidad para definir el ItemTemplate en los fields (pudiendo usar Eval, etc)
+- Definir Enabled para la TD
+- TextField OnClick en el TD
+- TD Tooltip y CssClass
+- TH y TD CssClass
+- Soporte para CustomField:
+ - ItemTemplate o Call back para formatear el valor en TD
 - Improve the way you can apply styles to the Query.Web controls.
 
 Basic projection
