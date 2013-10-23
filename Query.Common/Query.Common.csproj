@@ -34,9 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -47,6 +44,7 @@
     <Compile Include="Extension\QueryableExtensions.cs" />
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortDirection.cs" />
     <Compile Include="Util\ExpressionBuilder.cs" />
     <Compile Include="Util\ExpressionSubstitute.cs" />
     <Compile Include="Util\JavaScriptUtil.cs" />

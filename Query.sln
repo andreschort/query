@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Core", "Query.Core\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common", "Query.Common\Query.Common.csproj", "{322B2398-6E88-4644-8040-CF5B25408811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Common.Web", "Query.Common.Web\Query.Common.Web.csproj", "{F3F2AC0F-0707-4007-B952-F82CE9759FCE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Test", "Query.Test\Query.Test.csproj", "{13068568-94A0-4093-B051-D819CF205AD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Query.Web", "Query.Web\Query.Web.csproj", "{CC117E78-ACDA-4993-BF8B-1B8A5E7D8D35}"
@@ -40,10 +38,6 @@ Global
 		{322B2398-6E88-4644-8040-CF5B25408811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{322B2398-6E88-4644-8040-CF5B25408811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{322B2398-6E88-4644-8040-CF5B25408811}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3F2AC0F-0707-4007-B952-F82CE9759FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3F2AC0F-0707-4007-B952-F82CE9759FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3F2AC0F-0707-4007-B952-F82CE9759FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3F2AC0F-0707-4007-B952-F82CE9759FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13068568-94A0-4093-B051-D819CF205AD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13068568-94A0-4093-B051-D819CF205AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13068568-94A0-4093-B051-D819CF205AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU

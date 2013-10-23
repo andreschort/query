@@ -8,7 +8,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Query.Common.Extension;
 using Query.Common.Util;
-using SortDirection = Query.Core.SortDirection;
+using SortDirection = Query.Common.SortDirection;
 
 namespace Query.Web
 {

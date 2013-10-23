@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
-using Query.Common.Web.Util;
-using SortDirection = Query.Core.SortDirection;
+using Query.Web.Util;
+using SortDirection = Query.Common.SortDirection;
 
 namespace Query.Web
 {

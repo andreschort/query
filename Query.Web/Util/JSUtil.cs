@@ -1,6 +1,6 @@
 ﻿using System.Web.UI;
 
-namespace Query.Common.Web.Util
+namespace Query.Web.Util
 {
     public class JSUtil
     {

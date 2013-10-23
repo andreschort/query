@@ -5,7 +5,7 @@ using System.Web.UI.WebControls;
 using Query.Common.Extension;
 using Query.Sample.Model;
 using Query.Web;
-using SortDirection = Query.Core.SortDirection;
+using SortDirection = Query.Common.SortDirection;
 
 namespace Query.Sample.WebSite40
 {

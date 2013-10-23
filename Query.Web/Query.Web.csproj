@@ -34,11 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DateField.cs" />
@@ -47,19 +44,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryFieldBase.cs" />
     <Compile Include="TextField.cs" />
+    <Compile Include="Util\JSUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Query.Common.Web\Query.Common.Web.csproj">
-      <Project>{F3F2AC0F-0707-4007-B952-F82CE9759FCE}</Project>
-      <Name>Query.Common.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Query.Common\Query.Common.csproj">
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
       <Name>Query.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Query.Core\Query.Core.csproj">
-      <Project>{a3c233f5-977a-4877-845c-317c9a2bb968}</Project>
-      <Name>Query.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
