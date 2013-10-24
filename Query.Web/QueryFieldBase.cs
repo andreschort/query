@@ -69,9 +69,9 @@ namespace Query.Web
         /// </summary>
         public string UrlFormat { get; set; }
 
-        [BrowsableAttribute(false)]
-        [PersistenceModeAttribute(PersistenceMode.InnerProperty)]
-        [TemplateContainerAttribute(typeof(IDataItemContainer), BindingDirection.TwoWay)]
+        [Browsable(false)]
+        [PersistenceMode(PersistenceMode.InnerProperty)]
+        [TemplateContainer(typeof(IDataItemContainer), BindingDirection.TwoWay)]
         public virtual ITemplate ItemTemplate { get; set; }
 
         public bool ItemEnabled
@@ -241,6 +241,13 @@ namespace Query.Web
         /// <param name="rowState"></param>
         protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
+            cell.Enabled = this.ItemEnabled;
+            if (this.ItemTemplate != null)
+            {
+                this.ItemTemplate.InstantiateIn(cell);
+                return;
+            }
+
             if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
             {
                 return; // plain text cell
@@ -266,10 +273,8 @@ namespace Query.Web
         {
             var cell = sender as TableCell;
 
-            cell.Enabled = this.ItemEnabled;
             if (this.ItemTemplate != null)
             {
-                this.ItemTemplate.InstantiateIn(cell);
                 return;
             }
 
