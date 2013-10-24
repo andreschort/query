@@ -23,6 +23,7 @@ namespace Query.Web
         private Label sortOrderLabel;
 
         private bool sortHiddenInputRead;
+        private bool itemEnabled = true;
         
         #endregion Fields
 
@@ -55,6 +56,12 @@ namespace Query.Web
         [PersistenceModeAttribute(PersistenceMode.InnerProperty)]
         [TemplateContainerAttribute(typeof(IDataItemContainer), BindingDirection.TwoWay)]
         public virtual ITemplate ItemTemplate { get; set; }
+
+        public bool ItemEnabled
+        {
+            get { return this.itemEnabled; }
+            set { this.itemEnabled = value; }
+        }
 
         #endregion Published Properties
 
@@ -221,6 +228,8 @@ namespace Query.Web
         protected virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
             var cell = sender as TableCell;
+
+            cell.Enabled = this.ItemEnabled;
             if (this.ItemTemplate != null)
             {
                 this.ItemTemplate.InstantiateIn(cell);
