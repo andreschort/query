@@ -9,11 +9,8 @@
                         OnFilter="GridExtender_Filter" OnSort="GridExtender_Sort" />
     <asp:GridView ID="GridView" runat="server" AutoGenerateColumns="False" ShowHeaderWhenEmpty="True" AllowPaging="True" AllowSorting="False" PageSize="8">
         <Columns>
-            <query:TextField Name="FullName" HeaderText="Full name">
-                <ItemTemplate>
-                    <asp:Label runat="server" Text='<%# Eval("FullName") %>' ID="DaLabel"></asp:Label>
-                </ItemTemplate>
-            </query:TextField>
+            <query:TextField Name="FullName" HeaderText="Full name" OnClick="FullName_Click" />
+            
             <query:TextField Name="Nombre" HeaderText="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Apellido" HeaderText="Apellido" />
@@ -28,7 +25,7 @@
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>
-    
+    <asp:LinkButton runat="server" OnClick="Link_Click" ID="Link" Text="Link"></asp:LinkButton>
     <asp:ObjectDataSource ID="OdsEmpleado" runat="server" EnablePaging="True"
                           SelectMethod="GetAll" SelectCountMethod="GetCount"
                           MaximumRowsParameterName="maximumRows"

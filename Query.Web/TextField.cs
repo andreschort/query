@@ -63,16 +63,10 @@ namespace Query.Web
         {
             base.HeaderCell_DataBinding(sender, e);
 
-            // Set textbox value
-            if (string.IsNullOrEmpty(this.externalFilterValue))
-            {
-                // restore the value from the form
-                this.textBox.Text = HttpContext.Current.Request.Form[this.textBox.UniqueID];
-            }
-            else
-            {
-                this.textBox.Text = this.externalFilterValue;
-            }
+            // Set value
+            this.textBox.Text = string.IsNullOrEmpty(this.externalFilterValue)
+                ? HttpContext.Current.Request.Form[this.textBox.UniqueID]
+                : this.externalFilterValue;
 
             // postback configuration, must be here to ensure UniqueID is not null
             this.textBox.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;

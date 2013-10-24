@@ -19,16 +19,33 @@ namespace Query.Web
         protected LinkButton FilterButton;
         
         private LinkButton sortButton;
-        private HtmlInputHidden sortInputHidden;
+        private HtmlInputHidden sortInputHidden; // used to save the sort direction and order across postbacks
         private Label sortOrderLabel;
 
+        /// <summary>
+        /// Tells if the value in sortInputHidden was already read in this postback.
+        /// Used to avoid overriding a value set manually during postback.
+        /// </summary>
         private bool sortHiddenInputRead;
+
         private bool itemEnabled = true;
+
+        private LinkButton linkButton; // used when the data cell must show a link
+        private HtmlInputHidden valueHidden; // used to save the text of the link across postbacks
+        private HtmlInputHidden urlHidden; // used to save the url of the link across postbacks
+
+        private string displayValue; // the text of the link
+        private string navigateUrl; // the url of the link
         
         #endregion Fields
 
+        public event EventHandler Click; // the click in a data cell link
+
         #region Published Properties
 
+        /// <summary>
+        /// The field's name
+        /// </summary>
         public string Name { get; set; }
 
         /// <summary>
@@ -101,6 +118,8 @@ namespace Query.Web
             else if (cellType == DataControlCellType.DataCell)
             {
                 cell.DataBinding += this.DataCell_DataBinding;
+                cell.Load += this.DataCell_Load;
+                cell.PreRender += this.DataCell_PreRender;
                 this.InitDataCell(cell, rowState);
             }
         }
@@ -142,11 +161,6 @@ namespace Query.Web
 
         #endregion Published Methods
 
-        protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
-        {
-            // Override if you want to do something before the cell's databinding
-        }
-
         protected virtual void InitHeaderCell(DataControlFieldCell cell)
         {
             // title with sorting
@@ -176,13 +190,13 @@ namespace Query.Web
         private void HeaderCell_Load(object sender, EventArgs e)
         {
             // read the sort order and direction from sortInputHidden
-            var hiddenFieldValue = HttpContext.Current.Request.Form[this.sortInputHidden.UniqueID];
-
             // we should do this only one time in every postback
             if (this.sortHiddenInputRead)
             {
                 return;
             }
+            
+            var hiddenFieldValue = HttpContext.Current.Request.Form[this.sortInputHidden.UniqueID];
 
             if (string.IsNullOrEmpty(hiddenFieldValue))
             {
@@ -219,6 +233,29 @@ namespace Query.Web
         protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
         {
         }
+        
+        /// <summary>
+        /// Creates linkButton, valueHidden and urlHidden for data cells with a link
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="rowState"></param>
+        protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
+        {
+            if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
+            {
+                return; // plain text cell
+            }
+
+            this.linkButton = new LinkButton();
+            cell.Controls.Add(this.linkButton);
+            this.linkButton.Click += this.Click;
+
+            this.valueHidden = new HtmlInputHidden();
+            cell.Controls.Add(this.valueHidden);
+
+            this.urlHidden = new HtmlInputHidden();
+            cell.Controls.Add(this.urlHidden);
+        }
 
         /// <summary>
         /// Sets the cell text to the value of the field.
@@ -235,26 +272,47 @@ namespace Query.Web
                 this.ItemTemplate.InstantiateIn(cell);
                 return;
             }
-            
-            object dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
-            var value = this.Eval(dataItem, this.Name);
-            var displayValue = this.FormatValue(value);
-            
-            if (string.IsNullOrEmpty(this.UrlFormat))
+            var dataItem = DataBinder.GetDataItem(cell.NamingContainer);
+
+            if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
             {
-                cell.Text = displayValue;
+                cell.Text = this.FormatValue(this.Eval(dataItem, this.Name));
             }
             else
             {
-                var linkButton = new HyperLink();
-                cell.Controls.Add(linkButton);
-                linkButton.Text = displayValue;
+                this.displayValue = this.FormatValue(this.Eval(dataItem, this.Name));
+                this.navigateUrl = this.UrlFields == null
+                        ? this.UrlFormat
+                        : string.Format(this.UrlFormat,
+                            this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
 
-                linkButton.NavigateUrl = this.UrlFields == null
-                                             ? this.UrlFormat
-                                             : string.Format(this.UrlFormat,
-                                                             this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
+                this.linkButton.Text = this.displayValue;
+                this.linkButton.PostBackUrl = this.navigateUrl;
+            }
+        }
+
+        private void DataCell_Load(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.displayValue) && this.valueHidden != null)
+            {
+                this.displayValue = HttpContext.Current.Request.Form[this.valueHidden.UniqueID];
+                this.navigateUrl = HttpContext.Current.Request.Form[this.urlHidden.UniqueID];
+            }
+
+            if (this.linkButton != null)
+            {
+                this.linkButton.Text = this.displayValue;
+                this.linkButton.PostBackUrl = this.navigateUrl;
+            }
+        }
+
+        private void DataCell_PreRender(object sender, EventArgs e)
+        {
+            if (this.valueHidden != null)
+            {
+                this.valueHidden.Value = this.displayValue;
+                this.urlHidden.Value = this.navigateUrl;
             }
         }
 
