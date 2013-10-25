@@ -9,6 +9,7 @@ You can find an example application in Query.Sample.WebSite40.
 
 TODO
 ----
+- Query.Web support to programmatically set a field type.
 - TD Tooltip
 - TH y TD CssClass
 - Improve the way you can apply styles to the Query.Web controls.
