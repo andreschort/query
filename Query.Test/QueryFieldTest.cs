@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Common.Util;
 using Query.Core;
+using Query.Core.Filters;
 using Query.Sample.Model;
 using System;
 using System.Collections.Generic;

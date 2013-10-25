@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Query.Common.Extension;
 using Query.Common.Util;
+using Query.Core.Filters;
+using Query.Core.Filters.Builders;
 
 namespace Query.Core
 {
@@ -11,7 +13,7 @@ namespace Query.Core
     {
         public string Name { get; set; }
 
-        public FilterType FilterType { get; set; }
+        public IFilterBuilder FilterBuilder { get; set; }
 
         public LambdaExpression Select { get; set; }
 

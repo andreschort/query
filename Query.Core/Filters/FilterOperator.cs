@@ -1,4 +1,4 @@
-﻿namespace Query.Core
+﻿namespace Query.Core.Filters
 {
     public enum FilterOperator
     {

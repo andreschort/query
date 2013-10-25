@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Query.Common.Extension;
 using Query.Common.Util;
+using Query.Core.Filters;
+using Query.Core.Filters.Builders;
 
 namespace Query.Core
 {
@@ -75,7 +77,7 @@ namespace Query.Core
             
             if (!this.withManualFilterType)
             {
-                this.Instance.FilterType = this.GetFilterType(where.ReturnType);
+                this.Instance.FilterBuilder = this.GetFilterBuilder(where.ReturnType);
             }
 
             this.withManualWhere = true;
@@ -90,11 +92,46 @@ namespace Query.Core
 
             return this;
         }
-
-        public QueryFieldBuilder<T> FilterAs(FilterType filterType)
+        
+        public QueryFieldBuilder<T> FilterAs(IFilterBuilder filterBuilder)
         {
-            this.Instance.FilterType = filterType;
-            this.withManualFilterType = true;
+            this.Instance.FilterBuilder = filterBuilder;
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsText()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof (string));
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsInteger()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(int));
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsDecimal()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(decimal));
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsDate()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(DateTime));
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsBoolean()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(bool));
+            return this;
+        }
+
+        public QueryFieldBuilder<T> FilterAsList()
+        {
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof (Enum));
             return this;
         }
 
@@ -117,44 +154,44 @@ namespace Query.Core
             return this;
         }
 
-        private FilterType GetFilterType(Type type)
+        private IFilterBuilder GetFilterBuilder(Type type)
         {
             if (type == null)
             {
-                return FilterType.None;
+                return null;
             }
 
             if (type == typeof(string))
             {
-                return FilterType.Text;
+                return new TextFilterBuilder();
             }
 
             if (type == typeof(int) || type == typeof(int?))
             {
-                return FilterType.Integer;
+                return new NumericFilterBuilder(type);
             }
 
             if (type == typeof(bool) || type == typeof(bool?))
             {
-                return FilterType.Boolean;
+                return new BooleanFilterBuilder();
             }
 
             if (type.IsEnum)
             {
-                return FilterType.List;
+                return new ListFilterBuilder();
             }
 
             if (type == typeof(decimal) || type == typeof(double) || type == typeof(decimal?) || type == typeof(double?))
             {
-                return FilterType.Decimal;
+                return new NumericFilterBuilder(type);
             }
 
             if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
-                return FilterType.Date;
+                return new DateFilterBuilder();
             }
 
-            return FilterType.List;
+            return new ListFilterBuilder();
         }
 
         public QueryFieldBuilder<T> CaseSensitive()

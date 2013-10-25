@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
+using Query.Core.Filters;
+using Query.Core.Filters.Builders;
 using Query.Sample.Model;
 
 namespace Query.Test
@@ -27,7 +29,7 @@ namespace Query.Test
 
             Assert.AreEqual("Apellido", builder.Instance.Name);
             Assert.AreEqual(typeof(string), builder.Instance.Select.ReturnType);
-            Assert.AreEqual(FilterType.Text, builder.Instance.FilterType);
+            Assert.AreEqual(typeof(TextFilterBuilder), builder.Instance.FilterBuilder.GetType());
         }
 
         [TestMethod]
@@ -39,7 +41,7 @@ namespace Query.Test
 
             Assert.AreEqual("Cuit", builder.Instance.Name);
             Assert.AreEqual(typeof(int?), builder.Instance.Select.ReturnType);
-            Assert.AreEqual(FilterType.Integer, builder.Instance.FilterType);
+            Assert.AreEqual(typeof(NumericFilterBuilder), builder.Instance.FilterBuilder.GetType());
         }
 
         [TestMethod]
@@ -53,7 +55,7 @@ namespace Query.Test
             Assert.AreEqual(typeof(string), builder.Instance.Select.ReturnType);
             Assert.AreEqual(1, builder.Instance.Where.Count);
             Assert.AreEqual(typeof(string), builder.Instance.Where[0].ReturnType);
-            Assert.AreEqual(FilterType.Text, builder.Instance.FilterType);
+            Assert.AreEqual(typeof(TextFilterBuilder), builder.Instance.FilterBuilder.GetType());
         }
 
         [TestMethod]
@@ -67,7 +69,7 @@ namespace Query.Test
             Assert.AreEqual(typeof(EstadoCivil), builder.Instance.Select.ReturnType);
             Assert.AreEqual(1, builder.Instance.Where.Count);
             Assert.AreEqual(typeof(int), builder.Instance.Where[0].ReturnType);
-            Assert.AreEqual(FilterType.Integer, builder.Instance.FilterType);
+            Assert.AreEqual(typeof(NumericFilterBuilder), builder.Instance.FilterBuilder.GetType());
         }
 
         [TestMethod]
@@ -81,7 +83,7 @@ namespace Query.Test
             Assert.AreEqual(typeof(EstadoCivil), builder.Instance.Select.ReturnType);
             Assert.AreEqual(1, builder.Instance.Where.Count);
             Assert.AreEqual(typeof(int), builder.Instance.Where[0].ReturnType);
-            Assert.AreEqual(FilterType.Integer, builder.Instance.FilterType);
+            Assert.AreEqual(typeof(NumericFilterBuilder), builder.Instance.FilterBuilder.GetType());
         }
 
         [TestMethod]

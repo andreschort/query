@@ -64,6 +64,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Filters\Builders\TextFilterBuilderTest.cs" />
+    <Compile Include="Filters\Builders\BooleanFilterBuilderTest.cs" />
+    <Compile Include="Filters\Builders\NumericFilterBuilderTest.cs" />
+    <Compile Include="Filters\Builders\ListFilterBuilderTest.cs" />
+    <Compile Include="Filters\Builders\DateFilterBuilderTest.cs" />
     <Compile Include="QueryFieldTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilterBuilderTest.cs" />

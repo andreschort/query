@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Query.Common;
 using Query.Common.Extension;
 using Query.Common.Util;
+using Query.Core.Filters;
 
 namespace Query.Core
 {
@@ -16,11 +17,6 @@ namespace Query.Core
         }
 
         public List<QueryField<T>> Fields { get; set; }
-
-        public IQueryable Apply(IQueryable<T> query, IEnumerable<Filter> filters)
-        {
-            return this.Project(this.Filter(query, filters));
-        }
 
         /// <summary>
         /// Create a select new {} expression and apply it to queryable.
@@ -73,10 +69,9 @@ namespace Query.Core
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
         {
-            var filterBuilder = new FilterBuilder();
             var filters = from value in values
                           let field = this.Fields.Find(x => x.Name.Equals(value.Key))
-                          select filterBuilder.Create(field, value.Value);
+                          select field.FilterBuilder.Create(field, value.Value);
 
             return this.Filter(query, filters);
         }
@@ -135,7 +130,7 @@ namespace Query.Core
             this.Fields.Add(builder.Create(name).Instance);
 
             return builder;
-        }   
+        }
 
         public QueryFieldBuilder<T> AddField<E>(Expression<Func<T, E>> select)
         {

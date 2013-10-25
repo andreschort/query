@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Query.Common;
+using Query.Core.Filters;
 using Query.Sample.Model;
 using Query.Core;
 
@@ -40,7 +41,7 @@ namespace Query.Sample.WebSite40
             query.AddField("EstadoCivil")
                 .Select(x => x.EstadoCivil_Id) // enums in EF5 for .NET 4.0
                 // since the select targets an int we need the following to force a list filter instead of an integer filter.
-                .FilterAs(FilterType.List)
+                .FilterAsList()
                 // Return constants for specific values of the target, not necesary but allows us to translates the enum values that will be shown.
                 .SelectWhen(this.GetEstadoCivilTranslations(), string.Empty)
                 .FilterWhen(10, x => x.EstadoCivil_Id.Equals((int)EstadoCivil.Casado) || // custom value filter

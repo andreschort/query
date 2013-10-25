@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Query.Core
+namespace Query.Core.Filters
 {
     public class Filter
     {
