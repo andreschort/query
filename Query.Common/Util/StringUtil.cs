@@ -85,5 +85,35 @@ namespace Query.Common.Util
         {
             return string.IsNullOrEmpty(s) ? new Queue<string>() : new Queue<string>(s.Split('.'));
         }
+
+        public static string ToString(object val, string format)
+        {
+            if (val == null)
+            {
+                return string.Empty;
+            }
+
+            if (val is int)
+            {
+                return ((int) val).ToString(format);
+            }
+
+            if (val is decimal)
+            {
+                return ((decimal) val).ToString(format);
+            }
+
+            if (val is double)
+            {
+                return ((double)val).ToString(format);
+            }
+
+            if (val is DateTime)
+            {
+                return ((DateTime) val).ToString(format);
+            }
+
+            return val.ToString();
+        }
     }
 }

@@ -138,11 +138,6 @@ namespace Query.Web
         {
             this.Field.AdjustSortOrder(removedSortOrder);
         }
-
-        protected internal override string FormatValue(object val)
-        {
-            return this.Field.FormatValue(val);
-        }
     }
 
     public enum FieldType

@@ -74,12 +74,19 @@ namespace Query.Web
         [TemplateContainer(typeof(IDataItemContainer), BindingDirection.TwoWay)]
         public virtual ITemplate ItemTemplate { get; set; }
 
+        /// <summary>
+        /// Controls wheather the elements inside the data cell are enabled or not
+        /// </summary>
         public bool ItemEnabled
         {
             get { return this.itemEnabled; }
             set { this.itemEnabled = value; }
         }
 
+        /// <summary>
+        /// The format to use when converting the data cell value to string.
+        /// Can be any standard format
+        /// </summary>
         public string Format { get; set; }
 
         #endregion Published Properties
@@ -281,7 +288,7 @@ namespace Query.Web
         /// <param name="eventArgs"></param>
         protected internal virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
-            var cell = sender as TableCell;
+            var cell = (TableCell) sender;
 
             if (this.ItemTemplate != null)
             {
@@ -343,9 +350,9 @@ namespace Query.Web
             return uniqueID.Equals(lastFocus);
         }
 
-        protected internal virtual string FormatValue(object val)
+        protected string FormatValue(object val)
         {
-            return val == null ? string.Empty : val.ToString();
+            return StringUtil.ToString(val, this.Format);
         }
 
         private object Eval(object dataItem, string dataField)

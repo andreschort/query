@@ -14,10 +14,10 @@
             <query:TextField Name="Nombre" HeaderText="Nombre"
                              UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
             <query:TextField Name="Apellido" HeaderText="Apellido" />
-            <query:TextField Name="Dni" HeaderText="Dni" />
+            <query:TextField Name="Dni" HeaderText="Dni" Format="N0" />
             <query:DropDownField Name="EstadoCivil" HeaderText="Estado civil" />
             <query:TextField Name="Edad" HeaderText="Edad" />
-            <query:TextField Name="Salario" HeaderText="Salario" />
+            <query:TextField Name="Salario" HeaderText="Salario" Format="C" />
             <query:DateField Name="FechaNacimiento" HeaderText="Fecha Nacimiento" Format="d" />
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" />
             <query:TextField Name="Cuit" HeaderText="CUIT" />

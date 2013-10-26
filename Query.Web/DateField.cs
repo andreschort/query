@@ -100,13 +100,6 @@ namespace Query.Web
             this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
         }
 
-        protected internal override string FormatValue(object val)
-        {
-            var date = val as DateTime?;
-
-            return date.HasValue ? date.Value.ToString(this.Format) : base.FormatValue(val);
-        }
-
         private string GetFilterValue()
         {
             if (this.textFrom == null)
