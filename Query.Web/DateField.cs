@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 
@@ -85,7 +86,11 @@ namespace Query.Web
             {
                 var parts = this.externalFilterValue.Split(new[] {';'}, 2);
                 this.textFrom.Text = parts[0];
-                this.textTo.Text = parts[1];
+
+                if (parts.Length > 1)
+                {
+                    this.textTo.Text = parts[1];
+                }
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
