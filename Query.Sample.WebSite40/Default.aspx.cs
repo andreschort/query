@@ -37,14 +37,16 @@ namespace Query.Sample.WebSite40
             // initial filters
             this.GridExtender.Filters = new Dictionary<string, string>
                 {
-                    {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()}
+                    {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()},
+                    {"Dynamic", "Dr"},
                 };
 
             // initial sortings
             this.GridExtender.Sortings = new List<KeyValuePair<string, SortDirection>>
                 {
                     new KeyValuePair<string, SortDirection>("Salario", SortDirection.Descending),
-                    new KeyValuePair<string, SortDirection>("Edad", SortDirection.Ascending)
+                    new KeyValuePair<string, SortDirection>("Edad", SortDirection.Ascending),
+                    new KeyValuePair<string, SortDirection>("Dynamic", SortDirection.Ascending)
                 };
 
             this.GridView.DataSourceID = this.OdsEmpleado.ID;

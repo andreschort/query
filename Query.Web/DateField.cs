@@ -29,7 +29,7 @@ namespace Query.Web
             set { this.externalFilterValue = value; }
         }
 
-        protected override void InitHeaderCell(DataControlFieldCell cell)
+        protected internal override void InitHeaderCell(DataControlFieldCell cell)
         {
             base.InitHeaderCell(cell);
 
@@ -64,13 +64,13 @@ namespace Query.Web
             }
         }
 
-        public override short SetTabIndex(short tabIndex)
+        protected internal override short SetTabIndex(short tabIndex)
         {
             this.TabIndex = tabIndex;
             return (short) (tabIndex + 2); // we have two textboxes
         }
 
-        protected override void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
 

@@ -90,9 +90,9 @@ namespace Query.Web
 
         protected internal string SortCommand { get; set; }
 
-        protected internal SortDirection? SortDir { get; set; }
+        protected internal virtual SortDirection? SortDir { get; set; }
 
-        protected internal int SortOrder { get; set; }
+        protected internal virtual int SortOrder { get; set; }
 
         protected short? TabIndex { get; set; }
 
@@ -130,7 +130,7 @@ namespace Query.Web
         /// In case this field is no longer sorting, it also sets the sort order to zero.
         /// </summary>
         /// <param name="newSortOrder"></param>
-        public void CycleSort(int newSortOrder)
+        protected internal virtual void CycleSort(int newSortOrder)
         {
             if (this.SortDir.Equals(SortDirection.Ascending))
             {
@@ -153,15 +153,23 @@ namespace Query.Web
         /// </summary>
         /// <param name="tabIndex"></param>
         /// <returns>The next tab index</returns>
-        public virtual short SetTabIndex(short tabIndex)
+        protected internal virtual short SetTabIndex(short tabIndex)
         {
             this.TabIndex = tabIndex;
             return (short)(tabIndex + 1);
         }
 
+        protected internal virtual void AdjustSortOrder(int removedSortOrder)
+        {
+            if (this.SortOrder > removedSortOrder)
+            {
+                this.SortOrder--;
+            }
+        }
+
         #endregion Published Methods
 
-        protected virtual void InitHeaderCell(DataControlFieldCell cell)
+        protected internal virtual void InitHeaderCell(DataControlFieldCell cell)
         {
             // title with sorting
             var pnl = new Panel {CssClass = "query-header"};
@@ -187,7 +195,7 @@ namespace Query.Web
             cell.Controls.Add(this.FilterButton);
         }
 
-        private void HeaderCell_Load(object sender, EventArgs e)
+        protected internal virtual void HeaderCell_Load(object sender, EventArgs e)
         {
             // read the sort order and direction from sortInputHidden
             // we should do this only one time in every postback
@@ -217,7 +225,7 @@ namespace Query.Web
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void HeaderCell_PreRender(object sender, EventArgs e)
+        protected internal virtual void HeaderCell_PreRender(object sender, EventArgs e)
         {
             this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
 
@@ -230,7 +238,7 @@ namespace Query.Web
             }
         }
         
-        protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected internal virtual void HeaderCell_DataBinding(object sender, EventArgs e)
         {
         }
         
@@ -239,7 +247,7 @@ namespace Query.Web
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="rowState"></param>
-        protected void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
+        protected internal virtual void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
             cell.Enabled = this.ItemEnabled;
             if (this.ItemTemplate != null)

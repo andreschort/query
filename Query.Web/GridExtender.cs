@@ -117,10 +117,7 @@ namespace Query.Web
                 // update greater sort orders if the field does not sort anymore
                 if (!sortingField.SortDir.HasValue)
                 {
-                    foreach (var field in sortingFields.Where(field => field.SortOrder > sortOrder))
-                    {
-                        field.SortOrder--;
-                    }
+                    sortingFields.ForEach(x => x.AdjustSortOrder(sortOrder));
                 }
 
                 this.RaiseSort(sender, e);

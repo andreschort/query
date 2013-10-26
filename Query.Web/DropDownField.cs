@@ -24,7 +24,7 @@ namespace Query.Web
             return new DropDownField();
         }
 
-        protected override void InitHeaderCell(DataControlFieldCell cell)
+        protected internal override void InitHeaderCell(DataControlFieldCell cell)
         {
             base.InitHeaderCell(cell);
 
@@ -42,7 +42,7 @@ namespace Query.Web
             }
         }
 
-        protected override void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
             

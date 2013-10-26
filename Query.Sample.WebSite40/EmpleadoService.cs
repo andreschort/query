@@ -52,6 +52,7 @@ namespace Query.Sample.WebSite40
             query.AddField("AttachmentCount").Select(x => x.Attachment.Items.Count(item => !item.Deleted && item.Location_Id.Equals((int)AttachmentLocation.Creation)));
             query.AddField(x => x.Cuit);
             query.AddField(x => x.AverageHourlyWage);
+            query.AddField("Dynamic").Select(x => x.Apellido);
 
             using (var db = new SampleContext())
             {
