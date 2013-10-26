@@ -75,6 +75,7 @@ namespace Query.Web
             this.Field.AutoFilterDelay = this.AutoFilterDelay;
             this.Field.UrlFormat = this.UrlFormat;
             this.Field.UrlFields = this.UrlFields;
+            this.Field.ItemEnabled = this.ItemEnabled;
 
             base.InitializeCell(cell, cellType, rowState, rowIndex);
         }
