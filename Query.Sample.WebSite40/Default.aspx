@@ -22,7 +22,7 @@
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" />
             <query:TextField Name="Cuit" HeaderText="CUIT" />
             <query:TextField Name="AverageHourlyWage" HeaderText="Wage" />
-            <query:DynamicField Name="Dynamic" HeaderText="Dynamic" FieldType="Text" UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" />
+            <query:DynamicField Name="Dynamic" HeaderText="Dynamic" FieldType="List" UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" Format="d" />
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

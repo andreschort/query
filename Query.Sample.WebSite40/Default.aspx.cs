@@ -25,6 +25,13 @@ namespace Query.Sample.WebSite40
                     new ListItem("Divorciado", EstadoCivil.Divorciado.ToOrdinalString()),
                     new ListItem("Viudo", EstadoCivil.Viudo.ToOrdinalString()),
                 };
+
+            var dynField = (DynamicField) this.GridView.Columns[11];
+            dynField.Items = new List<ListItem>
+            {
+                new ListItem("Opcion 1", "-1"),
+                new ListItem("Opcion 2", "-2"),
+            };
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -38,7 +45,6 @@ namespace Query.Sample.WebSite40
             this.GridExtender.Filters = new Dictionary<string, string>
                 {
                     {"EstadoCivil", EstadoCivil.Casado.ToOrdinalString()},
-                    {"Dynamic", "Dr"},
                 };
 
             // initial sortings

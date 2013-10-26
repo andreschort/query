@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using SortDirection = Query.Common.SortDirection;
@@ -10,6 +11,8 @@ namespace Query.Web
         private QueryFieldBase field;
         
         public FieldType? FieldType { get; set; }
+
+        public List<ListItem> Items { get; set; }
 
         protected internal override string FilterValue
         {
@@ -76,6 +79,14 @@ namespace Query.Web
             this.Field.UrlFormat = this.UrlFormat;
             this.Field.UrlFields = this.UrlFields;
             this.Field.ItemEnabled = this.ItemEnabled;
+            this.Field.Format = this.Format;
+
+            var dropDownField = this.Field as DropDownField;
+
+            if (dropDownField != null)
+            {
+                dropDownField.Items = this.Items;
+            }
 
             base.InitializeCell(cell, cellType, rowState, rowIndex);
         }
@@ -103,6 +114,8 @@ namespace Query.Web
 
         protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
+
+
             this.Field.HeaderCell_DataBinding(sender, e);
         }
 
@@ -124,6 +137,11 @@ namespace Query.Web
         protected internal override void AdjustSortOrder(int removedSortOrder)
         {
             this.Field.AdjustSortOrder(removedSortOrder);
+        }
+
+        protected internal override string FormatValue(object val)
+        {
+            return this.Field.FormatValue(val);
         }
     }
 

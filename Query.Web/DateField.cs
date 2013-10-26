@@ -17,8 +17,6 @@ namespace Query.Web
 
         #endregion Fields
 
-        public string Format { get; set; }
-
         protected override DataControlField CreateField()
         {
             return new DateField();
@@ -102,7 +100,7 @@ namespace Query.Web
             this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
         }
 
-        protected override string FormatValue(object val)
+        protected internal override string FormatValue(object val)
         {
             var date = val as DateTime?;
 

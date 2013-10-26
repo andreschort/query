@@ -102,14 +102,14 @@ namespace Query.Core
             }
 
             var builder = ExpressionBuilder.Parameter<T>();
-            ExpressionBuilder body = this.Where.Aggregate(
+            var body = this.Where.Aggregate(
                 ExpressionBuilder.False(),
                 (current, key) =>
-                current.OrElse(
-                    opFunction(
-                        ExpressionBuilder.New(builder.Param, key.Body.Replace(key.Parameters[0], builder.Param)),
-                        filter)
-                    .Expression));
+                    current.OrElse(
+                        opFunction(
+                            ExpressionBuilder.New(builder.Param, key.Body.Replace(key.Parameters[0], builder.Param)),
+                            filter)
+                            .Expression));
 
             return query.Where(builder.Lambda<T, bool>(body.Expression));
         }

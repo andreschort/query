@@ -80,6 +80,8 @@ namespace Query.Web
             set { this.itemEnabled = value; }
         }
 
+        public string Format { get; set; }
+
         #endregion Published Properties
 
         #region Internal Properties
@@ -95,7 +97,7 @@ namespace Query.Web
         protected internal virtual int SortOrder { get; set; }
 
         protected short? TabIndex { get; set; }
-
+        
         #endregion Internal Properties
 
         #region Published Methods
@@ -341,7 +343,7 @@ namespace Query.Web
             return uniqueID.Equals(lastFocus);
         }
 
-        protected virtual string FormatValue(object val)
+        protected internal virtual string FormatValue(object val)
         {
             return val == null ? string.Empty : val.ToString();
         }
