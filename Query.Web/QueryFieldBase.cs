@@ -277,7 +277,7 @@ namespace Query.Web
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
-        protected virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
+        protected internal virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
             var cell = sender as TableCell;
 

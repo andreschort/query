@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using SortDirection = Query.Common.SortDirection;
 
@@ -72,6 +73,8 @@ namespace Query.Web
             this.Field.HeaderText = this.HeaderText;
             this.Field.Placeholder = this.Placeholder;
             this.Field.AutoFilterDelay = this.AutoFilterDelay;
+            this.Field.UrlFormat = this.UrlFormat;
+            this.Field.UrlFields = this.UrlFields;
 
             base.InitializeCell(cell, cellType, rowState, rowIndex);
         }
@@ -83,6 +86,7 @@ namespace Query.Web
 
         protected internal override void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
         {
+            this.Field.ItemTemplate = this.ItemTemplate;
             this.Field.InitDataCell(cell, rowState);
         }
 
@@ -99,6 +103,11 @@ namespace Query.Web
         protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             this.Field.HeaderCell_DataBinding(sender, e);
+        }
+
+        protected internal override void DataCell_DataBinding(object sender, EventArgs eventArgs)
+        {
+            this.Field.DataCell_DataBinding(sender, eventArgs);
         }
 
         protected internal override void CycleSort(int newSortOrder)
