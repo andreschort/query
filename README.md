@@ -9,13 +9,22 @@ You can find an example application in Query.Sample.WebSite40.
 
 TODO
 ----
+
+Query.Core
 - Support for compiled queries
- - Filter values and sortings as parameters 
+ - Filter values and sortings as parameters.
  - Research: http://msdn.microsoft.com/en-us/library/bb896297.aspx
-- Support for usage stadistics (ie. how often a combination of filters and sortings is used)
+- Support for usage stadistics (ie. how often a combination of filters and sortings is used).
+- Support for arbitrary filter expressions ie. ">10 AND !=15".
+
+Query.Web
 - TD Tooltip
 - TH y TD CssClass
 - Improve the way you can apply styles to the Query.Web controls.
+- New field types:
+ - Autocomplete (from a service or automatically from the Query - if posible)
+ - DropDownList with multiple options (Query.Core currently supports many filter values with an OR conjunction)
+- Calendar button option for DateField.
 
 Basic projection
 ----------------
