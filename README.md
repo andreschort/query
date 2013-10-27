@@ -9,6 +9,10 @@ You can find an example application in Query.Sample.WebSite40.
 
 TODO
 ----
+- Support for compiled queries
+ - Filter values and sortings as parameters 
+ - Research: http://msdn.microsoft.com/en-us/library/bb896297.aspx
+- Support for usage stadistics (ie. how often a combination of filters and sortings is used)
 - TD Tooltip
 - TH y TD CssClass
 - Improve the way you can apply styles to the Query.Web controls.
