@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using SortDirection = Query.Common.SortDirection;
 
@@ -13,7 +12,6 @@ namespace Query.Web
         public FieldType? FieldType { get; set; }
 
         public List<ListItem> Items { get; set; }
-
         protected internal override string FilterValue
         {
             get { return this.Field == null? null : this.Field.FilterValue; }
@@ -80,6 +78,7 @@ namespace Query.Web
             this.Field.UrlFields = this.UrlFields;
             this.Field.ItemEnabled = this.ItemEnabled;
             this.Field.Format = this.Format;
+            this.Field.FormatDelegate = this.FormatDelegate;
 
             var dropDownField = this.Field as DropDownField;
 

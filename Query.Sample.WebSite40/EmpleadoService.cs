@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Query.Common;
-using Query.Core.Filters;
 using Query.Sample.Model;
 using Query.Core;
 

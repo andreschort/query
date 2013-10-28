@@ -89,6 +89,8 @@ namespace Query.Web
         /// </summary>
         public string Format { get; set; }
 
+        public Func<object, string> FormatDelegate { get; set; }
+
         #endregion Published Properties
 
         #region Internal Properties
@@ -352,7 +354,7 @@ namespace Query.Web
 
         protected string FormatValue(object val)
         {
-            return StringUtil.ToString(val, this.Format);
+            return this.FormatDelegate == null ? StringUtil.ToString(val, this.Format) : this.FormatDelegate(val);
         }
 
         private object Eval(object dataItem, string dataField)
