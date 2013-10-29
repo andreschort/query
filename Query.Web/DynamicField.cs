@@ -68,59 +68,11 @@ namespace Query.Web
 
         public override void InitializeCell(DataControlFieldCell cell, DataControlCellType cellType, DataControlRowState rowState, int rowIndex)
         {
-            this.Field.Name = this.Name;
-            this.Field.FilterCommand = this.FilterCommand;
-            this.Field.SortCommand = this.SortCommand;
-            this.Field.HeaderText = this.HeaderText;
-            this.Field.Placeholder = this.Placeholder;
-            this.Field.AutoFilterDelay = this.AutoFilterDelay;
-            this.Field.UrlFormat = this.UrlFormat;
-            this.Field.UrlFields = this.UrlFields;
-            this.Field.ItemEnabled = this.ItemEnabled;
-            this.Field.Format = this.Format;
-            this.Field.FormatDelegate = this.FormatDelegate;
+            this.CopyPropertiesToInnerField(this, null);
 
-            var dropDownField = this.Field as DropDownField;
+            cell.Load += this.CopyPropertiesToInnerField;
 
-            if (dropDownField != null)
-            {
-                dropDownField.Items = this.Items;
-            }
-
-            base.InitializeCell(cell, cellType, rowState, rowIndex);
-        }
-
-        protected internal override void InitHeaderCell(DataControlFieldCell cell)
-        {
-            this.Field.InitHeaderCell(cell);
-        }
-
-        protected internal override void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
-        {
-            this.Field.ItemTemplate = this.ItemTemplate;
-            this.Field.InitDataCell(cell, rowState);
-        }
-
-        protected internal override void HeaderCell_Load(object sender, EventArgs e)
-        {
-            this.Field.HeaderCell_Load(sender, e);
-        }
-
-        protected internal override void HeaderCell_PreRender(object sender, EventArgs e)
-        {
-            this.Field.HeaderCell_PreRender(sender, e);
-        }
-
-        protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
-        {
-
-
-            this.Field.HeaderCell_DataBinding(sender, e);
-        }
-
-        protected internal override void DataCell_DataBinding(object sender, EventArgs eventArgs)
-        {
-            this.Field.DataCell_DataBinding(sender, eventArgs);
+            this.Field.InitializeCell(cell, cellType, rowState, rowIndex);
         }
 
         protected internal override void CycleSort(int newSortOrder)
@@ -136,6 +88,29 @@ namespace Query.Web
         protected internal override void AdjustSortOrder(int removedSortOrder)
         {
             this.Field.AdjustSortOrder(removedSortOrder);
+        }
+
+        private void CopyPropertiesToInnerField(object sender, EventArgs e)
+        {
+            this.Field.Name = this.Name;
+            this.Field.FilterCommand = this.FilterCommand;
+            this.Field.SortCommand = this.SortCommand;
+            this.Field.HeaderText = this.HeaderText;
+            this.Field.Placeholder = this.Placeholder;
+            this.Field.AutoFilterDelay = this.AutoFilterDelay;
+            this.Field.UrlFormat = this.UrlFormat;
+            this.Field.UrlFields = this.UrlFields;
+            this.Field.ItemEnabled = this.ItemEnabled;
+            this.Field.Format = this.Format;
+            this.Field.FormatDelegate = this.FormatDelegate;
+            this.Field.ItemTemplate = this.ItemTemplate;
+
+            var dropDownField = this.Field as DropDownField;
+
+            if (dropDownField != null)
+            {
+                dropDownField.Items = this.Items;
+            }
         }
     }
 

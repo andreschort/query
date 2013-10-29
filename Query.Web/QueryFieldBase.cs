@@ -119,19 +119,20 @@ namespace Query.Web
         {
             base.InitializeCell(cell, cellType, rowState, rowIndex);
 
-            if (cellType == DataControlCellType.Header)
+            switch (cellType)
             {
-                cell.DataBinding += this.HeaderCell_DataBinding;
-                cell.Load += this.HeaderCell_Load;
-                cell.PreRender += this.HeaderCell_PreRender;
-                this.InitHeaderCell(cell);
-            }
-            else if (cellType == DataControlCellType.DataCell)
-            {
-                cell.DataBinding += this.DataCell_DataBinding;
-                cell.Load += this.DataCell_Load;
-                cell.PreRender += this.DataCell_PreRender;
-                this.InitDataCell(cell, rowState);
+                case DataControlCellType.Header:
+                    cell.Init += this.HeaderCell_Init;
+                    cell.DataBinding += this.HeaderCell_DataBinding;
+                    cell.Load += this.HeaderCell_Load;
+                    cell.PreRender += this.HeaderCell_PreRender;
+                    break;
+                case DataControlCellType.DataCell:
+                    cell.Init += this.DataCell_Init;
+                    cell.DataBinding += this.DataCell_DataBinding;
+                    cell.Load += this.DataCell_Load;
+                    cell.PreRender += this.DataCell_PreRender;
+                    break;
             }
         }
 
@@ -180,19 +181,17 @@ namespace Query.Web
 
         #endregion Published Methods
 
-        protected internal virtual void InitHeaderCell(DataControlFieldCell cell)
+        #region HeaderCell Events Handlers
+
+        protected virtual void HeaderCell_Init(object sender, EventArgs e)
         {
+            var cell = (DataControlFieldHeaderCell) sender;
+
             // title with sorting
             var pnl = new Panel {CssClass = "query-header"};
             cell.Controls.Add(pnl);
-            
-            this.sortButton = new LinkButton
-            {
-                Text = this.HeaderText,
-                CommandName = this.SortCommand,
-                CommandArgument = this.Name
-            };
 
+            this.sortButton = new LinkButton();
             this.sortInputHidden = new HtmlInputHidden();
             this.sortOrderLabel = new Label();
 
@@ -201,13 +200,20 @@ namespace Query.Web
             pnl.Controls.Add(this.sortOrderLabel);
 
             // Filter button
-            this.FilterButton = new LinkButton { CommandName = this.FilterCommand, CommandArgument = this.Name };
+            this.FilterButton = new LinkButton();
             this.FilterButton.Attributes["style"] = "display:none";
             cell.Controls.Add(this.FilterButton);
         }
 
-        protected internal virtual void HeaderCell_Load(object sender, EventArgs e)
+        protected virtual void HeaderCell_Load(object sender, EventArgs e)
         {
+            this.sortButton.Text = this.HeaderText;
+            this.sortButton.CommandName = this.SortCommand;
+            this.sortButton.CommandArgument = this.Name;
+
+            this.FilterButton.CommandName = this.FilterCommand;
+            this.FilterButton.CommandArgument = this.Name;
+
             // read the sort order and direction from sortInputHidden
             // we should do this only one time in every postback
             if (this.sortHiddenInputRead)
@@ -236,7 +242,7 @@ namespace Query.Web
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected internal virtual void HeaderCell_PreRender(object sender, EventArgs e)
+        protected virtual void HeaderCell_PreRender(object sender, EventArgs e)
         {
             this.sortInputHidden.Value = this.SortOrder + ";" + this.SortDir;
 
@@ -249,17 +255,21 @@ namespace Query.Web
             }
         }
         
-        protected internal virtual void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected virtual void HeaderCell_DataBinding(object sender, EventArgs e)
         {
         }
-        
+
+        #endregion HeaderCell Events Handlers
+
+        #region DataCell Event Handlers
+
         /// <summary>
         /// Creates linkButton, valueHidden and urlHidden for data cells with a link
         /// </summary>
-        /// <param name="cell"></param>
-        /// <param name="rowState"></param>
-        protected internal virtual void InitDataCell(DataControlFieldCell cell, DataControlRowState rowState)
+        protected virtual void DataCell_Init(object sender, EventArgs e)
         {
+            var cell = (TableCell)sender;
+
             cell.Enabled = this.ItemEnabled;
             if (this.ItemTemplate != null)
             {
@@ -283,14 +293,38 @@ namespace Query.Web
             cell.Controls.Add(this.urlHidden);
         }
 
+        protected virtual void DataCell_Load(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.displayValue) && this.valueHidden != null)
+            {
+                this.displayValue = HttpContext.Current.Request.Form[this.valueHidden.UniqueID];
+                this.navigateUrl = HttpContext.Current.Request.Form[this.urlHidden.UniqueID];
+            }
+
+            if (this.linkButton != null)
+            {
+                this.linkButton.Text = this.displayValue;
+                this.linkButton.PostBackUrl = this.navigateUrl;
+            }
+        }
+
+        protected virtual void DataCell_PreRender(object sender, EventArgs e)
+        {
+            if (this.valueHidden != null)
+            {
+                this.valueHidden.Value = this.displayValue;
+                this.urlHidden.Value = this.navigateUrl;
+            }
+        }
+
         /// <summary>
         /// Sets the cell text to the value of the field.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
-        protected internal virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
+        protected virtual void DataCell_DataBinding(object sender, EventArgs eventArgs)
         {
-            var cell = (TableCell) sender;
+            var cell = (TableCell)sender;
 
             if (this.ItemTemplate != null)
             {
@@ -316,29 +350,7 @@ namespace Query.Web
             }
         }
 
-        private void DataCell_Load(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(this.displayValue) && this.valueHidden != null)
-            {
-                this.displayValue = HttpContext.Current.Request.Form[this.valueHidden.UniqueID];
-                this.navigateUrl = HttpContext.Current.Request.Form[this.urlHidden.UniqueID];
-            }
-
-            if (this.linkButton != null)
-            {
-                this.linkButton.Text = this.displayValue;
-                this.linkButton.PostBackUrl = this.navigateUrl;
-            }
-        }
-
-        private void DataCell_PreRender(object sender, EventArgs e)
-        {
-            if (this.valueHidden != null)
-            {
-                this.valueHidden.Value = this.displayValue;
-                this.urlHidden.Value = this.navigateUrl;
-            }
-        }
+        #endregion DataCell Event Handlers
 
         /// <summary>
         /// Tells if the control with the indicated unique ID was the last control with the focus before the postback

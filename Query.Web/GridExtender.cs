@@ -68,7 +68,7 @@ namespace Query.Web
         {
             base.OnInit(e);
 
-            this.Grid.Init += this.Grid_Init;
+            this.Grid.Load += this.Grid_Load;
             this.Grid.RowCommand += this.Grid_RowCommand;
 
             var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "Query.Web.Query.js");
@@ -81,7 +81,7 @@ namespace Query.Web
             this.Page.ClientScript.GetPostBackEventReference(new System.Web.UI.PostBackOptions(this) { TrackFocus = true });
         }
 
-        private void Grid_Init(object sender, EventArgs e)
+        private void Grid_Load(object sender, EventArgs e)
         {
             // Set fields parameters
             short tabIndex = 1;

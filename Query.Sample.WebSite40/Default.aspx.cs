@@ -27,6 +27,7 @@ namespace Query.Sample.WebSite40
                 };
 
             var dynField = (DynamicField) this.GridView.Columns[11];
+            dynField.FieldType = FieldType.List;
             dynField.Items = new List<ListItem>
             {
                 new ListItem("Opcion 1", "-1"),

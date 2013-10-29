@@ -24,9 +24,11 @@ namespace Query.Web
             return new DropDownField();
         }
 
-        protected internal override void InitHeaderCell(DataControlFieldCell cell)
+        protected override void HeaderCell_Init(object sender, EventArgs e)
         {
-            base.InitHeaderCell(cell);
+            base.HeaderCell_Init(sender, e);
+
+            var cell = (DataControlFieldHeaderCell)sender;
 
             var pnl = new Panel {CssClass = "query-filter"};
             cell.Controls.Add(pnl);
@@ -35,6 +37,11 @@ namespace Query.Web
             pnl.Controls.Add(this.dropDownList);
             
             this.dropDownList.Attributes["class"] = "data-query-dropdown";
+        }
+
+        protected override void HeaderCell_Load(object sender, EventArgs e)
+        {
+            base.HeaderCell_Load(sender, e);
 
             if (this.TabIndex.HasValue)
             {
@@ -42,7 +49,7 @@ namespace Query.Web
             }
         }
 
-        protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
             

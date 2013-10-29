@@ -22,7 +22,11 @@
             <query:TextField Name="AttachmentCount" HeaderText="Number of attachments" />
             <query:TextField Name="Cuit" HeaderText="CUIT" />
             <query:TextField Name="AverageHourlyWage" HeaderText="Wage" />
-            <query:DynamicField Name="Dynamic" HeaderText="Dynamic" FieldType="List" UrlFormat="https://www.google.com.ar/search?q={0} {1}" UrlFields="Nombre, Apellido" Format="d" />
+            <query:DynamicField Name="Dynamic" HeaderText="Dynamic" Format="d">
+                <ItemTemplate>
+                    <asp:LinkButton runat="server" ID="Link2" Text='<%# Eval("Dynamic") %>'></asp:LinkButton>
+                </ItemTemplate>
+            </query:DynamicField>
         </Columns>
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4"  FirstPageText="First" LastPageText="Last"/>
     </asp:GridView>

@@ -28,9 +28,11 @@ namespace Query.Web
             set { this.externalFilterValue = value; }
         }
 
-        protected internal override void InitHeaderCell(DataControlFieldCell cell)
+        protected override void HeaderCell_Init(object sender, EventArgs e)
         {
-            base.InitHeaderCell(cell);
+            base.HeaderCell_Init(sender, e);
+
+            var cell = (DataControlFieldHeaderCell)sender;
 
             var pnl = new Panel {CssClass = "query-date-filter"};
             cell.Controls.Add(pnl);
@@ -43,11 +45,17 @@ namespace Query.Web
             this.textFrom.Attributes["class"] = "data-query-datepicker";
             this.textFrom.AutoCompleteType = AutoCompleteType.Disabled;
             this.textFrom.Attributes["autocomplete"] = "off";
-            this.textFrom.Attributes["placeholder"] = this.Placeholder;
 
             this.textTo.Attributes["class"] = "data-query-datepicker";
             this.textTo.AutoCompleteType = AutoCompleteType.Disabled;
             this.textTo.Attributes["autocomplete"] = "off";
+        }
+
+        protected override void HeaderCell_Load(object sender, EventArgs e)
+        {
+            base.HeaderCell_Load(sender, e);
+
+            this.textFrom.Attributes["placeholder"] = this.Placeholder;
             this.textTo.Attributes["placeholder"] = this.Placeholder;
 
             if (this.AutoFilterDelay.HasValue)
@@ -59,7 +67,7 @@ namespace Query.Web
             if (this.TabIndex.HasValue)
             {
                 this.textFrom.TabIndex = this.TabIndex.Value;
-                this.textTo.TabIndex = (short) (this.TabIndex.Value + 1);
+                this.textTo.TabIndex = (short)(this.TabIndex.Value + 1);
             }
         }
 
@@ -69,7 +77,7 @@ namespace Query.Web
             return (short) (tabIndex + 2); // we have two textboxes
         }
 
-        protected internal override void HeaderCell_DataBinding(object sender, EventArgs e)
+        protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
 
