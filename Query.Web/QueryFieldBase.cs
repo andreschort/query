@@ -188,7 +188,7 @@ namespace Query.Web
             var cell = (DataControlFieldHeaderCell) sender;
 
             // title with sorting
-            var pnl = new Panel {CssClass = "query-header"};
+            var pnl = new Panel {CssClass = "query-header", DefaultButton = null};
             cell.Controls.Add(pnl);
 
             this.sortButton = new LinkButton();
