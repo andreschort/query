@@ -386,6 +386,11 @@ namespace Query.Web
             return this.FormatDelegate == null ? StringUtil.ToString(val, this.Format) : this.FormatDelegate(val);
         }
 
+        protected bool HasDataCellClick()
+        {
+            return this.Click != null;
+        }
+
         private object Eval(object dataItem, string dataField)
         {
             var view = dataItem as DataRowView;

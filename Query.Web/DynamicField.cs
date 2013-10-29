@@ -12,6 +12,7 @@ namespace Query.Web
         public FieldType? FieldType { get; set; }
 
         public List<ListItem> Items { get; set; }
+
         protected internal override string FilterValue
         {
             get { return this.Field == null? null : this.Field.FilterValue; }
@@ -104,7 +105,11 @@ namespace Query.Web
             this.Field.Format = this.Format;
             this.Field.FormatDelegate = this.FormatDelegate;
             this.Field.ItemTemplate = this.ItemTemplate;
-            this.Field.Click += this.DataCell_Click;
+
+            if (this.HasDataCellClick())
+            {
+                this.Field.Click += this.DataCell_Click;
+            }
 
             var dropDownField = this.Field as DropDownField;
 
