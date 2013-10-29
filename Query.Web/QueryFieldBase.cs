@@ -284,7 +284,11 @@ namespace Query.Web
 
             this.linkButton = new LinkButton();
             cell.Controls.Add(this.linkButton);
-            this.linkButton.Click += this.Click;
+
+            if (this.Click != null)
+            {
+                this.linkButton.Click += this.DataCell_Click;
+            }
 
             this.valueHidden = new HtmlInputHidden();
             cell.Controls.Add(this.valueHidden);
@@ -340,13 +344,26 @@ namespace Query.Web
             else
             {
                 this.displayValue = this.FormatValue(this.Eval(dataItem, this.Name));
-                this.navigateUrl = this.UrlFields == null
+                this.linkButton.Text = this.displayValue;
+
+                if (this.Click == null)
+                {
+                    this.navigateUrl = this.UrlFields == null
                         ? this.UrlFormat
                         : string.Format(this.UrlFormat,
                             this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
 
-                this.linkButton.Text = this.displayValue;
-                this.linkButton.PostBackUrl = this.navigateUrl;
+                    this.linkButton.PostBackUrl = this.navigateUrl;
+                }
+            }
+        }
+
+        protected virtual void DataCell_Click(object sender, EventArgs e)
+        {
+            var handler = this.Click;
+            if (handler != null)
+            {
+                handler(sender, e);
             }
         }
 

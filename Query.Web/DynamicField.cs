@@ -104,6 +104,7 @@ namespace Query.Web
             this.Field.Format = this.Format;
             this.Field.FormatDelegate = this.FormatDelegate;
             this.Field.ItemTemplate = this.ItemTemplate;
+            this.Field.Click += this.DataCell_Click;
 
             var dropDownField = this.Field as DropDownField;
 

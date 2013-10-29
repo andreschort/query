@@ -91,12 +91,17 @@ namespace Query.Sample.WebSite40
 
         protected void FullName_Click(object sender, EventArgs e)
         {
-            //this.Response.Redirect("http://www.google.com.ar", true);
+            this.Response.Redirect("http://www.google.com.ar", true);
         }
 
         protected void Link_Click(object sender, EventArgs e)
         {
             
+        }
+
+        protected void Dynamic_Click(object sender, EventArgs e)
+        {
+            this.Response.Redirect("http://www.yahoo.com.ar", true);
         }
     }
 }
