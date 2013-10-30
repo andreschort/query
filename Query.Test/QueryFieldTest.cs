@@ -2,10 +2,10 @@
 using Query.Common.Util;
 using Query.Core;
 using Query.Core.Filters;
-using Query.Sample.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Query.Test.Model;
 
 namespace Query.Test
 {

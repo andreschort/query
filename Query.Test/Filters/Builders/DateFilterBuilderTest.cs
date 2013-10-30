@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
 using Query.Core.Filters;
 using Query.Core.Filters.Builders;
-using Query.Sample.Model;
+using Query.Test.Model;
 
 namespace Query.Test.Filters.Builders
 {
