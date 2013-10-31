@@ -40,7 +40,7 @@ public class Employee
 You create a Query object like this:
 ```csharp
 var query = new Query<Employee>();
-query.AddField("FullName", x => x.Name + " " + x.LastName); // FieldName = "FullName"
+query.AddField("FullName").Select(x => x.Name + " " + x.LastName); // FieldName = "FullName"
 
 var employees = //some IQueryable<Employee>
 IQueryable theResult = query.Project(employees);
@@ -85,7 +85,7 @@ Multiple sortings are supported.
 
 Advance filtering
 -----------------
-You can use a small set of operators to filter. The kind of expressions you can use to filter depends on the type of the property that the filter is targeting.
+You can use a small set of operators to filter. The kind of expressions you can use to filter depends on the type of the property that the filter is targeting. This can be overriden using the FilterAsX methods.
 
 For System.String you can use the wildcard `%` at the start, end or both to create 'like' expressions. For example:
 - `%someText`: Will return the values that ends with "someText".

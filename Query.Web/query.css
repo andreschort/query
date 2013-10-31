@@ -1,0 +1,89 @@
+﻿tbody tr:first-child {
+    background-color: #ce8d7e;
+    vertical-align: bottom;
+}
+
+th {
+    border: 1px solid #FFFFFF;
+}
+
+.query-header {
+    padding: 5px 20px 5px 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.query-header a {
+    color: #000000;
+    display: inline-block;
+    font-family: 'Open Sans','Lucida Sans',Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    text-decoration: none;
+}
+
+.query-header a:hover {
+    color: #005580;
+    text-decoration: underline;
+}
+
+.query-header span {
+    color: #FFFFFF;
+    font-size: 0.83em;
+    text-align: right !important;
+    vertical-align: super;
+}
+
+.query-filter,
+.query-date-filter {
+    border-top: 1px solid #FFFFFF;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+.query-filter input,
+.query-date-filter input {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color;
+    border-image: initial;
+    border-style: none;
+    border-width: 0;
+    cursor: auto;
+    padding: 5px 0 5px 5%;
+    margin: 0;
+    width: 95%;
+    font-style: italic;
+    height: 20px;
+    line-height: 20px;
+}
+
+.query-filter select {
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.query-date-filter input {
+    height: 15px;
+    line-height: 12px;
+    padding: 0 0 0 0;
+    display: block;
+}
+
+th.asc span, th.desc span {
+    float: right;
+}
+
+th.asc .query-header a:after {
+    content: "▲";
+}
+
+th.desc .query-header a:after {
+    content: "▼";
+}

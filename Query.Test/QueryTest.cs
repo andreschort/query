@@ -6,7 +6,8 @@ using Query.Common.Extension;
 using Query.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Query.Core;
-using Query.Sample.Model;
+using Query.Test.Model;
+using TestContext = Query.Test.Model.TestContext;
 
 namespace Query.Test
 {
@@ -220,7 +221,7 @@ namespace Query.Test
             var connection = Effort.DbConnectionFactory.CreateTransient();
 
             List<object> result;
-            using (var db = new SampleContext(connection))
+            using (var db = new TestContext(connection))
             {
                 db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
@@ -262,7 +263,7 @@ namespace Query.Test
             var connection = Effort.DbConnectionFactory.CreateTransient();
 
             List<dynamic> result;
-            using (var db = new SampleContext(connection))
+            using (var db = new TestContext(connection))
             {
                 db.Empleados.Add(new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero, FechaNacimiento = DateTime.Today });
                 db.Empleados.Add(new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado, FechaNacimiento = DateTime.Today });
