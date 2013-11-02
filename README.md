@@ -7,6 +7,10 @@ query can:
 
 You can find an example application in Query.Sample.WebSite40.
 
+Demo
+----
+![demo](https://raw.github.com/andreschort/query/master/query-sample.gif)
+
 TODO
 ----
 
