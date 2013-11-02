@@ -5,7 +5,7 @@ query can:
 - Transform an IQueryable<T> with projections into an anonymous type, apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.
 - Easily create a GridView which gets the data from an IQueryable using the transformations provided.
 
-You can find an example application in Query.Sample.WebSite40.
+You can find an example application in https://github.com/andreschort/query-sample
 
 Demo
 ----
