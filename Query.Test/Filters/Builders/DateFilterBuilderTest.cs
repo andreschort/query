@@ -50,7 +50,7 @@ namespace Query.Test.Filters.Builders
 
             var from = DateTime.Today;
 
-            var fromStr = @from.ToString(CultureInfo.InvariantCulture);
+            var fromStr = @from.ToString();
             var value = fromStr + builder.Separator;
             var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
 
@@ -68,7 +68,7 @@ namespace Query.Test.Filters.Builders
 
             var to = DateTime.Today;
 
-            var toStr = to.ToString(CultureInfo.InvariantCulture);
+            var toStr = to.ToString();
             var value = ";" + toStr;
             var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
 
@@ -87,8 +87,8 @@ namespace Query.Test.Filters.Builders
             var from = DateTime.Today;
             var to = DateTime.Today;
 
-            var fromStr = @from.ToString(CultureInfo.InvariantCulture);
-            var toStr = to.ToString(CultureInfo.InvariantCulture);
+            var fromStr = @from.ToString();
+            var toStr = to.ToString();
 
             var value = fromStr +builder.Separator + toStr;
             var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, value);
