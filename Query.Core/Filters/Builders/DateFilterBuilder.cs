@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Query.Common.Util;
 
@@ -22,18 +21,12 @@ namespace Query.Core.Filters.Builders
 
             var parts = value.Split(new[] { this.Separator }, 2);
 
-            var from = StringUtil.ToDateNullable(
-                parts[0],
-                CultureInfo.InvariantCulture.DateTimeFormat,
-                DateTimeStyles.None);
+            var from = StringUtil.ToDateNullable(parts[0]);
 
             DateTime? to = null;
             if (parts.Count() > 1)
             {
-                to = StringUtil.ToDateNullable(
-                    parts[1],
-                    CultureInfo.InvariantCulture.DateTimeFormat,
-                    DateTimeStyles.None);
+                to = StringUtil.ToDateNullable(parts[1]);
             }
 
             filter.Valid = from.HasValue || to.HasValue;
