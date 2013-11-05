@@ -20,6 +20,7 @@ Query.Core
  - Research: http://msdn.microsoft.com/en-us/library/bb896297.aspx
 - Support for usage stadistics (ie. how often a combination of filters and sortings is used).
 - Support for arbitrary filter expressions ie. ">10 AND !=15".
+- Extend operators to any target type.
 
 Query.Web
 - TD Tooltip
