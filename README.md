@@ -30,6 +30,11 @@ Query.Web
  - Autocomplete (from a service or automatically from the Query - if posible)
  - DropDownList with multiple options (Query.Core currently supports many filter values with an OR conjunction)
 - Calendar button option for DateField.
+- Support TemplateField:
+ - Sorting of columns that do not have filter.
+ - Create the header with filter web controls
+   - Requires a refactor in the ui fields to extract web controls for each filter type)
+    - How would GridExtender set global properties and get sort and filter values?
 
 Basic projection
 ----------------
