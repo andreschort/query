@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Query.Core;
-using Query.Core.Filters;
-using Query.Core.Filters.Builders;
-using Query.Test.Model;
+using QueryTables.Core;
+using QueryTables.Core.Filters;
+using QueryTables.Core.Filters.Builders;
+using QueryTables.Test.Model;
 
-namespace Query.Test.Filters.Builders
+namespace QueryTables.Test.Filters.Builders
 {
     [TestClass]
     public class DateFilterBuilderTest

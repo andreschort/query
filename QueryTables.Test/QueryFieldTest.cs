@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Query.Common.Util;
-using Query.Core;
-using Query.Core.Filters;
+using QueryTables.Common.Util;
+using QueryTables.Core;
+using QueryTables.Core.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Query.Test.Model;
+using QueryTables.Test.Model;
 
-namespace Query.Test
+namespace QueryTables.Test
 {
     [TestClass]
     public class QueryFieldTest

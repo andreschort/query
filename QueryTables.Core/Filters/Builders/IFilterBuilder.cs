@@ -1,4 +1,4 @@
-﻿namespace Query.Core.Filters.Builders
+﻿namespace QueryTables.Core.Filters.Builders
 {
     public interface IFilterBuilder
     {

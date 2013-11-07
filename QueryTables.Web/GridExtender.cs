@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
-using Query.Web.Util;
-using SortDirection = Query.Common.SortDirection;
+using QueryTables.Web.Util;
+using SortDirection = QueryTables.Common.SortDirection;
 
-namespace Query.Web
+namespace QueryTables.Web
 {
     public class GridExtender : WebControl
     {
@@ -71,7 +71,7 @@ namespace Query.Web
             this.Grid.Load += this.Grid_Load;
             this.Grid.RowCommand += this.Grid_RowCommand;
 
-            var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "Query.Web.Query.js");
+            var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "QueryTables.Web.Query.js");
             this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
 
             var javascript = @"$(document).ready(function () { initGridExtender(); });";

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Query.Common.Extension
+namespace QueryTables.Common.Extension
 {
     public static class MemberInfoExtensions
     {

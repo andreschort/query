@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Query.Common.Extension;
-using Query.Common.Util;
-using Query.Core.Filters;
-using Query.Core.Filters.Builders;
+using QueryTables.Common.Extension;
+using QueryTables.Common.Util;
+using QueryTables.Core.Filters;
+using QueryTables.Core.Filters.Builders;
 
-namespace Query.Core
+namespace QueryTables.Core
 {
     public class QueryFieldBuilder<T>
     {

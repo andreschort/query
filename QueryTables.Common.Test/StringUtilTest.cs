@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading;
-using Query.Common.Util;
+using QueryTables.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Query.Common.Test
+namespace QueryTables.Common.Test
 {
     [TestClass]
     public class StringUtilTest

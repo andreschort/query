@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
-using SortDirection = Query.Common.SortDirection;
+using SortDirection = QueryTables.Common.SortDirection;
 
-namespace Query.Web
+namespace QueryTables.Web
 {
     public class DynamicField : QueryFieldBase
     {

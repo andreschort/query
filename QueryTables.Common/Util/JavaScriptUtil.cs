@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Query.Common.Util
+namespace QueryTables.Common.Util
 {
     public static class JavaScriptUtil
     {

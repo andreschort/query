@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Query.Test.Model
+namespace QueryTables.Test.Model
 {
     public class Empleado
     {

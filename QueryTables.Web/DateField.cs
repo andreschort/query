@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 
-namespace Query.Web
+namespace QueryTables.Web
 {
     public class DateField : QueryFieldBase
     {

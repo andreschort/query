@@ -1,6 +1,6 @@
-﻿using Query.Common.Util;
+﻿using QueryTables.Common.Util;
 
-namespace Query.Core.Filters.Builders
+namespace QueryTables.Core.Filters.Builders
 {
     public class BooleanFilterBuilder : IFilterBuilder
     {

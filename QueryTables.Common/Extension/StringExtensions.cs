@@ -1,6 +1,6 @@
-﻿using Query.Common.Util;
+﻿using QueryTables.Common.Util;
 
-namespace Query.Common.Extension
+namespace QueryTables.Common.Extension
 {
     public static class StringExtensions
     {

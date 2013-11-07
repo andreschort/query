@@ -1,4 +1,4 @@
-﻿namespace Query.Common
+﻿namespace QueryTables.Common
 {
     public enum SortDirection
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Query.Common.Util
+namespace QueryTables.Common.Util
 {
     class ExpressionSubstitute : ExpressionVisitor
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Query.Core;
-using Query.Core.Filters.Builders;
-using Query.Test.Model;
+using QueryTables.Core;
+using QueryTables.Core.Filters.Builders;
+using QueryTables.Test.Model;
 
-namespace Query.Test
+namespace QueryTables.Test
 {
     [TestClass]
     public class QueryFieldBuilderTest

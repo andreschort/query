@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Query.Common.Util
+namespace QueryTables.Common.Util
 {
     public class ExpressionBuilder
     {

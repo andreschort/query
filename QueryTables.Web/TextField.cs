@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Query.Web
+namespace QueryTables.Web
 {
     [DefaultProperty("Name")]
     [ToolboxData("<{0}:TextField runat=server></{0}:TextField>")]

@@ -6,11 +6,11 @@ using System.Web.UI;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Query.Web")]
+[assembly: AssemblyTitle("QueryTables.Web")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Query.Web")]
+[assembly: AssemblyProduct("QueryTables.Web")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -37,4 +37,4 @@ using System.Web.UI;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 // Export the Query.js file
-[assembly: WebResource("Query.Web.Query.js", "text/javascript")]
+[assembly: WebResource("QueryTables.Web.Query.js", "text/javascript")]

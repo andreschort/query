@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Query.Common.Util
+namespace QueryTables.Common.Util
 {
     public class StringUtil
     {

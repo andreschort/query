@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.Entity;
 
-namespace Query.Test.Model
+namespace QueryTables.Test.Model
 {
     public class TestContext : DbContext
     {

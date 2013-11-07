@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Query.Common;
-using Query.Common.Extension;
-using Query.Common.Util;
+using QueryTables.Common;
+using QueryTables.Common.Extension;
+using QueryTables.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Query.Core;
-using Query.Test.Model;
-using TestContext = Query.Test.Model.TestContext;
+using QueryTables.Core;
+using QueryTables.Test.Model;
+using TestContext = QueryTables.Test.Model.TestContext;
 
-namespace Query.Test
+namespace QueryTables.Test
 {
     [TestClass]
     public class QueryTest

@@ -6,11 +6,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Query.Common.Extension;
-using Query.Common.Util;
-using SortDirection = Query.Common.SortDirection;
+using QueryTables.Common.Extension;
+using QueryTables.Common.Util;
+using SortDirection = QueryTables.Common.SortDirection;
 
-namespace Query.Web
+namespace QueryTables.Web
 {
     public abstract class QueryFieldBase : DataControlField
     {

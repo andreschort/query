@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Query.Common;
-using Query.Common.Extension;
-using Query.Common.Util;
-using Query.Core.Filters;
+using QueryTables.Common;
+using QueryTables.Common.Extension;
+using QueryTables.Common.Util;
+using QueryTables.Core.Filters;
 
-namespace Query.Core
+namespace QueryTables.Core
 {
     public class Query<T>
     {

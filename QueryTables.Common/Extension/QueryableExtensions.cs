@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Query.Common.Extension
+namespace QueryTables.Common.Extension
 {
     public static class QueryableExtensions
     {

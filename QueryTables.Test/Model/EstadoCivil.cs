@@ -1,4 +1,4 @@
-﻿namespace Query.Test.Model
+﻿namespace QueryTables.Test.Model
 {
     public enum EstadoCivil
     {

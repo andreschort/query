@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Query.Common.Extension
+namespace QueryTables.Common.Extension
 {
     public static class EnumExtensions
     {
