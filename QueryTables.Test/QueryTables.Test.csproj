@@ -6,8 +6,8 @@
     <ProjectGuid>{13068568-94A0-4093-B051-D819CF205AD1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Query.Test</RootNamespace>
-    <AssemblyName>Query.Test</AssemblyName>
+    <RootNamespace>QueryTables.Test</RootNamespace>
+    <AssemblyName>QueryTables.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -78,13 +78,13 @@
     <Compile Include="QueryTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Query.Common\Query.Common.csproj">
+    <ProjectReference Include="..\QueryTables.Common\QueryTables.Common.csproj">
       <Project>{322B2398-6E88-4644-8040-CF5B25408811}</Project>
-      <Name>Query.Common</Name>
+      <Name>QueryTables.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Query.Core\Query.Core.csproj">
+    <ProjectReference Include="..\QueryTables.Core\QueryTables.Core.csproj">
       <Project>{A3C233F5-977A-4877-845C-317C9A2BB968}</Project>
-      <Name>Query.Core</Name>
+      <Name>QueryTables.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
