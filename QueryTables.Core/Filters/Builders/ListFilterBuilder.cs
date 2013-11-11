@@ -4,12 +4,12 @@ namespace QueryTables.Core.Filters.Builders
 {
     public class ListFilterBuilder : IFilterBuilder
     {
-        public string DefaultValue { get; set; }
-
         public ListFilterBuilder()
         {
             this.DefaultValue = string.Empty;
         }
+
+        public string DefaultValue { get; set; }
 
         public Filter Create<T>(QueryField<T> field, string value)
         {

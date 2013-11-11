@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading;
-using QueryTables.Common.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using QueryTables.Common.Util;
 
 namespace QueryTables.Common.Test
 {
@@ -12,11 +12,11 @@ namespace QueryTables.Common.Test
         [TestMethod]
         public void ToDecimalNullable()
         {
-            const string value = "3050.91";
+            const string Value = "3050.91";
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("es-AR");
 
-            var result = StringUtil.ToDecimalNullable(value, NumberStyles.Float);
+            var result = StringUtil.ToDecimalNullable(Value, NumberStyles.Float);
 
             Assert.IsNull(result);
         }
@@ -32,81 +32,81 @@ namespace QueryTables.Common.Test
         [TestMethod]
         public void ToStringInt()
         {
-            const int value = 2128;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const int Value = 2128;
+            const string Format = "N";
+            var result = StringUtil.ToString(Value, Format);
 
-            Assert.AreEqual(value.ToString(format), result);
+            Assert.AreEqual(Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringNullableInt()
         {
             int? value = 2128;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const string Format = "N";
+            var result = StringUtil.ToString(value, Format);
 
-            Assert.AreEqual(value.Value.ToString(format), result);
+            Assert.AreEqual(value.Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringDecimal()
         {
-            const decimal value = 2128.36m;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const decimal Value = 2128.36m;
+            const string Format = "N";
+            var result = StringUtil.ToString(Value, Format);
 
-            Assert.AreEqual(value.ToString(format), result);
+            Assert.AreEqual(Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringNullableDecimal()
         {
             decimal? value = 2128.36m;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const string Format = "N";
+            var result = StringUtil.ToString(value, Format);
 
-            Assert.AreEqual(value.Value.ToString(format), result);
+            Assert.AreEqual(value.Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringDouble()
         {
-            const double value = 2128.36;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const double Value = 2128.36;
+            const string Format = "N";
+            var result = StringUtil.ToString(Value, Format);
 
-            Assert.AreEqual(value.ToString(format), result);
+            Assert.AreEqual(Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringNullableDouble()
         {
             double? value = 2128.36;
-            const string format = "N";
-            var result = StringUtil.ToString(value, format);
+            const string Format = "N";
+            var result = StringUtil.ToString(value, Format);
 
-            Assert.AreEqual(value.Value.ToString(format), result);
+            Assert.AreEqual(value.Value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringDateTime()
         {
             var value = DateTime.Now;
-            const string format = "d";
-            var result = StringUtil.ToString(value, format);
+            const string Format = "d";
+            var result = StringUtil.ToString(value, Format);
 
-            Assert.AreEqual(value.ToString(format), result);
+            Assert.AreEqual(value.ToString(Format), result);
         }
 
         [TestMethod]
         public void ToStringNullableDateTime()
         {
             DateTime? value = DateTime.Now;
-            const string format = "d";
-            var result = StringUtil.ToString(value, format);
+            const string Format = "d";
+            var result = StringUtil.ToString(value, Format);
 
-            Assert.AreEqual(value.Value.ToString(format), result);
+            Assert.AreEqual(value.Value.ToString(Format), result);
         }
     }
 }

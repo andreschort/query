@@ -131,11 +131,11 @@ namespace QueryTables.Test
         {
             return new Dictionary<object, object>
                 {
-                    {EstadoCivil.Soltero, "Soltero"},
-                    {EstadoCivil.Casado, "Casado"},
-                    {EstadoCivil.Separado, "Separado"},
-                    {EstadoCivil.Divorciado, "Divorciado"},
-                    {EstadoCivil.Viudo, "Viudo"}
+                    { EstadoCivil.Soltero, "Soltero" },
+                    { EstadoCivil.Casado, "Casado" },
+                    { EstadoCivil.Separado, "Separado" },
+                    { EstadoCivil.Divorciado, "Divorciado" },
+                    { EstadoCivil.Viudo, "Viudo" }
                 };
         }
     }

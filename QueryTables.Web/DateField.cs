@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI.WebControls;
+using AjaxControlToolkit;
 
 namespace QueryTables.Web
 {
@@ -10,22 +11,34 @@ namespace QueryTables.Web
         #region Fields
 
         private TextBox textFrom;
-
         private TextBox textTo;
+
+        private TextBoxWatermarkExtender watermarkFrom;
+        private TextBoxWatermarkExtender watermarkTo;
 
         private string externalFilterValue;
 
         #endregion Fields
 
-        protected override DataControlField CreateField()
-        {
-            return new DateField();
-        }
+        public string PlaceholderFrom { get; set; }
+
+        public string PlaceholderTo { get; set; }
 
         protected internal override string FilterValue
         {
             get { return this.GetFilterValue(); }
             set { this.externalFilterValue = value; }
+        }
+
+        protected internal override short SetTabIndex(short tabIndex)
+        {
+            this.TabIndex = tabIndex;
+            return (short)(tabIndex + 2); // we have two textboxes
+        }
+
+        protected override DataControlField CreateField()
+        {
+            return new DateField();
         }
 
         protected override void HeaderCell_Init(object sender, EventArgs e)
@@ -34,11 +47,12 @@ namespace QueryTables.Web
 
             var cell = (DataControlFieldHeaderCell)sender;
 
-            var pnl = new Panel {CssClass = "query-date-filter"};
+            var pnl = new Panel { CssClass = "query-date-filter" };
             cell.Controls.Add(pnl);
 
-            this.textFrom = new TextBox();
-            this.textTo = new TextBox();
+            // from and to filter inputs
+            this.textFrom = new TextBox { ID = this.Name + "_textbox_from" };
+            this.textTo = new TextBox { ID = this.Name + "_textbox_to" };
             pnl.Controls.Add(this.textFrom);
             pnl.Controls.Add(this.textTo);
 
@@ -49,14 +63,54 @@ namespace QueryTables.Web
             this.textTo.Attributes["class"] = "data-query-datepicker";
             this.textTo.AutoCompleteType = AutoCompleteType.Disabled;
             this.textTo.Attributes["autocomplete"] = "off";
+
+            // watermarks (placeholders)
+            this.watermarkFrom = new TextBoxWatermarkExtender
+            {
+                ID = this.Name + "_watermark_from",
+                TargetControlID = this.textFrom.ID
+            };
+            this.watermarkTo = new TextBoxWatermarkExtender
+            {
+                ID = this.Name + "_watermark_to",
+                TargetControlID = this.textTo.ID
+            };
+            pnl.Controls.Add(this.watermarkFrom);
+            pnl.Controls.Add(this.watermarkTo);
+
+            // calendars
+            var calendarFrom = new CalendarExtender
+                {
+                    ID = this.Name + "_calendar_from",
+                    TargetControlID = this.textFrom.ID,
+                };
+            var calendarTo = new CalendarExtender
+                {
+                    ID = this.Name + "_calendar_to",
+                    TargetControlID = this.textTo.ID,
+                };
+            pnl.Controls.Add(calendarFrom);
+            pnl.Controls.Add(calendarTo);
+            
+            calendarFrom.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+            calendarTo.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+
+            calendarFrom.OnClientShowing = "Query_DateField_CancelShowWhenFocus";
+            calendarTo.OnClientShowing = "Query_DateField_CancelShowWhenFocus";
         }
 
         protected override void HeaderCell_Load(object sender, EventArgs e)
         {
             base.HeaderCell_Load(sender, e);
 
-            this.textFrom.Attributes["placeholder"] = this.Placeholder;
-            this.textTo.Attributes["placeholder"] = this.Placeholder;
+            this.textFrom.Attributes["data-query-placeholder"] = this.PlaceholderFrom;
+            this.textTo.Attributes["data-query-placeholder"] = this.PlaceholderTo;
+
+            this.watermarkFrom.WatermarkText = this.PlaceholderFrom;
+            this.watermarkFrom.Enabled = !string.IsNullOrEmpty(this.PlaceholderFrom);
+
+            this.watermarkTo.WatermarkText = this.PlaceholderTo;
+            this.watermarkTo.Enabled = !string.IsNullOrEmpty(this.PlaceholderTo);
 
             if (this.AutoFilterDelay.HasValue)
             {
@@ -71,26 +125,20 @@ namespace QueryTables.Web
             }
         }
 
-        protected internal override short SetTabIndex(short tabIndex)
-        {
-            this.TabIndex = tabIndex;
-            return (short) (tabIndex + 2); // we have two textboxes
-        }
-
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
 
             // set value
-            if (string.IsNullOrEmpty(this.externalFilterValue))
+            if (this.externalFilterValue == null)
             {
                 // restore the value from the form
                 this.textFrom.Text = HttpContext.Current.Request.Form[this.textFrom.UniqueID];
                 this.textTo.Text = HttpContext.Current.Request.Form[this.textTo.UniqueID];
             }
-            else
+            else if (string.IsNullOrEmpty(this.externalFilterValue))
             {
-                var parts = this.externalFilterValue.Split(new[] {';'}, 2);
+                var parts = this.externalFilterValue.Split(new[] { ';' }, 2);
                 this.textFrom.Text = parts[0];
 
                 if (parts.Length > 1)
@@ -110,6 +158,11 @@ namespace QueryTables.Web
 
         private string GetFilterValue()
         {
+            if (this.externalFilterValue != null)
+            {
+                return this.externalFilterValue;
+            }
+
             if (this.textFrom == null)
             {
                 return this.externalFilterValue ?? string.Empty;

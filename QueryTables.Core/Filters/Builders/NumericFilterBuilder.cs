@@ -21,8 +21,6 @@ namespace QueryTables.Core.Filters.Builders
                 { FilterOperator.Equal, "=" },
             };
 
-        private Type NumericType { get; set; }
-
         public NumericFilterBuilder(Type numericType)
         {
             this.Symbols = DefaultSymbols;
@@ -30,13 +28,15 @@ namespace QueryTables.Core.Filters.Builders
         }
 
         /// <summary>
-        /// The simbol for each FilterOperator.
+        /// The symbol for each FilterOperator.
         /// </summary>
         public Dictionary<FilterOperator, string> Symbols { get; set; }
 
+        private Type NumericType { get; set; }
+
         public Filter Create<T>(QueryField<T> field, string value)
         {
-            var filter = new Filter { Name = field.Name, OriginalText = value, Operator = GetOperator(value) };
+            var filter = new Filter { Name = field.Name, OriginalText = value, Operator = this.GetOperator(value) };
 
             if (filter.Operator.Equals(FilterOperator.None))
             {
@@ -87,7 +87,7 @@ namespace QueryTables.Core.Filters.Builders
 
         private FilterOperator GetOperator(string value)
         {
-            return this.Symbols.Keys.FirstOrDefault(x => value.Contains(Symbols[x]));
+            return this.Symbols.Keys.FirstOrDefault(x => value.Contains(this.Symbols[x]));
         }
     }
 }

@@ -5,6 +5,13 @@ using SortDirection = QueryTables.Common.SortDirection;
 
 namespace QueryTables.Web
 {
+    public enum FieldType
+    {
+        Text = 0,
+        List = 1,
+        Date = 2
+    }
+
     public class DynamicField : QueryFieldBase
     {
         private QueryFieldBase field;
@@ -15,7 +22,7 @@ namespace QueryTables.Web
 
         protected internal override string FilterValue
         {
-            get { return this.Field == null? null : this.Field.FilterValue; }
+            get { return this.Field == null ? null : this.Field.FilterValue; }
             set { this.Field.FilterValue = value; }
         }
 
@@ -61,11 +68,6 @@ namespace QueryTables.Web
                 return this.field;
             }
         }
-        
-        protected override DataControlField CreateField()
-        {
-            return new DynamicField();
-        }
 
         public override void InitializeCell(DataControlFieldCell cell, DataControlCellType cellType, DataControlRowState rowState, int rowIndex)
         {
@@ -89,6 +91,11 @@ namespace QueryTables.Web
         protected internal override void AdjustSortOrder(int removedSortOrder)
         {
             this.Field.AdjustSortOrder(removedSortOrder);
+        }
+
+        protected override DataControlField CreateField()
+        {
+            return new DynamicField();
         }
 
         private void CopyPropertiesToInnerField(object sender, EventArgs e)
@@ -118,12 +125,5 @@ namespace QueryTables.Web
                 dropDownField.Items = this.Items;
             }
         }
-    }
-
-    public enum FieldType
-    {
-        Text = 0,
-        List = 1,
-        Date = 2
     }
 }

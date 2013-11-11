@@ -1,4 +1,4 @@
-﻿function setFocus(element) {
+﻿function QuerySetFocus(element) {
     var elemLen = element.value.length;
     // For IE Only
     if (document.selection) {
@@ -28,25 +28,29 @@ var delay = (function () {
     };
 })();
 
-function initGridExtender() {
-    $('.data-query-textFilter').each(function () { initTextFilter($(this)); });
-    $('.data-query-datepicker').each(function () { initDateFilter($(this)); });
-    $('.data-query-dropdown').each(function () { initDropDownFilter($(this)); });
+function Query_GridExtender_Init() {
+    $('.data-query-textFilter').each(function () { Query_TextField_Init($(this)); });
+    $('.data-query-datepicker').each(function () { Query_DateField_Init($(this)); });
+    $('.data-query-dropdown').each(function () { Query_DropDownField_Init($(this)); });
 }
 
-function initTextFilter($element) {
+function Query_TextField_Init($element) {
     var currentVal = $element.val();
     var delayMs = $element.attr('data-query-filterDelay');
     var postbackName = $element.attr('data-query-postbackName');
     var focus = $element.attr('data-query-focus');
+    var defaultValue = $element.attr('data-query-placeholder');
     
     // Store initial value
+    if (defaultValue == currentVal) {
+        currentVal = "";
+    }
     $element.attr("data-query-value", currentVal);
     
     // Restore focus
     focus = focus ? focus.toLowerCase() : 'false';
     if (focus == 'true') {
-        setFocus($element[0]);
+        QuerySetFocus($element[0]);
     }
 
     $element.keyup(function (e) {
@@ -66,11 +70,11 @@ function initTextFilter($element) {
         }
 
         // Set timer for auto postback
-        var oldVal = $(this).attr('data-query-value');  
+        var oldVal = $(this).attr('data-query-value');
         var val = $(this).val();
 
         // Ignore default value (placeholder)
-        if (val == defaultValue) {
+        if (val === defaultValue) {
             val = "";
         }
 
@@ -84,32 +88,20 @@ function initTextFilter($element) {
     });
 }
 
-function initDateFilter($element) {
-    initTextFilter($element);
-    
-    var focus = $element.attr('data-query-focus');
-    var datepickerBackoff = focus ? focus.toLowerCase() : 'false';
-    
-    // set timeout to disable datepickerBackoff in case it is not disabled by the beforeShow. (needed if browser is not IE)
-    setTimeout(function () { datepickerBackoff = 'false'; }, 10);
-    $element.datepicker({
-        onSelect: function () {
-            document.getElementById('__LASTFOCUS').value = this.name;
-            __doPostBack($(this).attr('data-query-postbackName'), '');
-        },
-        beforeShow: function (input, inst) {
-            // FIX IE: Do not show datepicker dialog after postback from this filter
-            if (datepickerBackoff == 'true') {
-                datepickerBackoff = 'false';
-                return false;
-            }
-
-            return true;
-        }
-    });
+function Query_DateField_Init($element) {
+    Query_TextField_Init($element);
 }
 
-function initDropDownFilter($element) {
+function Query_DateField_CancelShowWhenFocus(sender, args) {
+    var focus = $(sender._element).attr('data-query-focus');
+
+    focus = focus ? focus.toLowerCase() : 'false';
+    if (focus == 'true') {
+        args.set_cancel(true);
+    }
+}
+
+function Query_DropDownField_Init($element) {
     var focus = $element.attr('data-query-focus');
     // Restore focus
     focus = focus ? focus.toLowerCase() : 'false';

@@ -16,11 +16,11 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new NumericFilterBuilder(typeof(int));
 
-            const string value = "aaf";
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            const string Value = "aaf";
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(Value, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(null, filter.Value);
@@ -31,157 +31,157 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new NumericFilterBuilder(typeof(int));
 
-            const string value = "2";
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            const string Value = "2";
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(Value, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(int.Parse(value), filter.Value);
+            Assert.AreEqual(int.Parse(Value), filter.Value);
         }
 
         [TestMethod]
         public void IntegerEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string equalOperator = "=";
-            const int value = 2;
+            const string EqualOperator = "=";
+            const int Value = 2;
 
-            var originalText = equalOperator + value;
-            builder.Symbols[FilterOperator.Equal] = equalOperator;
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var originalText = EqualOperator + Value;
+            builder.Symbols[FilterOperator.Equal] = EqualOperator;
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerNotEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string notEqualOperator = "!=";
-            const int value = 2;
-            var originalText = notEqualOperator + value;
+            const string NotEqualOperator = "!=";
+            const int Value = 2;
+            var originalText = NotEqualOperator + Value;
 
-            builder.Symbols[FilterOperator.NotEqual] = notEqualOperator;
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            builder.Symbols[FilterOperator.NotEqual] = NotEqualOperator;
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.NotEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerGreaterThanEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string greaterThanEqualOperator = ">=";
-            const int value = 2;
-            var originalText = greaterThanEqualOperator + value;
-            builder.Symbols[FilterOperator.GreaterThanEqual] = greaterThanEqualOperator;
+            const string GreaterThanEqualOperator = ">=";
+            const int Value = 2;
+            var originalText = GreaterThanEqualOperator + Value;
+            builder.Symbols[FilterOperator.GreaterThanEqual] = GreaterThanEqualOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.GreaterThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerLessThanEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string lessThanEqualOperator = "<=";
-            const int value = 2;
-            var originalText = lessThanEqualOperator + value;
-            builder.Symbols[FilterOperator.LessThanEqual] = lessThanEqualOperator;
+            const string LessThanEqualOperator = "<=";
+            const int Value = 2;
+            var originalText = LessThanEqualOperator + Value;
+            builder.Symbols[FilterOperator.LessThanEqual] = LessThanEqualOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.LessThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerGreaterThanOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string greaterThanOperator = ">";
-            const int value = 2;
-            var originalText = greaterThanOperator + value;
-            builder.Symbols[FilterOperator.GreaterThan] = greaterThanOperator;
+            const string GreaterThanOperator = ">";
+            const int Value = 2;
+            var originalText = GreaterThanOperator + Value;
+            builder.Symbols[FilterOperator.GreaterThan] = GreaterThanOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.GreaterThan, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerLessThanOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string lessThanOperator = "<";
-            const int value = 2;
-            var originalText = lessThanOperator + value;
-            builder.Symbols[FilterOperator.LessThan] = lessThanOperator;
+            const string LessThanOperator = "<";
+            const int Value = 2;
+            var originalText = LessThanOperator + Value;
+            builder.Symbols[FilterOperator.LessThan] = LessThanOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.LessThan, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void IntegerBetweenOperator()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "|";
-            const int leftValue = 1;
-            const int rightValue = 2;
-            var originalText = leftValue + betweenOperator + rightValue;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const int LeftValue = 1;
+            const int RightValue = 2;
+            var originalText = LeftValue + BetweenOperator + RightValue;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.Between, filter.Operator);
-            Assert.AreEqual(leftValue, filter.Values[0]);
-            Assert.AreEqual(rightValue, filter.Values[1]);
+            Assert.AreEqual(LeftValue, filter.Values[0]);
+            Assert.AreEqual(RightValue, filter.Values[1]);
         }
 
         [TestMethod]
         public void IntegerBetweenOperatorNoNumbers()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "|";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "|";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -190,15 +190,15 @@ namespace QueryTables.Test.Filters.Builders
         public void IntegerBetweenOperatorLeftLetters()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "d|";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "d|";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -207,15 +207,15 @@ namespace QueryTables.Test.Filters.Builders
         public void IntegerBetweenOperatorTwoTimes()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "3||5";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "3||5";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -224,12 +224,12 @@ namespace QueryTables.Test.Filters.Builders
         public void IntegerBetweenOperatorOnlyLeft()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "|";
-            const int leftValue = 1;
-            var originalText = leftValue + betweenOperator;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const int LeftValue = 1;
+            var originalText = LeftValue + BetweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
@@ -241,12 +241,12 @@ namespace QueryTables.Test.Filters.Builders
         public void IntegerBetweenOperatorOnlyRight()
         {
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "|";
-            const int rightValue = 1;
-            var originalText = betweenOperator + rightValue;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const int RightValue = 1;
+            var originalText = BetweenOperator + RightValue;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
@@ -260,15 +260,15 @@ namespace QueryTables.Test.Filters.Builders
         {
             // This test shows that we need to improve FilterBuilder.GetOperator
             var builder = new NumericFilterBuilder(typeof(int));
-            const string betweenOperator = "|";
+            const string BetweenOperator = "|";
 
-            const string originalText = "2|3|";
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string OriginalText = "2|3|";
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -282,11 +282,11 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
 
-            const string value = "aaf";
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, value);
+            const string Value = "aaf";
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(Value, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual(null, filter.Value);
@@ -298,7 +298,7 @@ namespace QueryTables.Test.Filters.Builders
             var builder = new NumericFilterBuilder(typeof(decimal));
 
             var value = 2.1m.ToString();
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, value);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(value, filter.OriginalText);
@@ -311,143 +311,143 @@ namespace QueryTables.Test.Filters.Builders
         public void DecimalEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string equalOperator = "=";
-            const decimal value = 2.1m;
+            const string EqualOperator = "=";
+            const decimal Value = 2.1m;
 
-            var originalText = equalOperator + value;
-            builder.Symbols[FilterOperator.Equal] = equalOperator;
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var originalText = EqualOperator + Value;
+            builder.Symbols[FilterOperator.Equal] = EqualOperator;
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalNotEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string notEqualOperator = "!=";
-            const decimal value = 2.1m;
-            var originalText = notEqualOperator + value;
+            const string NotEqualOperator = "!=";
+            const decimal Value = 2.1m;
+            var originalText = NotEqualOperator + Value;
 
-            builder.Symbols[FilterOperator.NotEqual] = notEqualOperator;
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            builder.Symbols[FilterOperator.NotEqual] = NotEqualOperator;
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.NotEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalGreaterThanEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string greaterThanEqualOperator = ">=";
-            const decimal value = 2.1m;
-            var originalText = greaterThanEqualOperator + value;
-            builder.Symbols[FilterOperator.GreaterThanEqual] = greaterThanEqualOperator;
+            const string GreaterThanEqualOperator = ">=";
+            const decimal Value = 2.1m;
+            var originalText = GreaterThanEqualOperator + Value;
+            builder.Symbols[FilterOperator.GreaterThanEqual] = GreaterThanEqualOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.GreaterThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalLessThanEqualOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string lessThanEqualOperator = "<=";
-            const decimal value = 2.1m;
-            var originalText = lessThanEqualOperator + value;
-            builder.Symbols[FilterOperator.LessThanEqual] = lessThanEqualOperator;
+            const string LessThanEqualOperator = "<=";
+            const decimal Value = 2.1m;
+            var originalText = LessThanEqualOperator + Value;
+            builder.Symbols[FilterOperator.LessThanEqual] = LessThanEqualOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.LessThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalGreaterThanOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string greaterThanOperator = ">";
-            const decimal value = 2.1m;
-            var originalText = greaterThanOperator + value;
-            builder.Symbols[FilterOperator.GreaterThan] = greaterThanOperator;
+            const string GreaterThanOperator = ">";
+            const decimal Value = 2.1m;
+            var originalText = GreaterThanOperator + Value;
+            builder.Symbols[FilterOperator.GreaterThan] = GreaterThanOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.GreaterThan, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalLessThanOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string lessThanOperator = "<";
-            const decimal value = 2.1m;
-            var originalText = lessThanOperator + value;
-            builder.Symbols[FilterOperator.LessThan] = lessThanOperator;
+            const string LessThanOperator = "<";
+            const decimal Value = 2.1m;
+            var originalText = LessThanOperator + Value;
+            builder.Symbols[FilterOperator.LessThan] = LessThanOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.LessThan, filter.Operator);
-            Assert.AreEqual(value, filter.Value);
+            Assert.AreEqual(Value, filter.Value);
         }
 
         [TestMethod]
         public void DecimalBetweenOperator()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "|";
-            const decimal leftValue = 1.1m;
-            const decimal rightValue = 2.1m;
-            var originalText = leftValue + betweenOperator + rightValue;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const decimal LeftValue = 1.1m;
+            const decimal RightValue = 2.1m;
+            var originalText = LeftValue + BetweenOperator + RightValue;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.Between, filter.Operator);
-            Assert.AreEqual(leftValue, filter.Values[0]);
-            Assert.AreEqual(rightValue, filter.Values[1]);
+            Assert.AreEqual(LeftValue, filter.Values[0]);
+            Assert.AreEqual(RightValue, filter.Values[1]);
         }
 
         [TestMethod]
         public void DecimalBetweenOperatorNoNumbers()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "|";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "|";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -456,15 +456,15 @@ namespace QueryTables.Test.Filters.Builders
         public void DecimalBetweenOperatorLeftLetters()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "d|";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "d|";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -473,15 +473,15 @@ namespace QueryTables.Test.Filters.Builders
         public void DecimalBetweenOperatorTwoTimes()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "3.1||5.7";
-            const string originalText = betweenOperator;
+            const string BetweenOperator = "3.1||5.7";
+            const string OriginalText = BetweenOperator;
 
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
@@ -490,12 +490,12 @@ namespace QueryTables.Test.Filters.Builders
         public void DecimalBetweenOperatorOnlyLeft()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "|";
-            const int leftValue = 1;
-            var originalText = leftValue + betweenOperator;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const int LeftValue = 1;
+            var originalText = LeftValue + BetweenOperator;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
@@ -507,12 +507,12 @@ namespace QueryTables.Test.Filters.Builders
         public void DecimalBetweenOperatorOnlyRight()
         {
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "|";
-            const decimal rightValue = 1.5m;
-            var originalText = betweenOperator + rightValue;
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string BetweenOperator = "|";
+            const decimal RightValue = 1.5m;
+            var originalText = BetweenOperator + RightValue;
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, originalText);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(originalText, filter.OriginalText);
@@ -526,19 +526,18 @@ namespace QueryTables.Test.Filters.Builders
         {
             // This test shows that we need to improve FilterBuilder.GetOperator
             var builder = new NumericFilterBuilder(typeof(decimal));
-            const string betweenOperator = "|";
+            const string BetweenOperator = "|";
 
-            const string originalText = "2.1|3.8|";
-            builder.Symbols[FilterOperator.Between] = betweenOperator;
+            const string OriginalText = "2.1|3.8|";
+            builder.Symbols[FilterOperator.Between] = BetweenOperator;
 
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, originalText);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, OriginalText);
 
             Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(originalText, filter.OriginalText);
+            Assert.AreEqual(OriginalText, filter.OriginalText);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
         }
-
 
         #endregion Decimal
     }

@@ -13,6 +13,5 @@ namespace QueryTables.Common.Extension
 
             return Convert.ToInt32(value).ToString();
         }
-
     }
 }

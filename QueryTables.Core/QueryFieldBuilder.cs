@@ -18,7 +18,7 @@ namespace QueryTables.Core
 
         public QueryFieldBuilder<T> Create(string name)
         {
-            this.Instance = new QueryField<T> {Name = name};
+            this.Instance = new QueryField<T> { Name = name };
             
             this.withManualFilterType = false;
             this.withManualWhere = false;
@@ -28,7 +28,7 @@ namespace QueryTables.Core
 
         public QueryFieldBuilder<T> Create<E>(Expression<Func<T, E>> select)
         {
-            this.Instance = new QueryField<T> {Name = @select.GetPropertyInfo().Name};
+            this.Instance = new QueryField<T> { Name = @select.GetPropertyInfo().Name };
 
             this.withManualFilterType = false;
             this.withManualWhere = false;
@@ -101,7 +101,7 @@ namespace QueryTables.Core
 
         public QueryFieldBuilder<T> FilterAsText()
         {
-            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof (string));
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(string));
             return this;
         }
 
@@ -131,7 +131,7 @@ namespace QueryTables.Core
 
         public QueryFieldBuilder<T> FilterAsList()
         {
-            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof (Enum));
+            this.Instance.FilterBuilder = this.GetFilterBuilder(typeof(Enum));
             return this;
         }
 
@@ -150,6 +150,13 @@ namespace QueryTables.Core
             this.Instance.Select = truncatedExpression;
             this.Instance.Where.Clear();
             this.Instance.Where.Add(truncatedExpression);
+
+            return this;
+        }
+
+        public QueryFieldBuilder<T> CaseSensitive()
+        {
+            this.Instance.CaseSensitive = true;
 
             return this;
         }
@@ -192,13 +199,6 @@ namespace QueryTables.Core
             }
 
             return new ListFilterBuilder();
-        }
-
-        public QueryFieldBuilder<T> CaseSensitive()
-        {
-            this.Instance.CaseSensitive = true;
-
-            return this;
         }
     }
 }

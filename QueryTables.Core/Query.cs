@@ -18,6 +18,8 @@ namespace QueryTables.Core
 
         public List<QueryField<T>> Fields { get; set; }
 
+        public Type ResultType { get; private set; }
+
         /// <summary>
         /// Create a select new {} expression and apply it to queryable.
         /// </summary>
@@ -26,45 +28,13 @@ namespace QueryTables.Core
         public IQueryable Project(IQueryable<T> queryable)
         {
             var fields = this.Fields.ToDictionary(x => x.Name, y => y.SelectElse == null ? y.Select.ReturnType : y.SelectElse.GetType());
-            var dynamicType = LinqRuntimeTypeBuilder.GetDynamicType(fields);
 
-            ParameterExpression parameter = Expression.Parameter(queryable.ElementType, "t");
-            var bindings = dynamicType.GetProperties()
-                                      .Select(field =>
-                                          {
-                                              var queryField = this.Fields.First(x => x.Name.Equals(field.Name));
+            return this.Project(queryable, LinqRuntimeTypeBuilder.GetDynamicType(fields));
+        }
 
-                                              // Replace original parameter with our new parameter
-                                              var originalParameter = queryField.Select.Parameters[0];
-                                              var expression = queryField.Select.Body.Replace(originalParameter, parameter);
-
-                                              // Ensure the expression return type and the field type match
-                                              //expression = Expression.Convert(expression, field.FieldType);
-
-                                              if (queryField.SelectElse != null)
-                                              {
-                                                  expression = this.CreateSelectWhen(
-                                                      expression,
-                                                      new Dictionary<object, object>(queryField.SelectWhen),
-                                                      queryField.SelectElse);
-                                              }
-
-                                              // Bind field with expression
-                                              return Expression.Bind(field, expression);
-                                          });
-
-            LambdaExpression selector = Expression.Lambda(
-                Expression.MemberInit(Expression.New(dynamicType), bindings),
-                parameter);
-
-            var selectExpression = Expression.Call(
-                typeof (Queryable),
-                "Select",
-                new[] { queryable.ElementType, dynamicType },
-                queryable.Expression,
-                Expression.Quote(selector));
-            
-            return queryable.Provider.CreateQuery(selectExpression);
+        public IQueryable<E> Project<E>(IQueryable<T> queryable)
+        {
+            return (IQueryable<E>)this.Project(queryable, typeof(E));
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
@@ -157,6 +127,50 @@ namespace QueryTables.Core
                           && method.GetParameters().Length == 2);
 
             return (IOrderedQueryable<T>)methodInfo.MakeGenericMethod(typeof(T), field.Select.ReturnType).Invoke(null, new object[] { query, field.Select });
+        }
+        
+        private IQueryable Project(IQueryable<T> queryable, Type resultType)
+        {
+            this.ResultType = resultType;
+            var parameter = Expression.Parameter(queryable.ElementType, "t");
+            var bindings = this.ResultType.GetProperties()
+                               .Select(field =>
+                               {
+                                   var queryField = this.Fields.First(x => x.Name.Equals(field.Name));
+
+                                   // Replace original parameter with our new parameter
+                                   var originalParameter = queryField.Select.Parameters[0];
+                                   var expression = queryField.Select.Body.Replace(originalParameter, parameter);
+                                   
+                                   if (queryField.SelectElse == null)
+                                   {
+                                       // Ensure the expression return type and the field type match
+                                       expression = Expression.Convert(expression, field.PropertyType);
+                                   }
+                                   else
+                                   {
+                                       expression = this.CreateSelectWhen(
+                                           expression,
+                                           new Dictionary<object, object>(queryField.SelectWhen),
+                                           queryField.SelectElse);
+                                   }
+
+                                   // Bind field with expression
+                                   return Expression.Bind(field, expression);
+                               });
+
+            var selector = Expression.Lambda(
+                Expression.MemberInit(Expression.New(this.ResultType), bindings),
+                parameter);
+
+            var selectExpression = Expression.Call(
+                typeof(Queryable),
+                "Select",
+                new[] { queryable.ElementType, this.ResultType },
+                queryable.Expression,
+                Expression.Quote(selector));
+
+            return queryable.Provider.CreateQuery(selectExpression);
         }
 
         /// <summary>

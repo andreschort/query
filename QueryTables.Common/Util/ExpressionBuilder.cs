@@ -118,8 +118,9 @@ namespace QueryTables.Common.Util
 
         public ExpressionBuilder TruncateTime()
         {
-            var exp = Expression.Call(typeof (EntityFunctions).GetMethod("TruncateTime", new[] {typeof (DateTime?)}),
-                                      Expression.Convert(this.Expression, typeof (DateTime?)));
+            var exp = Expression.Call(
+                typeof(EntityFunctions).GetMethod("TruncateTime", new[] { typeof(DateTime?) }),
+                Expression.Convert(this.Expression, typeof(DateTime?)));
 
             return new ExpressionBuilder(this.Param, exp);
         }

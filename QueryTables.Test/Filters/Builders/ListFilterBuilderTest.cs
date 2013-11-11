@@ -12,9 +12,9 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void ListDefault()
         {
-            var builder = new ListFilterBuilder {DefaultValue = "default"};
+            var builder = new ListFilterBuilder { DefaultValue = "default" };
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, builder.DefaultValue);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, builder.DefaultValue);
 
             Assert.AreEqual("name", filter.Name);
             Assert.IsFalse(filter.Valid);
@@ -28,14 +28,14 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new ListFilterBuilder { DefaultValue = "default" };
 
-            const string value = "1";
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, value);
+            const string Value = "1";
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.IsTrue(filter.Valid);
             Assert.AreEqual(1, filter.Value);
             Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(Value, filter.OriginalText);
         }
     }
 }

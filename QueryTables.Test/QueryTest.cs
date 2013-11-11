@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QueryTables.Common;
 using QueryTables.Common.Extension;
 using QueryTables.Common.Util;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QueryTables.Core;
 using QueryTables.Test.Model;
 using TestContext = QueryTables.Test.Model.TestContext;
@@ -34,9 +34,9 @@ namespace QueryTables.Test
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero},
+                    new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero },
+                    new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado },
+                    new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero },
                 };
 
             // Test target method
@@ -74,9 +74,9 @@ namespace QueryTables.Test
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero},
+                    new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero },
+                    new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado },
+                    new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero },
                 }.AsQueryable();
 
             // Test target method
@@ -107,9 +107,9 @@ namespace QueryTables.Test
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Divorciado},
+                    new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero },
+                    new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado },
+                    new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Divorciado },
                 };
 
             // Test target method
@@ -142,10 +142,10 @@ namespace QueryTables.Test
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero},
-                    new Empleado {Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado},
-                    new Empleado {Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero},
-                } ;
+                    new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero },
+                    new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado },
+                    new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero },
+                };
 
             var sortings = new List<KeyValuePair<string, SortDirection>>
             {
@@ -181,10 +181,10 @@ namespace QueryTables.Test
 
             var empleados = new List<Empleado>
                 {
-                    new Empleado {Nombre = "Andres", Salario = 150, Edad = 29},
-                    new Empleado {Nombre = "Matias", Salario = 200, Edad = 35},
-                    new Empleado {Nombre = "Neri", Salario = 300, Edad = 24},
-                } ;
+                    new Empleado { Nombre = "Andres", Salario = 150, Edad = 29 },
+                    new Empleado { Nombre = "Matias", Salario = 200, Edad = 35 },
+                    new Empleado { Nombre = "Neri", Salario = 300, Edad = 24 },
+                };
 
             var sortings = new List<KeyValuePair<string, SortDirection>>
             {
@@ -272,8 +272,40 @@ namespace QueryTables.Test
 
                 // Test target method
                 var queryable = query.Project(db.Empleados);
-                result = queryable.ToDynamic();//var objects = Enumerable.Cast<object>(queryable).ToList();
+                result = queryable.ToDynamic();
             }
+
+            // Assertions for the target method
+            Assert.AreEqual("Andres Chort", result[0].FullName);
+            Assert.AreEqual(31333555, result[0].Dni);
+        }
+
+        [TestMethod]
+        public void ProjectNamedType()
+        {
+            var query = new Query<Empleado>();
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "FullName",
+                Select = ExpressionBuilder.Build<Empleado, string>(x => x.Nombre + " " + x.Apellido)
+            });
+
+            query.Fields.Add(new QueryField<Empleado>
+            {
+                Name = "Dni",
+                Select = ExpressionBuilder.Build<Empleado, int>(x => x.Dni)
+            });
+
+            var empleados = new List<Empleado>
+                {
+                    new Empleado { Nombre = "Andres", Apellido = "Chort", Dni = 31333555, EstadoCivil = EstadoCivil.Soltero },
+                    new Empleado { Nombre = "Matias", Apellido = "Gieco", Dni = 28444555, EstadoCivil = EstadoCivil.Casado },
+                    new Empleado { Nombre = "Neri", Apellido = "Diaz", Dni = 34123321, EstadoCivil = EstadoCivil.Soltero },
+                }.AsQueryable();
+
+            // Test target method
+            var result = query.Project<EmpleadoDTO>(empleados).ToList();
 
             // Assertions for the target method
             Assert.AreEqual("Andres Chort", result[0].FullName);

@@ -34,7 +34,7 @@ namespace QueryTables.Core.Filters
         /// <summary>
         /// The values of the filter, in general there will be only one value in this list
         /// in which case you can use the single property Value.
-        /// For those filters that require multiple values (ie. the Between operator)
+        /// For those filters that require multiple values (i.e. the Between operator)
         /// this list will hold them.
         /// </summary>
         public List<object> Values { get; set; }

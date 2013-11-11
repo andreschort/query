@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using AjaxControlToolkit;
 
 namespace QueryTables.Web
 {
@@ -14,6 +15,8 @@ namespace QueryTables.Web
 
         private TextBox textBox;
 
+        private TextBoxWatermarkExtender watermark;
+
         /// <summary>
         /// Value given from outside of this component
         /// </summary>
@@ -23,8 +26,20 @@ namespace QueryTables.Web
 
         protected internal override string FilterValue
         {
-            get { return this.textBox == null ? this.externalFilterValue ?? string.Empty : this.textBox.Text; }
-            set { this.externalFilterValue = value; }
+            get
+            {
+                if (this.externalFilterValue != null)
+                {
+                    return this.externalFilterValue;
+                }
+
+                return this.textBox == null ? string.Empty : this.textBox.Text;
+            }
+
+            set
+            {
+                this.externalFilterValue = value;
+            }
         }
 
         protected override DataControlField CreateField()
@@ -38,23 +53,33 @@ namespace QueryTables.Web
 
             var cell = (DataControlFieldHeaderCell)sender;
 
-            var pnl = new Panel {CssClass = "query-filter"};
+            var pnl = new Panel { CssClass = "query-filter" };
             cell.Controls.Add(pnl);
 
             // Filter textbox
-            this.textBox = new TextBox();
-            pnl.Controls.Add(textBox);
+            this.textBox = new TextBox { ID = this.Name + "_textbox" };
+            pnl.Controls.Add(this.textBox);
 
             this.textBox.Attributes["class"] = "data-query-textFilter";
             this.textBox.AutoCompleteType = AutoCompleteType.Disabled;
             this.textBox.Attributes["autocomplete"] = "off";
+
+            this.watermark = new TextBoxWatermarkExtender
+                {
+                    ID = this.Name + "_watermark",
+                    TargetControlID = this.textBox.ID
+                };
+            pnl.Controls.Add(this.watermark);
         }
 
         protected override void HeaderCell_Load(object sender, EventArgs e)
         {
             base.HeaderCell_Load(sender, e);
 
-            this.textBox.Attributes["placeholder"] = this.Placeholder;
+            this.textBox.Attributes["data-query-placeholder"] = this.Placeholder;
+
+            this.watermark.WatermarkText = this.Placeholder;
+            this.watermark.Enabled = !string.IsNullOrEmpty(this.Placeholder);
 
             if (this.AutoFilterDelay.HasValue)
             {
@@ -72,9 +97,7 @@ namespace QueryTables.Web
             base.HeaderCell_DataBinding(sender, e);
 
             // Set value
-            this.textBox.Text = string.IsNullOrEmpty(this.externalFilterValue)
-                ? HttpContext.Current.Request.Form[this.textBox.UniqueID]
-                : this.externalFilterValue;
+            this.textBox.Text = this.externalFilterValue ?? HttpContext.Current.Request.Form[this.textBox.UniqueID];
 
             // postback configuration, must be here to ensure UniqueID is not null
             this.textBox.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;

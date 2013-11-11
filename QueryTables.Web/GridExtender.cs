@@ -14,6 +14,14 @@ namespace QueryTables.Web
 
         private bool enableFilters = true;
 
+        #region Events
+
+        public event EventHandler Filter;
+
+        public event EventHandler Sort;
+
+        #endregion Events
+
         #region Published Properties
 
         public string GridViewId { get; set; }
@@ -46,14 +54,11 @@ namespace QueryTables.Web
         /// </summary>
         public string Placeholder { get; set; }
 
+        public string DatePlaceholderFrom { get; set; }
+
+        public string DatePlaceholderTo { get; set; }
+
         #endregion Published Properties
-
-        #region Events
-
-        public event EventHandler Filter;
-        public event EventHandler Sort;
-        
-        #endregion Events
 
         #region Internal Properties
 
@@ -63,6 +68,16 @@ namespace QueryTables.Web
         }
 
         #endregion Internal Properties
+
+        public void ClearFiltersAndSortings()
+        {
+            foreach (var field in this.Grid.Columns.OfType<QueryFieldBase>())
+            {
+                field.FilterValue = string.Empty;
+                field.SortDir = null;
+                field.SortOrder = 0;
+            }
+        }
 
         protected override void OnInit(EventArgs e)
         {
@@ -74,7 +89,7 @@ namespace QueryTables.Web
             var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "QueryTables.Web.Query.js");
             this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
 
-            var javascript = @"$(document).ready(function () { initGridExtender(); });";
+            var javascript = @"$(document).ready(function () { Query_GridExtender_Init(); });";
             JSUtil.AddLoad(this, "GridExtender", javascript);
 
             // Force that the hidden input __LASTFOCUS is rendered
@@ -92,6 +107,12 @@ namespace QueryTables.Web
                 field.FilterCommand = FilterCommand;
                 field.SortCommand = SortCommand;
                 tabIndex = field.SetTabIndex(tabIndex);
+            }
+
+            foreach (var field in this.Grid.Columns.OfType<DateField>())
+            {
+                field.PlaceholderFrom = this.DatePlaceholderFrom;
+                field.PlaceholderTo = this.DatePlaceholderTo;
             }
         }
 
@@ -112,7 +133,7 @@ namespace QueryTables.Web
                 var sortOrder = sortingField.SortOrder;
 
                 // move the direction to the next value
-                sortingField.CycleSort(maxSortOrder+1);
+                sortingField.CycleSort(maxSortOrder + 1);
 
                 // update greater sort orders if the field does not sort anymore
                 if (!sortingField.SortDir.HasValue)
@@ -162,7 +183,7 @@ namespace QueryTables.Web
             for (int index = 0; index < sortings.Count; index++)
             {
                 var field = fields.First(x => x.Name.Equals(sortings[index].Key));
-                field.SortOrder = index+1;
+                field.SortOrder = index + 1;
                 field.SortDir = sortings[index].Value;
             }
         }

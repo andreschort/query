@@ -74,6 +74,7 @@
     <Compile Include="Filters\Builders\ListFilterBuilderTest.cs" />
     <Compile Include="Filters\Builders\DateFilterBuilderTest.cs" />
     <Compile Include="Model\Empleado.cs" />
+    <Compile Include="Model\EmpleadoDTO.cs" />
     <Compile Include="Model\EstadoCivil.cs" />
     <Compile Include="Model\TestContext.cs" />
     <Compile Include="QueryFieldTest.cs" />

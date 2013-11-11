@@ -6,20 +6,18 @@ namespace QueryTables.Core.Filters.Builders
 {
     public class DateFilterBuilder : IFilterBuilder
     {
-        private const char defaultSeparator = ';';
-
-        public char Separator { get; set; }
+        private const char DefaultSeparator = ';';
 
         public DateFilterBuilder()
         {
-            this.Separator = defaultSeparator;
+            this.Separator = DefaultSeparator;
         }
 
-        public Filter Create<T>(QueryField<T> field, string value)
-        {
-            var filter = new Filter { Name = field.Name, OriginalText = value };
+        public char Separator { get; set; }
 
-            var parts = value.Split(new[] { this.Separator }, 2);
+        public static DateTime?[] Parse(string value, char separator = DefaultSeparator)
+        {
+            var parts = value.Split(new[] { separator }, 2);
 
             var from = StringUtil.ToDateNullable(parts[0]);
 
@@ -29,7 +27,18 @@ namespace QueryTables.Core.Filters.Builders
                 to = StringUtil.ToDateNullable(parts[1]);
             }
 
-            filter.Valid = from.HasValue || to.HasValue;
+            return new[] { from, to };
+        }
+
+        public Filter Create<T>(QueryField<T> field, string value)
+        {
+            var filter = new Filter { Name = field.Name, OriginalText = value };
+
+            var parsed = Parse(value, this.Separator);
+            var from = parsed[0];
+            var to = parsed[1];
+
+            filter.Valid = parsed[0].HasValue || to.HasValue;
 
             if (from.HasValue && to.HasValue)
             {

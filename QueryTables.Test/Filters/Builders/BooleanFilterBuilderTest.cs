@@ -14,7 +14,7 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new BooleanFilterBuilder();
 
-            var queryField = new QueryField<Empleado> {Name = "name"};
+            var queryField = new QueryField<Empleado> { Name = "name" };
             var filter = builder.Create(queryField, true.ToString());
 
             Assert.AreEqual("name", filter.Name);
@@ -53,6 +53,5 @@ namespace QueryTables.Test.Filters.Builders
             Assert.AreEqual(FilterOperator.None, filter.Operator);
             Assert.AreEqual("not_a_valid_bool_value", filter.OriginalText);
         }
-
     }
 }

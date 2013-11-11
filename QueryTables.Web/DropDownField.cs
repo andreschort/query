@@ -11,13 +11,25 @@ namespace QueryTables.Web
 
         private string externalFilterValue;
 
+        public List<ListItem> Items { get; set; }
+
         protected internal override string FilterValue
         {
-            get { return this.dropDownList == null ? this.externalFilterValue ?? string.Empty : this.dropDownList.SelectedValue; }
-            set { this.externalFilterValue = value; }
+            get
+            {
+                if (this.externalFilterValue != null)
+                {
+                    return this.externalFilterValue;
+                }
+
+                return this.dropDownList == null ? string.Empty : this.dropDownList.SelectedValue;
+            }
+
+            set
+            {
+                this.externalFilterValue = value;
+            }
         }
-        
-        public List<ListItem> Items { get; set; }
 
         protected override DataControlField CreateField()
         {
@@ -30,7 +42,7 @@ namespace QueryTables.Web
 
             var cell = (DataControlFieldHeaderCell)sender;
 
-            var pnl = new Panel {CssClass = "query-filter"};
+            var pnl = new Panel { CssClass = "query-filter" };
             cell.Controls.Add(pnl);
 
             this.dropDownList = new DropDownList();
@@ -53,7 +65,7 @@ namespace QueryTables.Web
         {
             base.HeaderCell_DataBinding(sender, e);
             
-            this.Items.Insert(0, new ListItem(string.Empty, string.Empty)); // add empty option
+            this.Items.Insert(0, new ListItem(this.Placeholder ?? string.Empty, string.Empty)); // add empty option
             
             this.dropDownList.DataSource = this.Items;
             this.dropDownList.DataTextField = "Text";
@@ -61,9 +73,14 @@ namespace QueryTables.Web
             this.dropDownList.DataBind();
 
             // set selected value
-            this.dropDownList.SelectedValue = string.IsNullOrEmpty(this.externalFilterValue)
-                ? HttpContext.Current.Request.Form[this.dropDownList.UniqueID]
-                : this.externalFilterValue;
+            if (this.externalFilterValue == null)
+            {
+                this.dropDownList.SelectedValue = HttpContext.Current.Request.Form[this.dropDownList.UniqueID];
+            }
+            else if (!string.IsNullOrEmpty(this.externalFilterValue))
+            {
+                this.dropDownList.SelectedValue = this.externalFilterValue;
+            }
 
             // postback configuration, must be here to ensure UniqueID is not null
             this.dropDownList.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;

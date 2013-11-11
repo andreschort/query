@@ -16,15 +16,13 @@ namespace QueryTables.Web
     {
         #region Fields
 
-        protected LinkButton FilterButton;
-        
         private LinkButton sortButton;
         private HtmlInputHidden sortInputHidden; // used to save the sort direction and order across postbacks
         private Label sortOrderLabel;
 
         /// <summary>
-        /// Tells if the value in sortInputHidden was already read in this postback.
-        /// Used to avoid overriding a value set manually during postback.
+        /// Tells if the value in sortInputHidden was already read in this post back.
+        /// Used to avoid overriding a value set manually during post back.
         /// </summary>
         private bool sortHiddenInputRead;
 
@@ -59,7 +57,7 @@ namespace QueryTables.Web
         public int? AutoFilterDelay { get; set; }
 
         /// <summary>
-        /// A comma separeted list of properties to use as parameters to UrlFormat.
+        /// A comma separated list of properties to use as parameters to UrlFormat.
         /// </summary>
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
@@ -75,7 +73,7 @@ namespace QueryTables.Web
         public virtual ITemplate ItemTemplate { get; set; }
 
         /// <summary>
-        /// Controls wheather the elements inside the data cell are enabled or not
+        /// Controls if the elements inside the data cell are enabled or not
         /// </summary>
         public bool ItemEnabled
         {
@@ -104,6 +102,8 @@ namespace QueryTables.Web
         protected internal virtual SortDirection? SortDir { get; set; }
 
         protected internal virtual int SortOrder { get; set; }
+
+        protected Button FilterButton { get; set; }
 
         protected short? TabIndex { get; set; }
         
@@ -146,16 +146,16 @@ namespace QueryTables.Web
         {
             if (this.SortDir.Equals(SortDirection.Ascending))
             {
-                this.SortDir = SortDirection.Descending;
-            }
-            else if (this.SortDir.Equals(SortDirection.Descending))
-            {
                 this.SortDir = null;
                 this.SortOrder = 0;
             }
-            else
+            else if (this.SortDir.Equals(SortDirection.Descending))
             {
                 this.SortDir = SortDirection.Ascending;
+            }
+            else
+            {
+                this.SortDir = SortDirection.Descending;
                 this.SortOrder = newSortOrder;
             }
         }
@@ -185,10 +185,11 @@ namespace QueryTables.Web
 
         protected virtual void HeaderCell_Init(object sender, EventArgs e)
         {
-            var cell = (DataControlFieldHeaderCell) sender;
+            var cell = (DataControlFieldHeaderCell)sender;
 
             // title with sorting
-            var pnl = new Panel {CssClass = "query-header", DefaultButton = null};
+            var pnl = new Panel { CssClass = "query-header" };
+            pnl.Attributes["onkeypress"] = string.Empty; // Remove DefaultButton for good
             cell.Controls.Add(pnl);
 
             this.sortButton = new LinkButton();
@@ -200,7 +201,7 @@ namespace QueryTables.Web
             pnl.Controls.Add(this.sortOrderLabel);
 
             // Filter button
-            this.FilterButton = new LinkButton();
+            this.FilterButton = new Button();
             this.FilterButton.Attributes["style"] = "display:none";
             cell.Controls.Add(this.FilterButton);
         }
@@ -250,7 +251,7 @@ namespace QueryTables.Web
 
             if (this.SortDir.HasValue)
             {
-                var header = (DataControlFieldHeaderCell) sender;
+                var header = (DataControlFieldHeaderCell)sender;
                 header.CssClass = this.SortDir.Equals(SortDirection.Ascending) ? "asc" : "desc";
             }
         }
@@ -266,6 +267,8 @@ namespace QueryTables.Web
         /// <summary>
         /// Creates linkButton, valueHidden and urlHidden for data cells with a link
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void DataCell_Init(object sender, EventArgs e)
         {
             var cell = (TableCell)sender;
@@ -350,7 +353,8 @@ namespace QueryTables.Web
                 {
                     this.navigateUrl = this.UrlFields == null
                         ? this.UrlFormat
-                        : string.Format(this.UrlFormat,
+                        : string.Format(
+                            this.UrlFormat,
                             this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
 
                     this.linkButton.PostBackUrl = this.navigateUrl;
@@ -370,7 +374,7 @@ namespace QueryTables.Web
         #endregion DataCell Event Handlers
 
         /// <summary>
-        /// Tells if the control with the indicated unique ID was the last control with the focus before the postback
+        /// Tells if the control with the indicated unique ID was the last control with the focus before the post back
         /// </summary>
         /// <param name="uniqueID"></param>
         /// <returns></returns>

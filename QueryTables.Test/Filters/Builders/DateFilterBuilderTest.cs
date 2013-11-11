@@ -14,10 +14,10 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateEmpty()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
             var value = string.Empty;
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(0, filter.Values.Count);
@@ -29,12 +29,12 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateSeparatorOnly()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
-            const char separator = ';';
-            var value = separator.ToString();
+            const char Separator = ';';
+            var value = Separator.ToString();
 
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(0, filter.Values.Count);
@@ -46,13 +46,13 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateFrom()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
             var from = DateTime.Today;
 
             var fromStr = @from.ToString();
             var value = fromStr + builder.Separator;
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(from, filter.Values[0]);
@@ -64,13 +64,13 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateTo()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
             var to = DateTime.Today;
 
             var toStr = to.ToString();
             var value = ";" + toStr;
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(to, filter.Values[0]);
@@ -82,7 +82,7 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateBetween()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
             var from = DateTime.Today;
             var to = DateTime.Today;
@@ -90,8 +90,8 @@ namespace QueryTables.Test.Filters.Builders
             var fromStr = @from.ToString();
             var toStr = to.ToString();
 
-            var value = fromStr +builder.Separator + toStr;
-            var filter = builder.Create(new QueryField<Empleado>{Name = "name"}, value);
+            var value = fromStr + builder.Separator + toStr;
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(from, filter.Values[0]);
@@ -104,16 +104,16 @@ namespace QueryTables.Test.Filters.Builders
         [TestMethod]
         public void DateInvalid()
         {
-            var builder = new DateFilterBuilder {Separator = ';'};
+            var builder = new DateFilterBuilder { Separator = ';' };
 
-            const string value = "wefwef";
-            var filter = builder.Create(new QueryField<Empleado> {Name = "name"}, value);
+            const string Value = "wefwef";
+            var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
             Assert.AreEqual("name", filter.Name);
             Assert.AreEqual(0, filter.Values.Count);
             Assert.AreEqual(false, filter.Valid);
             Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.AreEqual(Value, filter.OriginalText);
         }
     }
 }

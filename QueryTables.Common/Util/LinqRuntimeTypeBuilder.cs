@@ -18,23 +18,17 @@ namespace QueryTables.Common.Util
             moduleBuilder = Thread.GetDomain().DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run).DefineDynamicModule(assemblyName.Name);
         }
 
-        private static string GetTypeKey(Dictionary<string, Type> fields)
-        {
-            /*TODO: optimize the type caching
-            -- if fields are simply reordered, that doesn't mean that they're actually different types, so this needs to be smarter*/
-            string key = string.Empty;
-            foreach (var field in fields)
-                key += field.Key + ";" + field.Value.Name + ";";
-
-            return key;
-        }
-
         public static Type GetDynamicType(Dictionary<string, Type> fields)
         {
             if (null == fields)
+            {
                 throw new ArgumentNullException("fields");
+            }
+
             if (0 == fields.Count)
+            {
                 throw new ArgumentOutOfRangeException("fields", "fields must have at least 1 field definition");
+            }
 
             try
             {
@@ -42,12 +36,16 @@ namespace QueryTables.Common.Util
                 string className = GetTypeKey(fields);
 
                 if (builtTypes.ContainsKey(className))
+                {
                     return builtTypes[className];
+                }
 
                 TypeBuilder typeBuilder = moduleBuilder.DefineType(className, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable);
 
                 foreach (var field in fields)
+                {
                     CreateProperty(typeBuilder, field.Key, field.Value);
+                }   
 
                 builtTypes[className] = typeBuilder.CreateType();
 
@@ -98,14 +96,17 @@ namespace QueryTables.Common.Util
             propertyBuilder.SetSetMethod(setMethodBuilder);
         }
 
-        private static string GetTypeKey(IEnumerable<PropertyInfo> fields)
+        private static string GetTypeKey(Dictionary<string, Type> fields)
         {
-            return GetTypeKey(fields.ToDictionary(f => f.Name, f => f.PropertyType));
-        }
+            /*TODO: optimize the type caching
+            -- if fields are simply reordered, that doesn't mean that they're actually different types, so this needs to be smarter*/
+            string key = string.Empty;
+            foreach (var field in fields)
+            {
+                key += field.Key + ";" + field.Value.Name + ";";
+            }
 
-        public static Type GetDynamicType(IEnumerable<PropertyInfo> fields)
-        {
-            return GetDynamicType(fields.ToDictionary(f => f.Name, f => f.PropertyType));
+            return key;
         }
     }
 }

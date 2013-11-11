@@ -95,12 +95,12 @@ namespace QueryTables.Common.Util
 
             if (val is int)
             {
-                return ((int) val).ToString(format);
+                return ((int)val).ToString(format);
             }
 
             if (val is decimal)
             {
-                return ((decimal) val).ToString(format);
+                return ((decimal)val).ToString(format);
             }
 
             if (val is double)
@@ -110,7 +110,7 @@ namespace QueryTables.Common.Util
 
             if (val is DateTime)
             {
-                return ((DateTime) val).ToString(format);
+                return ((DateTime)val).ToString(format);
             }
 
             return val.ToString();

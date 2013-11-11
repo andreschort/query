@@ -2,17 +2,23 @@
 
 namespace QueryTables.Common.Util
 {
-    class ExpressionSubstitute : ExpressionVisitor
+    public class ExpressionSubstitute : ExpressionVisitor
     {
-        public readonly Expression from, to;
+        private readonly Expression from, to;
+
         public ExpressionSubstitute(Expression from, Expression to)
         {
             this.from = from;
             this.to = to;
         }
+
         public override Expression Visit(Expression node)
         {
-            if (node == from) return to;
+            if (node == this.from)
+            {
+                return this.to;
+            }
+
             return base.Visit(node);
         }
     }

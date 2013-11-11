@@ -10,13 +10,13 @@ namespace QueryTables.Common.Extension
             switch (memberInfo.MemberType)
             {
                 case MemberTypes.Field:
-                    return ((FieldInfo) memberInfo).FieldType;
+                    return ((FieldInfo)memberInfo).FieldType;
 
                 case MemberTypes.Method:
-                    return ((MethodInfo) memberInfo).ReturnType;
+                    return ((MethodInfo)memberInfo).ReturnType;
 
                 case MemberTypes.Property:
-                    return ((PropertyInfo) memberInfo).PropertyType;
+                    return ((PropertyInfo)memberInfo).PropertyType;
             }
 
             return null;

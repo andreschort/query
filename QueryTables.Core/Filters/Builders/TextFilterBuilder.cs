@@ -6,6 +6,12 @@
 
         private const FilterOperator DefaultMissingWildcardBehavior = FilterOperator.StartsWith;
 
+        public TextFilterBuilder()
+        {
+            this.Wildcard = DefaultWildcard;
+            this.MissingWildcardBehavior = DefaultMissingWildcardBehavior;
+        }
+
         /// <summary>
         /// Only for Text filters
         /// The wildcard used for StartsWith, Contains and EndsWith operators.
@@ -18,12 +24,6 @@
         /// Options: StartsWith, Contains or EndsWith
         /// </summary>
         public FilterOperator MissingWildcardBehavior { get; set; }
-
-        public TextFilterBuilder()
-        {
-            this.Wildcard = DefaultWildcard;
-            this.MissingWildcardBehavior = DefaultMissingWildcardBehavior;
-        }
 
         public Filter Create<T>(QueryField<T> field, string value)
         {

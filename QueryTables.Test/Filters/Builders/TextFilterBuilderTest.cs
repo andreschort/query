@@ -14,7 +14,7 @@ namespace QueryTables.Test.Filters.Builders
         {
             var builder = new TextFilterBuilder();
 
-            var queryField = new QueryField<Empleado> {Name = "name"};
+            var queryField = new QueryField<Empleado> { Name = "name" };
             var filter = builder.Create(queryField, string.Empty);
 
             Assert.AreEqual("name", filter.Name);
@@ -71,6 +71,5 @@ namespace QueryTables.Test.Filters.Builders
             Assert.AreEqual(true, filter.Valid);
             Assert.AreEqual(FilterOperator.EndsWith, filter.Operator);
         }
-
     }
 }

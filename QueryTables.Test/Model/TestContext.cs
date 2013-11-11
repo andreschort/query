@@ -5,8 +5,6 @@ namespace QueryTables.Test.Model
 {
     public class TestContext : DbContext
     {
-        public DbSet<Empleado> Empleados { get; set; }
-
         public TestContext()
         {
         }
@@ -15,5 +13,7 @@ namespace QueryTables.Test.Model
             : base(existingConnection, true)
         {
         }
+
+        public DbSet<Empleado> Empleados { get; set; }
     }
 }
