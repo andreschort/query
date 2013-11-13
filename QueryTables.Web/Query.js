@@ -86,6 +86,16 @@ function Query_TextField_Init($element) {
             }, delayMs);
         }
     });
+
+    // Remove IE ding sound
+    $element.keypress(function (e) {
+        var theKey;
+        e = (window.event) ? event : e;
+        theKey = (e.keyCode) ? e.keyCode : e.charCode;
+        if (theKey == "13") { // 13 ENTER key
+            return false;
+        }
+    });
 }
 
 function Query_DateField_Init($element) {
@@ -93,10 +103,12 @@ function Query_DateField_Init($element) {
 }
 
 function Query_DateField_CancelShowWhenFocus(sender, args) {
-    var focus = $(sender._element).attr('data-query-focus');
+    var $element = $(sender._element);
+    var focus = $element.attr('data-query-focus');
 
     focus = focus ? focus.toLowerCase() : 'false';
     if (focus == 'true') {
+        $element.attr('data-query-focus', 'false');
         args.set_cancel(true);
     }
 }
