@@ -1,24 +1,26 @@
 ﻿function QuerySetFocus(element) {
-    var elemLen = element.value.length;
-    // For IE Only
-    if (document.selection) {
-        // Set focus
-        element.focus();
-        // Use IE Ranges
-        var oSel = document.selection.createRange();
-        // Reset position to 0 & then set at end
-        oSel.moveStart('character', -elemLen);
-        oSel.moveStart('character', elemLen);
-        oSel.moveEnd('character', 0);
-        oSel.select();
-    }
-    else if (element.selectionStart || element.selectionStart == '0') {
-        // Firefox/Chrome
-        element.selectionStart = elemLen;
-        element.selectionEnd = elemLen;
-        element.focus();
-    } // if
-} // SetCaretAtEnd()
+    try {
+        var elemLen = element.value.length;
+        if (document.selection) { // IE
+            // Set focus
+            element.focus();
+            // Use IE Ranges
+            var oSel = document.selection.createRange();
+            // Reset position to 0 & then set at end
+            oSel.moveStart('character', -elemLen);
+            oSel.moveStart('character', elemLen);
+            oSel.moveEnd('character', 0);
+            oSel.select();
+        }
+        else if (element.selectionStart || element.selectionStart == '0') { // Firefox/Chrome
+            element.selectionStart = elemLen;
+            element.selectionEnd = elemLen;
+            element.focus();
+        }
+    } catch(e) {
+        window.console && console.log && console.log("QuerySetFocus:", e);
+    } 
+}
 
 var delay = (function () {
     var timer = 0;
@@ -50,7 +52,10 @@ function Query_TextField_Init($element) {
     // Restore focus
     focus = focus ? focus.toLowerCase() : 'false';
     if (focus == 'true') {
-        QuerySetFocus($element[0]);
+        // use timeout to wait for every element to be loaded
+        setTimeout(function() {
+            QuerySetFocus($element[0]);
+        }, 10);
     }
 
     $element.keyup(function (e) {

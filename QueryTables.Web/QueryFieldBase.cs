@@ -32,6 +32,8 @@ namespace QueryTables.Web
         private HtmlInputHidden valueHidden; // used to save the text of the link across postbacks
         private HtmlInputHidden urlHidden; // used to save the url of the link across postbacks
 
+        private Label label; // used when the data cell shows a label tag
+
         private string displayValue; // the text of the link
         private string navigateUrl; // the url of the link
         
@@ -46,6 +48,8 @@ namespace QueryTables.Web
         /// </summary>
         public string Name { get; set; }
 
+        public string DataField { get; set; }
+
         /// <summary>
         /// The text to show when the filter is empty
         /// </summary>
@@ -57,13 +61,22 @@ namespace QueryTables.Web
         public int? AutoFilterDelay { get; set; }
 
         /// <summary>
+        /// Makes the data cell to display a label tag with the attribute 'for' pointing to that control
+        /// Overrides UrlFormat and the Click event.
+        /// </summary>
+        public string AssociatedControlID { get; set; }
+
+        public string ItemCssClass { get; set; }
+
+        /// <summary>
         /// A comma separated list of properties to use as parameters to UrlFormat.
         /// </summary>
         [TypeConverterAttribute(typeof(StringArrayConverter))]
         public string[] UrlFields { get; set; }
 
         /// <summary>
-        /// Makes the text in the cell a link to this url
+        /// Makes the text in the cell a link to this url.
+        /// Overrides the Click event.
         /// </summary>
         public string UrlFormat { get; set; }
 
@@ -274,9 +287,17 @@ namespace QueryTables.Web
             var cell = (TableCell)sender;
 
             cell.Enabled = this.ItemEnabled;
+            cell.CssClass = this.ItemCssClass;
             if (this.ItemTemplate != null)
             {
                 this.ItemTemplate.InstantiateIn(cell);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(this.AssociatedControlID))
+            {
+                this.label = new Label { AssociatedControlID = this.AssociatedControlID };
+                cell.Controls.Add(this.label);
                 return;
             }
 
@@ -340,13 +361,17 @@ namespace QueryTables.Web
 
             var dataItem = DataBinder.GetDataItem(cell.NamingContainer);
 
-            if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
+            if (!string.IsNullOrEmpty(this.AssociatedControlID))
             {
-                cell.Text = this.FormatValue(this.Eval(dataItem, this.Name));
+                this.label.Text = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
+            }
+            else if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
+            {
+                cell.Text = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
             }
             else
             {
-                this.displayValue = this.FormatValue(this.Eval(dataItem, this.Name));
+                this.displayValue = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
                 this.linkButton.Text = this.displayValue;
 
                 if (this.Click == null)

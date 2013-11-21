@@ -10,7 +10,7 @@ namespace QueryTables.Web
     public class GridExtender : WebControl
     {
         public const string FilterCommand = "Filter";
-        public const string SortCommand = "Sort";
+        public const string SortCommand = "SortIt";
 
         private bool enableFilters = true;
 
