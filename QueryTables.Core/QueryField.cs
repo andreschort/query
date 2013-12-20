@@ -30,7 +30,7 @@ namespace QueryTables.Core
 
         /// <summary>
         /// Key: Filter value
-        /// Value: Expression to apply as a filter to the IQueryable
+        /// Value: Expression to apply as a filter to the  expression
         /// </summary>
         public Dictionary<object, Expression<Func<T, bool>>> When { get; set; }
 

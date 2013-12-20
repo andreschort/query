@@ -28,6 +28,11 @@ namespace QueryTables.Common.Util
             return new ExpressionBuilder(param, expression);
         }
 
+        public static ExpressionBuilder New<T, E>(Expression<Func<T, E>> expression)
+        {
+            return new ExpressionBuilder(expression.Parameters[0], expression);
+        }
+
         public static ExpressionBuilder Parameter<T>()
         {
             return new ExpressionBuilder
@@ -52,6 +57,11 @@ namespace QueryTables.Common.Util
         }
 
         public static LambdaExpression Build<T, E>(Expression<Func<T, E>> expression)
+        {
+            return expression;
+        }
+
+        public static LambdaExpression Build<T1, T2, E>(Expression<Func<T1, T2, E>> expression)
         {
             return expression;
         }
@@ -95,7 +105,7 @@ namespace QueryTables.Common.Util
             return this.Call(type.GetMethod(name, new Type[] { }));
         }
 
-        public ExpressionBuilder Call(MethodInfo methodInfo)
+        public ExpressionBuilder Call(MethodInfo methodInfo, params Expression[] parameters)
         {
             if (methodInfo == null)
             {
@@ -103,8 +113,8 @@ namespace QueryTables.Common.Util
             }
 
             var methodCallExpression = methodInfo.IsStatic
-                                           ? Expression.Call(methodInfo, this.Expression)
-                                           : Expression.Call(this.Expression, methodInfo);
+                                           ? Expression.Call(methodInfo, new[] { this.Expression }.Union(parameters))
+                                           : Expression.Call(this.Expression, methodInfo, parameters);
 
             return new ExpressionBuilder(this.Param, methodCallExpression);
         }

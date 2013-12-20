@@ -1,4 +1,4 @@
-﻿function QuerySetFocus(element) {
+﻿function Query_SetFocus(element) {
     try {
         var elemLen = element.value.length;
         if (document.selection) { // IE
@@ -18,7 +18,7 @@
             element.focus();
         }
     } catch(e) {
-        window.console && console.log && console.log("QuerySetFocus:", e);
+        window.console && console.log && console.log("Query_SetFocus:", e);
     } 
 }
 
@@ -40,6 +40,7 @@ function Query_TextField_Init($element) {
     var currentVal = $element.val();
     var delayMs = $element.attr('data-query-filterDelay');
     var postbackName = $element.attr('data-query-postbackName');
+    var filterCommand = $element.attr('data-query-filterCommand');
     var focus = $element.attr('data-query-focus');
     var defaultValue = $element.attr('data-query-placeholder');
     
@@ -54,7 +55,7 @@ function Query_TextField_Init($element) {
     if (focus == 'true') {
         // use timeout to wait for every element to be loaded
         setTimeout(function() {
-            QuerySetFocus($element[0]);
+            Query_SetFocus($element[0]);
         }, 10);
     }
 
@@ -66,12 +67,13 @@ function Query_TextField_Init($element) {
 
         document.getElementById('__LASTFOCUS').value = this.name;
         if (theKey == "13") { // 13 ENTER key
-            __doPostBack(postbackName, '');
+            __doPostBack(postbackName, filterCommand);
+            return false;
         }
         
         // If no delay was defined we are done
         if (delayMs == undefined) {
-            return;
+            return false;
         }
 
         // Set timer for auto postback
@@ -87,7 +89,7 @@ function Query_TextField_Init($element) {
         if (oldVal != val) {
             $(this).attr('data-query-value', val);
             delay(function () {
-                __doPostBack(postbackName, '');
+                __doPostBack(postbackName, filterCommand);
             }, delayMs);
         }
     });

@@ -101,6 +101,7 @@ namespace QueryTables.Web
         private void CopyPropertiesToInnerField(object sender, EventArgs e)
         {
             this.Field.Name = this.Name;
+            this.Field.PostbackName = this.PostbackName;
             this.Field.FilterCommand = this.FilterCommand;
             this.Field.SortCommand = this.SortCommand;
             this.Field.HeaderText = this.HeaderText;

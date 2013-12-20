@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using AjaxControlToolkit;
+using QueryTables.Web.Filter;
 
 namespace QueryTables.Web
 {
@@ -13,9 +13,7 @@ namespace QueryTables.Web
     {
         #region Fields
 
-        private TextBox textBox;
-
-        private TextBoxWatermarkExtender watermark;
+        private TextFilter textFilter;
 
         /// <summary>
         /// Value given from outside of this component
@@ -33,7 +31,7 @@ namespace QueryTables.Web
                     return this.externalFilterValue;
                 }
 
-                return this.textBox == null ? string.Empty : this.textBox.Text;
+                return this.textFilter == null ? string.Empty : this.textFilter.Text;
             }
 
             set
@@ -57,38 +55,20 @@ namespace QueryTables.Web
             cell.Controls.Add(pnl);
 
             // Filter textbox
-            this.textBox = new TextBox { ID = this.Name + "_textbox" };
-            pnl.Controls.Add(this.textBox);
-
-            this.textBox.Attributes["class"] = "data-query-textFilter";
-            this.textBox.AutoCompleteType = AutoCompleteType.Disabled;
-            this.textBox.Attributes["autocomplete"] = "off";
-
-            this.watermark = new TextBoxWatermarkExtender
-                {
-                    ID = this.Name + "_watermark",
-                    TargetControlID = this.textBox.ID
-                };
-            pnl.Controls.Add(this.watermark);
+            this.textFilter = new TextFilter { ID = this.Name + "_textbox" };
+            pnl.Controls.Add(this.textFilter);
         }
 
         protected override void HeaderCell_Load(object sender, EventArgs e)
         {
             base.HeaderCell_Load(sender, e);
 
-            this.textBox.Attributes["data-query-placeholder"] = this.Placeholder;
-
-            this.watermark.WatermarkText = this.Placeholder;
-            this.watermark.Enabled = !string.IsNullOrEmpty(this.Placeholder);
-
-            if (this.AutoFilterDelay.HasValue)
-            {
-                this.textBox.Attributes["data-query-filterDelay"] = this.AutoFilterDelay.ToString();
-            }
-
+            this.textFilter.Placeholder = this.Placeholder;
+            this.textFilter.AutoFilterDelay = this.AutoFilterDelay;
+            
             if (this.TabIndex.HasValue)
             {
-                this.textBox.TabIndex = this.TabIndex.Value;
+                this.textFilter.TabIndex = this.TabIndex.Value;
             }
         }
 
@@ -97,13 +77,13 @@ namespace QueryTables.Web
             base.HeaderCell_DataBinding(sender, e);
 
             // Set value
-            this.textBox.Text = this.externalFilterValue ?? HttpContext.Current.Request.Form[this.textBox.UniqueID];
+            this.textFilter.Text = this.externalFilterValue ?? HttpContext.Current.Request.Form[this.textFilter.UniqueID];
 
-            // postback configuration, must be here to ensure UniqueID is not null
-            this.textBox.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
+            this.textFilter.PostbackName = this.PostbackName;
+            this.textFilter.PostbackParameter = this.FilterCommand;
 
             // restore focus
-            this.textBox.Attributes["data-query-focus"] = this.HasFocus(this.textBox.UniqueID).ToString();
+            this.textFilter.HasFocus = this.HasFocus(this.textFilter.UniqueID);
         }
     }
 }

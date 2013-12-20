@@ -108,6 +108,8 @@ namespace QueryTables.Web
 
         protected internal abstract string FilterValue { get; set; }
 
+        protected internal string PostbackName { get; set; }
+
         protected internal string FilterCommand { get; set; }
 
         protected internal string SortCommand { get; set; }
@@ -115,9 +117,7 @@ namespace QueryTables.Web
         protected internal virtual SortDirection? SortDir { get; set; }
 
         protected internal virtual int SortOrder { get; set; }
-
-        protected Button FilterButton { get; set; }
-
+        
         protected short? TabIndex { get; set; }
         
         #endregion Internal Properties
@@ -212,11 +212,6 @@ namespace QueryTables.Web
             pnl.Controls.Add(this.sortButton);
             pnl.Controls.Add(this.sortInputHidden);
             pnl.Controls.Add(this.sortOrderLabel);
-
-            // Filter button
-            this.FilterButton = new Button();
-            this.FilterButton.Attributes["style"] = "display:none";
-            cell.Controls.Add(this.FilterButton);
         }
 
         protected virtual void HeaderCell_Load(object sender, EventArgs e)
@@ -224,9 +219,6 @@ namespace QueryTables.Web
             this.sortButton.Text = this.HeaderText;
             this.sortButton.CommandName = this.SortCommand;
             this.sortButton.CommandArgument = this.Name;
-
-            this.FilterButton.CommandName = this.FilterCommand;
-            this.FilterButton.CommandArgument = this.Name;
 
             // read the sort order and direction from sortInputHidden
             // we should do this only one time in every postback

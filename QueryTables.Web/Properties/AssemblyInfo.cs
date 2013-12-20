@@ -38,3 +38,5 @@ using System.Web.UI;
 
 // Export the Query.js file
 [assembly: WebResource("QueryTables.Web.Query.js", "text/javascript")]
+[assembly: WebResource("QueryTables.Web.Filter.TextFilter.js", "text/javascript")]
+[assembly: WebResource("QueryTables.Web.Filter.DateFilter.js", "text/javascript")]

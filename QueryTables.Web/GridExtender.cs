@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
-using QueryTables.Web.Util;
 using SortDirection = QueryTables.Common.SortDirection;
 
 namespace QueryTables.Web
 {
-    public class GridExtender : WebControl
+    public class GridExtender : WebControl, IPostBackEventHandler
     {
         public const string FilterCommand = "Filter";
         public const string SortCommand = "SortIt";
@@ -86,16 +86,14 @@ namespace QueryTables.Web
             this.Grid.Load += this.Grid_Load;
             this.Grid.RowCommand += this.Grid_RowCommand;
 
+            //TODO remove
             var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "QueryTables.Web.Query.js");
             this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
-
-            var javascript = @"$(document).ready(function () { Query_GridExtender_Init(); });";
-            JSUtil.AddLoad(this, "GridExtender", javascript);
-
+            
             // Force that the hidden input __LASTFOCUS is rendered
-            this.Page.ClientScript.GetPostBackEventReference(new System.Web.UI.PostBackOptions(this) { TrackFocus = true });
+            this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(this) { TrackFocus = true });
         }
-
+        
         private void Grid_Load(object sender, EventArgs e)
         {
             // Set fields parameters
@@ -104,7 +102,8 @@ namespace QueryTables.Web
             {
                 field.AutoFilterDelay = field.AutoFilterDelay ?? this.AutoFilterDelay;
                 field.Placeholder = field.Placeholder ?? this.Placeholder;
-                field.FilterCommand = FilterCommand;
+                field.PostbackName = this.UniqueID;
+                field.FilterCommand = FilterCommand + "$" + field.Name;
                 field.SortCommand = SortCommand;
                 tabIndex = field.SetTabIndex(tabIndex);
             }
@@ -120,7 +119,7 @@ namespace QueryTables.Web
         {
             if (e.CommandName.Equals(FilterCommand))
             {
-                this.RaiseFilter(sender, e);
+                this.RaiseFilter();
             }
             else if (e.CommandName.Equals(SortCommand))
             {
@@ -145,7 +144,7 @@ namespace QueryTables.Web
             }
         }
 
-        private void RaiseFilter(object sender, GridViewCommandEventArgs e)
+        private void RaiseFilter()
         {
             if (this.Filter != null)
             {
@@ -195,6 +194,14 @@ namespace QueryTables.Web
                        .OrderBy(field => field.SortOrder)
                        .Select(field => new KeyValuePair<string, SortDirection>(field.Name, field.SortDir.Value))
                        .ToList();
+        }
+
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            if (eventArgument.StartsWith(FilterCommand))
+            {
+                this.RaiseFilter();
+            }
         }
     }
 }

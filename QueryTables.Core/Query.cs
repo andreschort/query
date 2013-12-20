@@ -21,7 +21,7 @@ namespace QueryTables.Core
         public Type ResultType { get; private set; }
 
         /// <summary>
-        /// Create a select new {} expression and apply it to queryable.
+        /// Create a select new {} expression and apply it to lambda expression.
         /// </summary>
         /// <param name="queryable"></param>
         /// <returns></returns>

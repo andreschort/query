@@ -83,7 +83,7 @@ namespace QueryTables.Web
             }
 
             // postback configuration, must be here to ensure UniqueID is not null
-            this.dropDownList.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
+            this.dropDownList.Attributes["data-query-postbackName"] = this.PostbackName;
 
             // restore focus
             this.dropDownList.Attributes["data-query-focus"] = this.HasFocus(this.dropDownList.UniqueID).ToString();

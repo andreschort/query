@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading;
 using System.Web;
 using System.Web.UI.WebControls;
-using AjaxControlToolkit;
+using QueryTables.Web.Filter;
 
 namespace QueryTables.Web
 {
@@ -10,11 +9,8 @@ namespace QueryTables.Web
     {
         #region Fields
 
-        private TextBox textFrom;
-        private TextBox textTo;
-
-        private TextBoxWatermarkExtender watermarkFrom;
-        private TextBoxWatermarkExtender watermarkTo;
+        private DateFilter textFrom;
+        private DateFilter textTo;
 
         private string externalFilterValue;
 
@@ -48,76 +44,25 @@ namespace QueryTables.Web
             var cell = (DataControlFieldHeaderCell)sender;
 
             var pnl = new Panel { CssClass = "query-date-filter" };
+            pnl.Attributes["onkeypress"] = string.Empty; // Remove DefaultButton for good
             cell.Controls.Add(pnl);
 
             // from and to filter inputs
-            this.textFrom = new TextBox { ID = this.Name + "_textbox_from" };
-            this.textTo = new TextBox { ID = this.Name + "_textbox_to" };
+            this.textFrom = new DateFilter { ID = this.Name + "_from" };
+            this.textTo = new DateFilter { ID = this.Name + "_to" };
             pnl.Controls.Add(this.textFrom);
             pnl.Controls.Add(this.textTo);
-
-            this.textFrom.Attributes["class"] = "data-query-datepicker";
-            this.textFrom.AutoCompleteType = AutoCompleteType.Disabled;
-            this.textFrom.Attributes["autocomplete"] = "off";
-
-            this.textTo.Attributes["class"] = "data-query-datepicker";
-            this.textTo.AutoCompleteType = AutoCompleteType.Disabled;
-            this.textTo.Attributes["autocomplete"] = "off";
-
-            // watermarks (placeholders)
-            this.watermarkFrom = new TextBoxWatermarkExtender
-            {
-                ID = this.Name + "_watermark_from",
-                TargetControlID = this.textFrom.ID
-            };
-            this.watermarkTo = new TextBoxWatermarkExtender
-            {
-                ID = this.Name + "_watermark_to",
-                TargetControlID = this.textTo.ID
-            };
-            pnl.Controls.Add(this.watermarkFrom);
-            pnl.Controls.Add(this.watermarkTo);
-
-            // calendars
-            var calendarFrom = new CalendarExtender
-                {
-                    ID = this.Name + "_calendar_from",
-                    TargetControlID = this.textFrom.ID,
-                };
-            var calendarTo = new CalendarExtender
-                {
-                    ID = this.Name + "_calendar_to",
-                    TargetControlID = this.textTo.ID,
-                };
-            pnl.Controls.Add(calendarFrom);
-            pnl.Controls.Add(calendarTo);
-            
-            calendarFrom.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-            calendarTo.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-
-            calendarFrom.OnClientShowing = "Query_DateField_CancelShowWhenFocus";
-            calendarTo.OnClientShowing = "Query_DateField_CancelShowWhenFocus";
         }
 
         protected override void HeaderCell_Load(object sender, EventArgs e)
         {
             base.HeaderCell_Load(sender, e);
 
-            this.textFrom.Attributes["data-query-placeholder"] = this.PlaceholderFrom;
-            this.textTo.Attributes["data-query-placeholder"] = this.PlaceholderTo;
-
-            this.watermarkFrom.WatermarkText = this.PlaceholderFrom;
-            this.watermarkFrom.Enabled = !string.IsNullOrEmpty(this.PlaceholderFrom);
-
-            this.watermarkTo.WatermarkText = this.PlaceholderTo;
-            this.watermarkTo.Enabled = !string.IsNullOrEmpty(this.PlaceholderTo);
-
-            if (this.AutoFilterDelay.HasValue)
-            {
-                this.textFrom.Attributes["data-query-filterDelay"] = this.AutoFilterDelay.ToString();
-                this.textTo.Attributes["data-query-filterDelay"] = this.AutoFilterDelay.ToString();
-            }
-
+            this.textFrom.Placeholder = this.PlaceholderFrom;
+            this.textTo.Placeholder = this.PlaceholderTo;
+            this.textFrom.AutoFilterDelay = this.AutoFilterDelay;
+            this.textTo.AutoFilterDelay = this.AutoFilterDelay;
+            
             if (this.TabIndex.HasValue)
             {
                 this.textFrom.TabIndex = this.TabIndex.Value;
@@ -147,13 +92,15 @@ namespace QueryTables.Web
                 }
             }
 
-            // postback configuration, must be here to ensure UniqueID is not null
-            this.textFrom.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
-            this.textTo.Attributes["data-query-postbackName"] = this.FilterButton.UniqueID;
+            this.textFrom.PostbackName = this.PostbackName;
+            this.textTo.PostbackName = this.PostbackName;
+
+            this.textFrom.PostbackParameter = this.FilterCommand;
+            this.textTo.PostbackParameter = this.FilterCommand;
             
             // restore focus
-            this.textFrom.Attributes["data-query-focus"] = this.HasFocus(this.textFrom.UniqueID).ToString();
-            this.textTo.Attributes["data-query-focus"] = this.HasFocus(this.textTo.UniqueID).ToString();
+            this.textFrom.HasFocus = this.HasFocus(this.textFrom.UniqueID);
+            this.textTo.HasFocus = this.HasFocus(this.textTo.UniqueID);
         }
 
         private string GetFilterValue()
