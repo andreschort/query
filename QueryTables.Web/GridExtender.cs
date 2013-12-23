@@ -79,6 +79,14 @@ namespace QueryTables.Web
             }
         }
 
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            if (eventArgument.StartsWith(FilterCommand))
+            {
+                this.RaiseFilter();
+            }
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
@@ -194,14 +202,6 @@ namespace QueryTables.Web
                        .OrderBy(field => field.SortOrder)
                        .Select(field => new KeyValuePair<string, SortDirection>(field.Name, field.SortDir.Value))
                        .ToList();
-        }
-
-        public void RaisePostBackEvent(string eventArgument)
-        {
-            if (eventArgument.StartsWith(FilterCommand))
-            {
-                this.RaiseFilter();
-            }
         }
     }
 }

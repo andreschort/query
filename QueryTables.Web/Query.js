@@ -114,6 +114,7 @@ function Query_DateField_CancelShowWhenFocus(sender, args) {
     var focus = $element.attr('data-query-focus');
 
     focus = focus ? focus.toLowerCase() : 'false';
+    console.log(sender._element.id + ':' + 'focus=' + focus);
     if (focus == 'true') {
         $element.attr('data-query-focus', 'false');
         args.set_cancel(true);

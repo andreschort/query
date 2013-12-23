@@ -22,9 +22,7 @@ namespace QueryTables.Web.Filter
             };
 
             this.Parent.Controls.Add(this.calendarExtender);
-
             this.calendarExtender.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-            this.calendarExtender.OnClientShowing = "Query_DateField_CancelShowWhenFocus";
         }
 
         protected override IEnumerable<ScriptReference> GetScriptReferences()
@@ -46,7 +44,7 @@ namespace QueryTables.Web.Filter
 
             descriptor.AddProperty("calendarExtenderId", this.calendarExtender.ClientID);
 
-            return new List<ScriptDescriptor> {descriptor};
+            return new List<ScriptDescriptor> { descriptor };
         }
     }
 }

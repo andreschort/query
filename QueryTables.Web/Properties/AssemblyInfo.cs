@@ -40,3 +40,4 @@ using System.Web.UI;
 [assembly: WebResource("QueryTables.Web.Query.js", "text/javascript")]
 [assembly: WebResource("QueryTables.Web.Filter.TextFilter.js", "text/javascript")]
 [assembly: WebResource("QueryTables.Web.Filter.DateFilter.js", "text/javascript")]
+[assembly: WebResource("QueryTables.Web.Filter.DropDownFilter.js", "text/javascript")]

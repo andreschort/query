@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI.WebControls;
+using QueryTables.Web.Filter;
 
 namespace QueryTables.Web
 {
     public class DropDownField : QueryFieldBase
     {
-        private DropDownList dropDownList;
+        private DropDownFilter dropDownList;
 
         private string externalFilterValue;
 
@@ -45,7 +46,7 @@ namespace QueryTables.Web
             var pnl = new Panel { CssClass = "query-filter" };
             cell.Controls.Add(pnl);
 
-            this.dropDownList = new DropDownList();
+            this.dropDownList = new DropDownFilter { ID = this.Name + "_dropdown" };
             pnl.Controls.Add(this.dropDownList);
             
             this.dropDownList.Attributes["class"] = "data-query-dropdown";
@@ -72,6 +73,10 @@ namespace QueryTables.Web
             this.dropDownList.DataValueField = "Value";
             this.dropDownList.DataBind();
 
+            this.dropDownList.PostbackName = this.PostbackName;
+            this.dropDownList.PostbackParameter = this.FilterCommand;
+            this.dropDownList.HasFocus = this.HasFocus(this.dropDownList.UniqueID);
+
             // set selected value
             if (this.externalFilterValue == null)
             {
@@ -81,12 +86,6 @@ namespace QueryTables.Web
             {
                 this.dropDownList.SelectedValue = this.externalFilterValue;
             }
-
-            // postback configuration, must be here to ensure UniqueID is not null
-            this.dropDownList.Attributes["data-query-postbackName"] = this.PostbackName;
-
-            // restore focus
-            this.dropDownList.Attributes["data-query-focus"] = this.HasFocus(this.dropDownList.UniqueID).ToString();
         }
     }
 }

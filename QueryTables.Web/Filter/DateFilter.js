@@ -22,9 +22,15 @@ QueryTables.Web.DateFilter.prototype = {
         setTimeout(function () {
             var calendar = $find(_this._calendarExtenderId);
 
-            calendar.add_showing(function (sender, args) { _this.cancelShowWhenFocus(_this, sender, args); });
-            calendar.add_dateSelectionChanged(function(sender, arg) { _this.doPostback(); });
-        }, 10);
+            var showing = function (sender, args) { _this.cancelShowWhenFocus(sender, args); };
+            var selection = function (sender, arg) { _this.doPostback(); };
+            
+            //calendar.remove_showing(showing);
+            calendar.add_showing(showing);
+
+            //calendar.remove_dateSelectionChanged(selection);
+            calendar.add_dateSelectionChanged(selection);
+        }, 1);
     },
 
     dispose: function() {
@@ -50,16 +56,18 @@ QueryTables.Web.DateFilter.prototype = {
         }
     },
 
-    cancelShowWhenFocus: function (_this, sender, args) {
-        console.log('cancelShowWhenFocus: ' + _this._showWasCancelled);
-        if (_this._showWasCancelled) {
-            console.log('cancelShowWhenFocus: return');
+    cancelShowWhenFocus: function (sender, args) {
+        if (this._showWasCancelled) {
+            if (document.selection && !this._showWasCancelled2) {
+                // IE has the bad habit of running 'cancelShowWhenFocus' two times under some situations
+                this._showWasCancelled2 = true;
+                args.set_cancel(true);
+            }
             return;
         }
         
-        if (_this._hasFocus) {
-            console.log('cancelShowWhenFocus: ' + _this._hasFocus);
-            _this._showWasCancelled = true;
+        if (this._hasFocus) {
+            this._showWasCancelled = true;
             args.set_cancel(true);
         }
     }
