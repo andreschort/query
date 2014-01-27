@@ -1,8 +1,8 @@
-query
+QueryTables
 =====
 
-query can:
-- Transform an IQueryable<T> with projections into an anonymous type, apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.
+QueryTables can:
+- Transform an IQueryable<T> with projections into another type(or an anonymous type), apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.
 - Easily create a GridView which gets the data from an IQueryable using the transformations provided.
 
 You can find an example application in https://github.com/andreschort/query-sample
@@ -14,7 +14,7 @@ Demo
 TODO
 ----
 
-Query.Core
+QueryTables.Core
 - Support for compiled queries
  - Filter values and sortings as parameters.
  - Research: http://msdn.microsoft.com/en-us/library/bb896297.aspx
@@ -22,7 +22,7 @@ Query.Core
 - Support for arbitrary filter expressions ie. ">10 AND !=15".
 - Extend operators to any target type.
 
-Query.Web
+QueryTables.Web
 - TD Tooltip
 - TH y TD CssClass
 - Improve the way you can apply styles to the Query.Web controls.
@@ -53,6 +53,18 @@ var query = new Query<Employee>();
 query.AddField("FullName").Select(x => x.Name + " " + x.LastName); // FieldName = "FullName"
 
 var employees = //some IQueryable<Employee>
+IQueryable<EmployeeDTO> theResult = query.Project<EmployeeDTO>(employees);
+```
+Where EmployeeDTO is something like this:
+```chsarp
+public class EmployeeDTO
+{
+  public string FullName;
+}
+```
+
+If you do not want to define an EmployeeDTO class you can use an annonymous type like this:
+```csharp
 IQueryable theResult = query.Project(employees);
 ```
 theResult is an untyped IQueryable. The ElementType is an annonymous type of the form:
@@ -75,7 +87,8 @@ employees = query.Filter(employees, filters);
 ```
 This is equivalent to:
 ```csharp
-employees = employees.Where(x => x.LastName.StartsWith("Car"));
+// by default it is case insensitive but you can override this
+employees = employees.Where(x => x.LastName.ToLower().StartsWith("car"));
 ```
 
 Basic sorting
@@ -100,9 +113,9 @@ You can use a small set of operators to filter. The kind of expressions you can 
 For System.String you can use the wildcard `%` at the start, end or both to create 'like' expressions. For example:
 - `%someText`: Will return the values that ends with "someText".
 - `someText%`: Will return the values that start with "someText".
-- `%someText`: Will return the values that contains "someText".
+- `%someText%`: Will return the values that contains "someText".
 
-The filter is by default case insensitive but you can override this while creating the query object.
+The filter is by default case insensitive but you can override this while creating the Query object.
 
 For numeric types (int, double, decimal, etc) you can use these operators:
 - `=2`: This will return the values equal to 2 (this is the default operator)
@@ -115,7 +128,8 @@ For numeric types (int, double, decimal, etc) you can use these operators:
 WebForms controls
 =================
 Query includes a set of `DataControlField` classes that enables a GridView with filtering fields right below each header. Multiple sorting is also supported.
-This project relies on jquery so you should include it in your page.
+The initial release of this project required jQuery but this requirement was removed. Now all the fields are customs AJAX client controls.
+You need AJAX Control toolkit as it is used to show a datepicker in the date filters.
 
 The main entry point to this project is the GridExtender control:
 ```aspx
@@ -129,7 +143,7 @@ The main entry point to this project is the GridExtender control:
 These are the more important properties:
 - __GridViewId__ (string - required): The ID of the GridView.
 - __Placeholder__ (string - optional): The placeholder to show in the filter UI elements.
-- __AutoFilterDelay__ (int - optional): The milliseconds to wait before automatically triggering the search after the user changes a filter.
+- __AutoFilterDelay__ (int - optional): The milliseconds to wait before automatically triggering the search after the user changes a filter. If not specified the user needs to trigger the filter using the enter key.
 - __EnableFilters__ (bool - optional - default=true): Determines wheather the filter elements are shown (default: True)
 - __OnFilter__ (event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.
 - __OnSort__ (event): Triggered when the user clicks on a header's title.
@@ -139,8 +153,8 @@ The `GridExtender` exposes all the current filters and sortings through two prop
 - Sortings (`List<KeyValuePair<string, SortDirection>>`): The key is the field's name and the value is the sort direction of the field. Only the fields which are currently sorting will be on the list.
 
 There are three kinds of `DataControlField`'s:
-- __TextField__: Renders an text field as the filter UI element.
-- __DateField__: Renders two text fields as the filter UI elements (we need two elements to filter by a range of dates). Both elements have jquery datepicker.
+- __TextField__: Renders a text field as the filter UI element.
+- __DateField__: Renders two text fields as the filter UI elements (we need two elements to filter by a range of dates). Both elements have AJAX Control Toolkit datepicker.
 - __DropDownField__: Renders a select as the filter UI element.
 - __DynamicField__: Enables to programmatically set the field type. Uses one of the above fields internally.
 
@@ -149,6 +163,9 @@ The `Filter` event is triggered by hitting the enter key on a field's filter UI 
 
 These are the properties common to all fields:
 - __Name__ (string - required): The name of the field. Determines the value shown and is the name used to identify the field's filter value and sorting direction in the `GridExtender` Filter and Sorting properties as explained above.
+- __DataField__ (string - optional): The name of the property of the data bound element from where to get the value of the data cell. If not specified it will use the __Name__ property.
+- __AssociatedControlID__ (string - optional): Makes the data cell to render a <label for=".."> tag.
+- __ItemCssClass__ (string - optional): Add a CSS class to the data cell.
 - __Placeholder__ (string - optional): The placeholder to show in the filter UI element.
 - __UrlFormat__ (string - optional): Turns the text in the cell into a link. The string is used as the url of the link.
 - __UrlFields__ (string, optional): A comma separated list of properties to use with UrlFormat. This allows to generate an url customized for each row.
