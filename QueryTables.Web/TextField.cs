@@ -65,6 +65,8 @@ namespace QueryTables.Web
 
             this.textFilter.Placeholder = this.Placeholder;
             this.textFilter.AutoFilterDelay = this.AutoFilterDelay;
+            this.textFilter.PostbackName = this.PostbackName;
+            this.textFilter.PostbackParameter = this.FilterCommand;
             
             if (this.TabIndex.HasValue)
             {
@@ -78,9 +80,6 @@ namespace QueryTables.Web
 
             // Set value
             this.textFilter.Text = this.externalFilterValue ?? HttpContext.Current.Request.Form[this.textFilter.UniqueID];
-
-            this.textFilter.PostbackName = this.PostbackName;
-            this.textFilter.PostbackParameter = this.FilterCommand;
 
             // restore focus
             this.textFilter.HasFocus = this.HasFocus(this.textFilter.UniqueID);
