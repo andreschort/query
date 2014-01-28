@@ -40,6 +40,7 @@ namespace QueryTables.Web.Filter
             this.Attributes["class"] = "data-query-textFilter";
             this.AutoCompleteType = AutoCompleteType.Disabled;
             this.Attributes["autocomplete"] = "off";
+            this.Attributes["onkeydown"] = "return QueryTables.Web.StopBeepOnEnter(event)";
 
             this.watermark = new TextBoxWatermarkExtender
             {

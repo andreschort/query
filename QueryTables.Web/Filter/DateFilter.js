@@ -25,10 +25,8 @@ QueryTables.Web.DateFilter.prototype = {
             var showing = function (sender, args) { _this.cancelShowWhenFocus(sender, args); };
             var selection = function (sender, arg) { _this.doPostback(); };
             
-            //calendar.remove_showing(showing);
             calendar.add_showing(showing);
 
-            //calendar.remove_dateSelectionChanged(selection);
             calendar.add_dateSelectionChanged(selection);
         }, 1);
     },
@@ -56,19 +54,19 @@ QueryTables.Web.DateFilter.prototype = {
         }
     },
 
+    // Hide the calendar popup after filtering
     cancelShowWhenFocus: function (sender, args) {
-        if (this._showWasCancelled) {
-            if (document.selection && !this._showWasCancelled2) {
-                // IE has the bad habit of running 'cancelShowWhenFocus' two times under some situations
-                this._showWasCancelled2 = true;
-                args.set_cancel(true);
-            }
-            return;
+        if (this._showWasCancelled && !this._showWasCancelled2 && document.selection) {
+            // Some times the calendar is initialized twice (IE only)
+            this._showWasCancelled2 = true;
+            args.set_cancel(true);
         }
-        
-        if (this._hasFocus) {
+        else if (this._hasFocus && !this._showWasCancelled) {
             this._showWasCancelled = true;
             args.set_cancel(true);
+            var _this = this;
+            // If IE does not initialize the calendar twice
+            setTimeout(function () { _this._showWasCancelled2 = true; }, 100);
         }
     }
 };
@@ -77,7 +75,7 @@ QueryTables.Web.DateFilter.prototype = {
 QueryTables.Web.DateFilter.descriptor = {
     properties: [
         { name: 'calendarExtenderId', type: String },
-        { name: 'showWasCancelled', type: Boolean },
+        { name: 'showWasCancelled', type: Boolean }
     ]
 };
 

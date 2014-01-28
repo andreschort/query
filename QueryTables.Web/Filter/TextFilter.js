@@ -16,6 +16,15 @@ QueryTables.Web.TextFilter = function (element) {
     this._timer = 0;
 };
 
+
+QueryTables.Web.StopBeepOnEnter = function (event) {
+    var e = (window.event) ? window.event : event;
+    var theKey = (e.keyCode) ? e.keyCode : e.charCode;
+    if (theKey == "13") { // 13 ENTER key
+        return false; // This stops the beep
+    }
+};
+
 //
 // Create the prototype for the control.
 //
@@ -129,7 +138,7 @@ QueryTables.Web.TextFilter.prototype = {
     
     schedulePostback: function() {
         // If no delay was defined we are done
-        if (this._autoFilterDelay === undefined) {
+        if (this._autoFilterDelay === null) {
             return;
         }
 
