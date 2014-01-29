@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="QueryTables : A small library that enables the fast creation of GridViews with filter and multiple sorting features with Entity Framework support." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>QueryTables</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/andreschort/query">View on GitHub</a>
+
+          <h1 id="project_title">QueryTables</h1>
+          <h2 id="project_tagline">A small library that enables the fast creation of GridViews with filter and multiple sorting features with Entity Framework support.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/andreschort/query/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/andreschort/query/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="querytables" class="anchor" href="#querytables"><span class="octicon octicon-link"></span></a>QueryTables</h1>
+
+<p>QueryTables can:</p>
+
+<ul>
+<li>Transform an IQueryable with projections into another type(or an anonymous type), apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.</li>
+<li>Easily create a GridView which gets the data from an IQueryable using the transformations provided.</li>
+</ul><p>You can find an example application in <a href="https://github.com/andreschort/query-sample">https://github.com/andreschort/query-sample</a></p>
+
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<p><img src="https://raw.github.com/andreschort/query/master/query-sample.gif" alt="demo"></p>
+
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<p>QueryTables.Core</p>
+
+<ul>
+<li>Support for compiled queries
+
+<ul>
+<li>Filter values and sortings as parameters.</li>
+<li>Research: <a href="http://msdn.microsoft.com/en-us/library/bb896297.aspx">http://msdn.microsoft.com/en-us/library/bb896297.aspx</a>
+</li>
+</ul>
+</li>
+<li>Support for usage stadistics (ie. how often a combination of filters and sortings is used).</li>
+<li>Support for arbitrary filter expressions ie. "&gt;10 AND !=15".</li>
+<li>Extend operators to any target type.</li>
+</ul><p>QueryTables.Web</p>
+
+<ul>
+<li>TD Tooltip</li>
+<li>TH y TD CssClass</li>
+<li>Improve the way you can apply styles to the Query.Web controls.</li>
+<li>New field types:
+
+<ul>
+<li>Autocomplete (from a service or automatically from the Query - if posible)</li>
+<li>DropDownList with multiple options (Query.Core currently supports many filter values with an OR conjunction)</li>
+</ul>
+</li>
+<li>Calendar button option for DateField.</li>
+<li>Support TemplateField:
+
+<ul>
+<li>Sorting of columns that do not have filter.</li>
+<li>Create the header with filter web controls
+
+<ul>
+<li>Requires a refactor in the ui fields to extract web controls for each filter type)</li>
+<li>How would GridExtender set global properties and get sort and filter values?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h2>
+<a name="basic-projection" class="anchor" href="#basic-projection"><span class="octicon octicon-link"></span></a>Basic projection</h2>
+
+<p>Let's say you have this Employee class:  </p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">Employee</span>  
+<span class="p">{</span>  
+  <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>  
+  <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>  
+<span class="p">}</span>
+</pre></div>
+
+<p>You create a Query object like this:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Query</span><span class="p">&lt;</span><span class="n">Employee</span><span class="p">&gt;();</span>
+<span class="n">query</span><span class="p">.</span><span class="n">AddField</span><span class="p">(</span><span class="s">"FullName"</span><span class="p">).</span><span class="n">Select</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">x</span><span class="p">.</span><span class="n">LastName</span><span class="p">);</span> <span class="c1">// FieldName = "FullName"</span>
+
+<span class="kt">var</span> <span class="n">employees</span> <span class="p">=</span> <span class="c1">//some IQueryable&lt;Employee&gt;</span>
+<span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">EmployeeDTO</span><span class="p">&gt;</span> <span class="n">theResult</span> <span class="p">=</span> <span class="n">query</span><span class="p">.</span><span class="n">Project</span><span class="p">&lt;</span><span class="n">EmployeeDTO</span><span class="p">&gt;(</span><span class="n">employees</span><span class="p">);</span>
+</pre></div>
+
+<p>Where EmployeeDTO is something like this:</p>
+
+<pre lang="chsarp"><code>public class EmployeeDTO
+{
+  public string FullName;
+}
+</code></pre>
+
+<p>If you do not want to define an EmployeeDTO class you can use an annonymous type like this:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">IQueryable</span> <span class="n">theResult</span> <span class="p">=</span> <span class="n">query</span><span class="p">.</span><span class="n">Project</span><span class="p">(</span><span class="n">employees</span><span class="p">);</span>
+</pre></div>
+
+<p>theResult is an untyped IQueryable. The ElementType is an annonymous type of the form:</p>
+
+<pre lang="chsarp"><code>public class FullName;String;
+{
+  public string FullName;
+}
+</code></pre>
+
+<h2>
+<a name="basic-filtering" class="anchor" href="#basic-filtering"><span class="octicon octicon-link"></span></a>Basic filtering</h2>
+
+<p>If you want to filter the IQueryable by some user-entered value.</p>
+
+<p>The filters values are defined using a Dictionary. The key is the name of the field and the value is the filter value. You can use a set of operators to filter.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">IQueryable</span><span class="p">&lt;</span><span class="n">Employee</span><span class="p">&gt;</span> <span class="n">employees</span> <span class="p">=</span> <span class="p">...</span>
+<span class="kt">var</span> <span class="n">filters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="p">{{</span><span class="s">"FullName"</span><span class="p">,</span> <span class="s">"Car%"</span><span class="p">}};</span>   <span class="c1">// '%' acts as the wildcard</span>
+<span class="n">employees</span> <span class="p">=</span> <span class="n">query</span><span class="p">.</span><span class="n">Filter</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">filters</span><span class="p">);</span>
+</pre></div>
+
+<p>This is equivalent to:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// by default it is case insensitive but you can override this</span>
+<span class="n">employees</span> <span class="p">=</span> <span class="n">employees</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">LastName</span><span class="p">.</span><span class="n">ToLower</span><span class="p">().</span><span class="n">StartsWith</span><span class="p">(</span><span class="s">"car"</span><span class="p">));</span>
+</pre></div>
+
+<h2>
+<a name="basic-sorting" class="anchor" href="#basic-sorting"><span class="octicon octicon-link"></span></a>Basic sorting</h2>
+
+<p>You can also apply sorting to an IQueryable pretty much the same way that you apply filters:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">sortings</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">SortDirection</span><span class="p">&gt;&gt;{</span>
+  <span class="k">new</span> <span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">SortDirection</span><span class="p">&gt;(</span><span class="s">"FullName"</span><span class="p">,</span> <span class="n">SortDirection</span><span class="p">.</span><span class="n">Descending</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">employees</span> <span class="p">=</span> <span class="n">query</span><span class="p">.</span><span class="n">OrderBy</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">sortings</span><span class="p">);</span>
+</pre></div>
+
+<p>This is equivalent to:</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">employees</span> <span class="p">=</span> <span class="n">employees</span><span class="p">.</span><span class="n">OrderByDescending</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">x</span><span class="p">.</span><span class="n">LastName</span><span class="p">);</span>
+</pre></div>
+
+<p>Multiple sortings are supported.</p>
+
+<h2>
+<a name="advance-filtering" class="anchor" href="#advance-filtering"><span class="octicon octicon-link"></span></a>Advance filtering</h2>
+
+<p>You can use a small set of operators to filter. The kind of expressions you can use to filter depends on the type of the property that the filter is targeting. This can be overriden using the FilterAsX methods.</p>
+
+<p>For System.String you can use the wildcard <code>%</code> at the start, end or both to create 'like' expressions. For example:</p>
+
+<ul>
+<li>
+<code>%someText</code>: Will return the values that ends with "someText".</li>
+<li>
+<code>someText%</code>: Will return the values that start with "someText".</li>
+<li>
+<code>%someText%</code>: Will return the values that contains "someText".</li>
+</ul><p>The filter is by default case insensitive but you can override this while creating the Query object.</p>
+
+<p>For numeric types (int, double, decimal, etc) you can use these operators:</p>
+
+<ul>
+<li>
+<code>=2</code>: This will return the values equal to 2 (this is the default operator)</li>
+<li>
+<code>&gt;2</code>: Greater than..</li>
+<li>
+<code>&gt;=2</code>: Great or equal to..</li>
+<li>
+<code>&lt;2</code>: Smaller than..</li>
+<li>
+<code>&lt;=2</code>: Samll or equal than to..</li>
+<li>
+<code>2|3</code>: Between.. (this is the pipe character <code>|</code>)</li>
+</ul><h1>
+<a name="webforms-controls" class="anchor" href="#webforms-controls"><span class="octicon octicon-link"></span></a>WebForms controls</h1>
+
+<p>Query includes a set of <code>DataControlField</code> classes that enables a GridView with filtering fields right below each header. Multiple sorting is also supported.
+The initial release of this project required jQuery but this requirement was removed. Now all the fields are customs AJAX client controls.
+You need AJAX Control toolkit as it is used to show a datepicker in the date filters.</p>
+
+<p>The main entry point to this project is the GridExtender control:</p>
+
+<div class="highlight highlight-aspx"><pre><span class="nt">&lt;query:GridExtender</span> <span class="na">ID=</span><span class="s">"GridExtender"</span> <span class="na">runat=</span><span class="s">"server"</span>
+                    <span class="na">GridViewId=</span><span class="s">"GridView"</span>
+                    <span class="na">AutoFilterDelay=</span><span class="s">"2000"</span>
+                    <span class="na">EnableFilters=</span><span class="s">"True"</span>
+                    <span class="na">OnFilter=</span><span class="s">"GridExtender_Filter"</span>
+                    <span class="na">OnSort=</span><span class="s">"GridExtender_Sort"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>These are the more important properties:</p>
+
+<ul>
+<li>
+<strong>GridViewId</strong> (string - required): The ID of the GridView.</li>
+<li>
+<strong>Placeholder</strong> (string - optional): The placeholder to show in the filter UI elements.</li>
+<li>
+<strong>AutoFilterDelay</strong> (int - optional): The milliseconds to wait before automatically triggering the search after the user changes a filter. If not specified the user needs to trigger the filter using the enter key.</li>
+<li>
+<strong>EnableFilters</strong> (bool - optional - default=true): Determines wheather the filter elements are shown (default: True)</li>
+<li>
+<strong>OnFilter</strong> (event): Triggered when the user changes a filter or hits the enter key while the focus is in a filter.</li>
+<li>
+<strong>OnSort</strong> (event): Triggered when the user clicks on a header's title.</li>
+</ul><p>The <code>GridExtender</code> exposes all the current filters and sortings through two properties:</p>
+
+<ul>
+<li>Filters (<code>Dictionary&lt;string, string&gt;</code>): The key is the field's name and the value is the filter value. The dictionary will hold as many fields as you define, empty filters will have an empty string as the value.</li>
+<li>Sortings (<code>List&lt;KeyValuePair&lt;string, SortDirection&gt;&gt;</code>): The key is the field's name and the value is the sort direction of the field. Only the fields which are currently sorting will be on the list.</li>
+</ul><p>There are three kinds of <code>DataControlField</code>'s:</p>
+
+<ul>
+<li>
+<strong>TextField</strong>: Renders a text field as the filter UI element.</li>
+<li>
+<strong>DateField</strong>: Renders two text fields as the filter UI elements (we need two elements to filter by a range of dates). Both elements have AJAX Control Toolkit datepicker.</li>
+<li>
+<strong>DropDownField</strong>: Renders a select as the filter UI element.</li>
+<li>
+<strong>DynamicField</strong>: Enables to programmatically set the field type. Uses one of the above fields internally.</li>
+</ul><p>All fields have a anchor as title above them which when clicked triggers the <code>Sort</code> event in <code>GridExtender</code>.
+The <code>Filter</code> event is triggered by hitting the enter key on a field's filter UI element or automatically by the AutoFilterDelay parameter.</p>
+
+<p>These are the properties common to all fields:</p>
+
+<ul>
+<li>
+<strong>Name</strong> (string - required): The name of the field. Determines the value shown and is the name used to identify the field's filter value and sorting direction in the <code>GridExtender</code> Filter and Sorting properties as explained above.</li>
+<li>
+<strong>DataField</strong> (string - optional): The name of the property of the data bound element from where to get the value of the data cell. If not specified it will use the <strong>Name</strong> property.</li>
+<li>
+<strong>AssociatedControlID</strong> (string - optional): Makes the data cell to render a  tag.</li>
+<li>
+<strong>ItemCssClass</strong> (string - optional): Add a CSS class to the data cell.</li>
+<li>
+<strong>Placeholder</strong> (string - optional): The placeholder to show in the filter UI element.</li>
+<li>
+<strong>UrlFormat</strong> (string - optional): Turns the text in the cell into a link. The string is used as the url of the link.</li>
+<li>
+<strong>UrlFields</strong> (string, optional): A comma separated list of properties to use with UrlFormat. This allows to generate an url customized for each row.</li>
+<li>
+<strong>AutoFilterDelay</strong> (int - optional): Same as GridExtender but affects only this field.</li>
+<li>
+<strong>ItemEnabled</strong> (bool - optional - default=true): Set to false when you want to disable everything inside the data cell.</li>
+<li>
+<strong>ItemTemplate</strong> (ITemplate - optional): Enables you to define the full content of the data cells (similar to TemplateField.ItemTemplate).</li>
+<li>
+<strong>Format</strong> (string - optional): Used to format the value shown in the data cell. Can be any standard format strings.</li>
+<li>
+<strong>FormatDelegate</strong> (Func - optional): Use this when you want full control over how the value show inside the data cell is formatted. Overrides <strong>Format</strong>.</li>
+<li>
+<strong>Click</strong> (Event - optional): Makes the data cell show a link with a postback event. Overrides <strong>UrlFormat</strong>.</li>
+</ul><p>The following are properties specific to DropDownField:</p>
+
+<ul>
+<li>
+<strong>Items</strong> (List - required): Describes the list of options to put in the select element. Do not include the empty option, it is inserted automatically.</li>
+</ul><p>This is an example of a GridView using the <code>DataControlField</code>'s provided:</p>
+
+<div class="highlight highlight-aspx"><pre><span class="nt">&lt;asp:GridView</span> <span class="na">ID=</span><span class="s">"GridView"</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">AutoGenerateColumns=</span><span class="s">"False"</span> <span class="na">ShowHeaderWhenEmpty=</span><span class="s">"True"</span>
+              <span class="na">AllowPaging=</span><span class="s">"True"</span> <span class="na">AllowSorting=</span><span class="s">"False"</span> <span class="na">PageSize=</span><span class="s">"8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Columns&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"Nombre"</span> <span class="na">HeaderText=</span><span class="s">"Nombre"</span>
+                         <span class="na">UrlFormat=</span><span class="s">"https://www.google.com.ar/search?q={0} {1}"</span> <span class="na">UrlFields=</span><span class="s">"Nombre, Apellido"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"Apellido"</span> <span class="na">HeaderText=</span><span class="s">"Apellido"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"Dni"</span> <span class="na">HeaderText=</span><span class="s">"Dni"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:DropDownField</span> <span class="na">Name=</span><span class="s">"EstadoCivil"</span> <span class="na">HeaderText=</span><span class="s">"Estado civil"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"Edad"</span> <span class="na">HeaderText=</span><span class="s">"Edad"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"Salario"</span> <span class="na">HeaderText=</span><span class="s">"Salario"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:DateField</span> <span class="na">Name=</span><span class="s">"FechaNacimiento"</span> <span class="na">HeaderText=</span><span class="s">"Fecha Nacimiento"</span> <span class="na">Format=</span><span class="s">"d"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;query:TextField</span> <span class="na">Name=</span><span class="s">"AttachmentCount"</span> <span class="na">HeaderText=</span><span class="s">"Number of attachments"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Columns&gt;</span>
+<span class="nt">&lt;/asp:GridView&gt;</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">QueryTables maintained by <a href="https://github.com/andreschort">andreschort</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
