@@ -133,31 +133,31 @@ namespace QueryTables.Core
         {
             this.ResultType = resultType;
             var parameter = Expression.Parameter(queryable.ElementType, "t");
-            var bindings = this.ResultType.GetProperties()
-                               .Select(field =>
-                               {
-                                   var queryField = this.Fields.First(x => x.Name.Equals(field.Name));
 
-                                   // Replace original parameter with our new parameter
-                                   var originalParameter = queryField.Select.Parameters[0];
-                                   var expression = queryField.Select.Body.Replace(originalParameter, parameter);
-                                   
-                                   if (queryField.SelectElse == null)
-                                   {
-                                       // Ensure the expression return type and the field type match
-                                       expression = Expression.Convert(expression, field.PropertyType);
-                                   }
-                                   else
-                                   {
-                                       expression = this.CreateSelectWhen(
-                                           expression,
-                                           new Dictionary<object, object>(queryField.SelectWhen),
-                                           queryField.SelectElse);
-                                   }
+            var bindings = this.Fields.Select(field =>
+                {
+                    var property = this.ResultType.GetProperty(field.Name);
 
-                                   // Bind field with expression
-                                   return Expression.Bind(field, expression);
-                               });
+                    // Replace original parameter with our new parameter
+                    var originalParameter = field.Select.Parameters[0];
+                    var expression = field.Select.Body.Replace(originalParameter, parameter);
+
+                    if (field.SelectElse == null)
+                    {
+                        // Ensure the expression return type and the field type match
+                        expression = Expression.Convert(expression, property.PropertyType);
+                    }
+                    else
+                    {
+                        expression = this.CreateSelectWhen(
+                            expression,
+                            new Dictionary<object, object>(field.SelectWhen),
+                            field.SelectElse);
+                    }
+
+                    // Bind field with expression
+                    return Expression.Bind(property, expression);
+                });
 
             var selector = Expression.Lambda(
                 Expression.MemberInit(Expression.New(this.ResultType), bindings),
