@@ -14,6 +14,12 @@ namespace QueryTables.Web
 
         private bool enableFilters = true;
 
+        /// <summary>
+        /// Filters that do not have a field, commonnly set by the client.
+        /// These filters will remain until the Filter event is triggered.
+        /// </summary>
+        private Dictionary<string, string> additionalFilters;
+
         #region Events
 
         public event EventHandler Filter;
@@ -77,12 +83,15 @@ namespace QueryTables.Web
                 field.SortDir = null;
                 field.SortOrder = 0;
             }
+
+            this.additionalFilters = null;
         }
 
         public void RaisePostBackEvent(string eventArgument)
         {
             if (eventArgument.StartsWith(FilterCommand))
             {
+                this.additionalFilters = null;
                 this.RaiseFilter();
             }
         }
@@ -93,15 +102,31 @@ namespace QueryTables.Web
 
             this.Grid.Load += this.Grid_Load;
             this.Grid.RowCommand += this.Grid_RowCommand;
-
-            //TODO remove
-            var webResourceUrl = this.Page.ClientScript.GetWebResourceUrl(this.GetType(), "QueryTables.Web.Query.js");
-            this.Page.ClientScript.RegisterClientScriptInclude(this.GetType(), "Query.js", webResourceUrl);
             
             // Force that the hidden input __LASTFOCUS is rendered
             this.Page.ClientScript.GetPostBackEventReference(new PostBackOptions(this) { TrackFocus = true });
+
+            this.Page.RegisterRequiresControlState(this);
         }
-        
+
+        protected override void LoadControlState(object savedState)
+        {
+            var result = (Pair)savedState;
+
+            this.additionalFilters = (Dictionary<string, string>)result.Second;
+
+            base.LoadControlState(result.First);
+        }
+
+        protected override object SaveControlState()
+        {
+            var saveControlState = base.SaveControlState();
+
+            var result = new Pair(saveControlState, this.additionalFilters);
+
+            return result;
+        }
+
         private void Grid_Load(object sender, EventArgs e)
         {
             // Set fields parameters
@@ -125,11 +150,7 @@ namespace QueryTables.Web
 
         private void Grid_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName.Equals(FilterCommand))
-            {
-                this.RaiseFilter();
-            }
-            else if (e.CommandName.Equals(SortCommand))
+            if (e.CommandName.Equals(SortCommand))
             {
                 var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
                 var sortingFields = fields.Where(field => field.SortDir.HasValue).ToList();
@@ -168,19 +189,46 @@ namespace QueryTables.Web
             }
         }
 
-        private void SetFilters(Dictionary<string, string> value)
+        private void SetFilters(Dictionary<string, string> values)
         {
             var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
 
-            foreach (var filter in value)
+            var additionalFilters = new Dictionary<string, string>();
+
+            foreach (var filter in values)
             {
-                fields.First(x => x.Name.Equals(filter.Key)).FilterValue = filter.Value;
+                var field = fields.FirstOrDefault(x => x.Name.Equals(filter.Key));
+
+                if (field == null)
+                {
+                    additionalFilters.Add(filter.Key, filter.Value);
+                }
+                else
+                {
+                    field.FilterValue = filter.Value;
+                }
+            }
+
+            if (additionalFilters.Any())
+            {
+                this.additionalFilters = additionalFilters;
             }
         }
 
         private Dictionary<string, string> GetFilters()
         {
-            return this.Grid.Columns.OfType<QueryFieldBase>().ToDictionary(field => field.Name, field => field.FilterValue);
+            var dictionary = this.Grid.Columns.OfType<QueryFieldBase>()
+                                 .ToDictionary(field => field.Name, field => field.FilterValue);
+
+            if (this.additionalFilters != null)
+            {
+                foreach (var additionalFilter in this.additionalFilters)
+                {
+                    dictionary.Add(additionalFilter.Key, additionalFilter.Value);
+                }
+            }
+
+            return dictionary;
         }
 
         private void SetSortings(IList<KeyValuePair<string, SortDirection>> sortings)

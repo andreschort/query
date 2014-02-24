@@ -50,6 +50,8 @@ namespace QueryTables.Web
 
         public string DataField { get; set; }
 
+        public string ItemToolTipDataField { get; set; }
+
         /// <summary>
         /// The text to show when the filter is empty
         /// </summary>
@@ -376,6 +378,11 @@ namespace QueryTables.Web
 
                     this.linkButton.PostBackUrl = this.navigateUrl;
                 }
+            }
+
+            if (!string.IsNullOrEmpty(this.ItemToolTipDataField))
+            {
+                cell.ToolTip = this.Eval(dataItem, this.ItemToolTipDataField).ToString();
             }
         }
 

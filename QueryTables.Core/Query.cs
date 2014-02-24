@@ -39,6 +39,13 @@ namespace QueryTables.Core
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
         {
+            var fieldsNotFound = values.Keys.Except(this.Fields.Select(x => x.Name)).ToList();
+
+            if (fieldsNotFound.Any())
+            {
+                throw new Exception("Fields not found: " + fieldsNotFound.Aggregate((c, a) => c + ", " + a));
+            }
+
             var filters = from value in values
                           let field = this.Fields.Find(x => x.Name.Equals(value.Key))
                           select field.FilterBuilder.Create(field, value.Value);
@@ -137,6 +144,11 @@ namespace QueryTables.Core
             var bindings = this.Fields.Select(field =>
                 {
                     var property = this.ResultType.GetProperty(field.Name);
+
+                    if (property == null)
+                    {
+                        throw new Exception(string.Format("Property {0} not found in type {1}", field.Name, this.ResultType.FullName));
+                    }
 
                     // Replace original parameter with our new parameter
                     var originalParameter = field.Select.Parameters[0];

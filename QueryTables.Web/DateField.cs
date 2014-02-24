@@ -7,6 +7,8 @@ namespace QueryTables.Web
 {
     public class DateField : QueryFieldBase
     {
+        public const char Separator = ';';
+
         #region Fields
 
         private DateFilter textFrom;
@@ -24,6 +26,25 @@ namespace QueryTables.Web
         {
             get { return this.GetFilterValue(); }
             set { this.externalFilterValue = value; }
+        }
+
+        public static string Serialize(DateTime? dateFrom, DateTime? dateTo)
+        {
+            string value = string.Empty;
+
+            if (dateFrom.HasValue)
+            {
+                value = dateFrom.Value.ToShortDateString();
+            }
+
+            value += Separator;
+
+            if (dateTo.HasValue)
+            {
+                value += dateTo.Value.ToShortDateString();
+            }
+
+            return value;
         }
 
         protected internal override short SetTabIndex(short tabIndex)
@@ -81,9 +102,9 @@ namespace QueryTables.Web
                 this.textFrom.Text = HttpContext.Current.Request.Form[this.textFrom.UniqueID];
                 this.textTo.Text = HttpContext.Current.Request.Form[this.textTo.UniqueID];
             }
-            else if (string.IsNullOrEmpty(this.externalFilterValue))
+            else if (!string.IsNullOrEmpty(this.externalFilterValue))
             {
-                var parts = this.externalFilterValue.Split(new[] { ';' }, 2);
+                var parts = this.externalFilterValue.Split(new[] { Separator }, 2);
                 this.textFrom.Text = parts[0];
 
                 if (parts.Length > 1)
@@ -115,7 +136,7 @@ namespace QueryTables.Web
                 return this.externalFilterValue ?? string.Empty;
             }
 
-            return this.textFrom.Text + ";" + this.textTo.Text;
+            return this.textFrom.Text + Separator + this.textTo.Text;
         }
     }
 }
