@@ -50,6 +50,7 @@
     <Compile Include="DateField.cs" />
     <Compile Include="DropDownField.cs" />
     <Compile Include="DynamicField.cs" />
+    <Compile Include="Extension\GridViewExtensions.cs" />
     <Compile Include="Filter\DateFilter.cs" />
     <Compile Include="Filter\DropDownFilter.cs" />
     <Compile Include="Filter\TextFilter.cs" />
