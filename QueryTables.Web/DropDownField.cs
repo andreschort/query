@@ -46,6 +46,11 @@ namespace QueryTables.Web
             var pnl = new Panel { CssClass = "query-filter" };
             cell.Controls.Add(pnl);
 
+            if (!this.EnableFilter.GetValueOrDefault(true))
+            {
+                pnl.Attributes["style"] = "display: none;";
+            }
+
             this.dropDownList = new DropDownFilter { ID = this.Name + "_dropdown" };
             pnl.Controls.Add(this.dropDownList);
             
@@ -60,22 +65,24 @@ namespace QueryTables.Web
             {
                 this.dropDownList.TabIndex = this.TabIndex.Value;
             }
+
+            this.dropDownList.PostbackName = this.PostbackName;
+            this.dropDownList.PostbackParameter = this.FilterCommand;
+            this.dropDownList.HasFocus = this.HasFocus(this.dropDownList.UniqueID);
         }
 
         protected override void HeaderCell_DataBinding(object sender, EventArgs e)
         {
             base.HeaderCell_DataBinding(sender, e);
-            
+
+            this.Items = this.Items ?? new List<ListItem>();
+
             this.Items.Insert(0, new ListItem(this.Placeholder ?? string.Empty, string.Empty)); // add empty option
             
             this.dropDownList.DataSource = this.Items;
             this.dropDownList.DataTextField = "Text";
             this.dropDownList.DataValueField = "Value";
             this.dropDownList.DataBind();
-
-            this.dropDownList.PostbackName = this.PostbackName;
-            this.dropDownList.PostbackParameter = this.FilterCommand;
-            this.dropDownList.HasFocus = this.HasFocus(this.dropDownList.UniqueID);
 
             // set selected value
             if (this.externalFilterValue == null)

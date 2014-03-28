@@ -28,10 +28,7 @@ namespace QueryTables.Core
 
         public QueryFieldBuilder<T> Create<E>(Expression<Func<T, E>> select)
         {
-            this.Instance = new QueryField<T> { Name = @select.GetPropertyInfo().Name };
-
-            this.withManualFilterType = false;
-            this.withManualWhere = false;
+            this.Create(@select.GetPropertyInfo().Name);
 
             return this.Select(select);
         }
@@ -157,6 +154,13 @@ namespace QueryTables.Core
         public QueryFieldBuilder<T> CaseSensitive()
         {
             this.Instance.CaseSensitive = true;
+
+            return this;
+        }
+
+        public QueryFieldBuilder<T> NullSafe(bool v = true)
+        {
+            this.Instance.NullSafe = v;
 
             return this;
         }

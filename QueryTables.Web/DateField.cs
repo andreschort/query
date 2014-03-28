@@ -68,6 +68,11 @@ namespace QueryTables.Web
             pnl.Attributes["onkeypress"] = string.Empty; // Remove DefaultButton for good
             cell.Controls.Add(pnl);
 
+            if (!this.EnableFilter.GetValueOrDefault(true))
+            {
+                pnl.Attributes["style"] = "display: none;";
+            }
+
             // from and to filter inputs
             this.textFrom = new DateFilter { ID = this.Name + "_from" };
             this.textTo = new DateFilter { ID = this.Name + "_to" };

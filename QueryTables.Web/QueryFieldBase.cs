@@ -29,6 +29,7 @@ namespace QueryTables.Web
         private bool itemEnabled = true;
 
         private LinkButton linkButton; // used when the data cell must show a link
+        private HyperLink hyperLink;
         private HtmlInputHidden valueHidden; // used to save the text of the link across postbacks
         private HtmlInputHidden urlHidden; // used to save the url of the link across postbacks
 
@@ -86,6 +87,13 @@ namespace QueryTables.Web
         [PersistenceMode(PersistenceMode.InnerProperty)]
         [TemplateContainer(typeof(IDataItemContainer), BindingDirection.TwoWay)]
         public virtual ITemplate ItemTemplate { get; set; }
+
+        [Browsable(false)]
+        [PersistenceMode(PersistenceMode.InnerProperty)]
+        [TemplateContainer(typeof(IDataItemContainer), BindingDirection.TwoWay)]
+        public virtual ITemplate FooterTemplate { get; set; }
+
+        public bool? EnableFilter { get; set; }
 
         /// <summary>
         /// Controls if the elements inside the data cell are enabled or not
@@ -148,6 +156,9 @@ namespace QueryTables.Web
                     cell.Load += this.DataCell_Load;
                     cell.PreRender += this.DataCell_PreRender;
                     break;
+                case DataControlCellType.Footer:
+                    cell.DataBinding += this.FooterCell_DataBinding;
+                    break;
             }
         }
 
@@ -204,9 +215,9 @@ namespace QueryTables.Web
 
             // title with sorting
             var pnl = new Panel { CssClass = "query-header" };
-            pnl.Attributes["onkeypress"] = string.Empty; // Remove DefaultButton for good
             cell.Controls.Add(pnl);
-
+            pnl.Attributes["onkeypress"] = string.Empty; // Remove DefaultButton for good
+            
             this.sortButton = new LinkButton();
             this.sortInputHidden = new HtmlInputHidden();
             this.sortOrderLabel = new Label();
@@ -300,12 +311,16 @@ namespace QueryTables.Web
                 return; // plain text cell
             }
 
-            this.linkButton = new LinkButton();
-            cell.Controls.Add(this.linkButton);
-
             if (this.Click != null)
             {
+                this.linkButton = new LinkButton();
+                cell.Controls.Add(this.linkButton);
                 this.linkButton.Click += this.DataCell_Click;
+            }
+            else if (!string.IsNullOrEmpty(this.UrlFormat))
+            {
+                this.hyperLink = new HyperLink();
+                cell.Controls.Add(this.hyperLink);
             }
 
             this.valueHidden = new HtmlInputHidden();
@@ -326,7 +341,12 @@ namespace QueryTables.Web
             if (this.linkButton != null)
             {
                 this.linkButton.Text = this.displayValue;
-                this.linkButton.PostBackUrl = this.navigateUrl;
+            }
+
+            if (this.hyperLink != null)
+            {
+                this.hyperLink.Text = this.displayValue;
+                this.hyperLink.NavigateUrl = this.navigateUrl;
             }
         }
 
@@ -354,35 +374,35 @@ namespace QueryTables.Web
             }
 
             var dataItem = DataBinder.GetDataItem(cell.NamingContainer);
+            this.displayValue = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
 
-            if (!string.IsNullOrEmpty(this.AssociatedControlID))
+            if (this.label != null)
             {
-                this.label.Text = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
+                this.label.Text = this.displayValue;
             }
-            else if (string.IsNullOrEmpty(this.UrlFormat) && this.Click == null)
+            else if (this.linkButton != null)
             {
-                cell.Text = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
+                this.linkButton.Text = this.displayValue;
+            }
+            else if (this.hyperLink != null)
+            {
+                this.hyperLink.Text = this.displayValue;
+                this.navigateUrl = this.UrlFields == null
+                       ? this.UrlFormat
+                       : string.Format(
+                           this.UrlFormat,
+                           this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
+                this.hyperLink.NavigateUrl = this.navigateUrl;
             }
             else
             {
-                this.displayValue = this.FormatValue(this.Eval(dataItem, this.DataField ?? this.Name));
-                this.linkButton.Text = this.displayValue;
-
-                if (this.Click == null)
-                {
-                    this.navigateUrl = this.UrlFields == null
-                        ? this.UrlFormat
-                        : string.Format(
-                            this.UrlFormat,
-                            this.UrlFields.Select(x => this.Eval(dataItem, x)).ToArray());
-
-                    this.linkButton.PostBackUrl = this.navigateUrl;
-                }
+                cell.Text = this.displayValue;
             }
 
             if (!string.IsNullOrEmpty(this.ItemToolTipDataField))
             {
-                cell.ToolTip = this.Eval(dataItem, this.ItemToolTipDataField).ToString();
+                var tooltip = this.Eval(dataItem, this.ItemToolTipDataField);
+                cell.ToolTip = tooltip == null ? string.Empty : tooltip.ToString();
             }
         }
 
@@ -392,6 +412,14 @@ namespace QueryTables.Web
             if (handler != null)
             {
                 handler(sender, e);
+            }
+        }
+
+        protected virtual void FooterCell_DataBinding(object sender, EventArgs e)
+        {
+            if (this.FooterTemplate != null)
+            {
+                this.FooterTemplate.InstantiateIn((TableCell)sender);
             }
         }
 

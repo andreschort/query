@@ -87,6 +87,16 @@ namespace QueryTables.Web
             this.additionalFilters = null;
         }
 
+        public void ClearFilters()
+        {
+            foreach (var field in this.Grid.Columns.OfType<QueryFieldBase>())
+            {
+                field.FilterValue = string.Empty;
+            }
+
+            this.additionalFilters = null;
+        }
+
         public void RaisePostBackEvent(string eventArgument)
         {
             if (eventArgument.StartsWith(FilterCommand))
@@ -129,10 +139,13 @@ namespace QueryTables.Web
 
         private void Grid_Load(object sender, EventArgs e)
         {
+            this.Grid.CssClass += " QueryTables";
+
             // Set fields parameters
             short tabIndex = 1;
             foreach (var field in this.Grid.Columns.OfType<QueryFieldBase>())
             {
+                field.EnableFilter = field.EnableFilter ?? this.EnableFilters;
                 field.AutoFilterDelay = field.AutoFilterDelay ?? this.AutoFilterDelay;
                 field.Placeholder = field.Placeholder ?? this.Placeholder;
                 field.PostbackName = this.UniqueID;

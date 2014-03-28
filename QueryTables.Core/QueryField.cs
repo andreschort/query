@@ -41,7 +41,9 @@ namespace QueryTables.Core
         /// </summary>
         public List<LambdaExpression> Where { get; set; }
 
-        public bool? CaseSensitive { get; set; }
+        public bool CaseSensitive { get; set; }
+
+        public bool NullSafe { get; set; }
 
         public IQueryable<T> Filter(IQueryable<T> query, Filter filter)
         {
@@ -80,7 +82,7 @@ namespace QueryTables.Core
                     operatorFunc = (b, f) => b.Between(f.Values[0], f.Values[1]);
                     break;
                 case FilterOperator.Contains:
-                    if (this.CaseSensitive.GetValueOrDefault())
+                    if (this.CaseSensitive)
                     {
                         operatorFunc = (b, f) => b.Call<string>("Contains", f.Value.ToString());
                     }
@@ -91,7 +93,7 @@ namespace QueryTables.Core
 
                     break;
                 case FilterOperator.StartsWith:
-                    if (this.CaseSensitive.GetValueOrDefault())
+                    if (this.CaseSensitive)
                     {
                         operatorFunc = (b, f) => b.Call<string>("StartsWith", f.Value.ToString());
                     }
@@ -102,7 +104,7 @@ namespace QueryTables.Core
 
                     break;
                 case FilterOperator.EndsWith:
-                    if (this.CaseSensitive.GetValueOrDefault())
+                    if (this.CaseSensitive)
                     {
                         operatorFunc = (b, f) => b.Call<string>("EndsWith", f.Value.ToString());
                     }
@@ -116,17 +118,27 @@ namespace QueryTables.Core
                     throw new Exception("Unkown operator: " + filter.Operator);
             }
 
-            var builder = ExpressionBuilder.Parameter<T>();
-            var body = this.Where.Aggregate(
-                ExpressionBuilder.False(),
-                (current, key) =>
-                    current.OrElse(
-                        operatorFunc(
-                            ExpressionBuilder.New(builder.Param, key.Body.Replace(key.Parameters[0], builder.Param)),
-                            filter)
-                            .Expression));
+            var param = Expression.Parameter(typeof(T));
+            var current = ExpressionBuilder.False();
+            foreach (var part in this.Where)
+            {
+                var part_body = ExpressionBuilder.New(param, part.Body.Replace(part.Parameters[0], param));
+                var canBeNull = !part.ReturnType.IsValueType || Nullable.GetUnderlyingType(part.ReturnType) != null;
+                if (this.NullSafe && canBeNull)
+                {
+                    var e = Expression.Condition(
+                        part_body.NotNull().Expression,
+                        operatorFunc(part_body, filter).Expression,
+                        Expression.Constant(false));
+                    current = current.OrElse(e);
+                }
+                else
+                {
+                    current = current.OrElse(operatorFunc(part_body, filter).Expression);
+                }
+            }
 
-            return query.Where(builder.Lambda<T, bool>(body.Expression));
+            return query.Where(Expression.Lambda<Func<T, bool>>(current.Expression, param));
         }
     }
 }

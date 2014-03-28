@@ -20,6 +20,8 @@ namespace QueryTables.Core
 
         public Type ResultType { get; private set; }
 
+        public bool NullSafe { get; set; }
+
         /// <summary>
         /// Create a select new {} expression and apply it to lambda expression.
         /// </summary>
@@ -104,7 +106,9 @@ namespace QueryTables.Core
         {
             var builder = new QueryFieldBuilder<T>();
 
-            this.Fields.Add(builder.Create(name).Instance);
+            var field = builder.Create(name).Instance;
+            field.NullSafe = this.NullSafe;
+            this.Fields.Add(field);
 
             return builder;
         }
@@ -113,7 +117,9 @@ namespace QueryTables.Core
         {
             var builder = new QueryFieldBuilder<T>();
 
-            this.Fields.Add(builder.Create(select).Instance);
+            var field = builder.Create(@select).Instance;
+            field.NullSafe = this.NullSafe;
+            this.Fields.Add(field);
 
             return builder;
         }

@@ -54,6 +54,11 @@ namespace QueryTables.Web
             var pnl = new Panel { CssClass = "query-filter" };
             cell.Controls.Add(pnl);
 
+            if (!this.EnableFilter.GetValueOrDefault(true))
+            {
+                pnl.Attributes["style"] = "display: none;";
+            }
+
             // Filter textbox
             this.textFilter = new TextFilter { ID = this.Name + "_textbox" };
             pnl.Controls.Add(this.textFilter);

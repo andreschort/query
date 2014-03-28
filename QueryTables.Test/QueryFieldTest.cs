@@ -425,5 +425,50 @@ namespace QueryTables.Test
             Assert.IsTrue(result.Any(x => x.Apellido.Equals("Diaz")));
             Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
         }
+
+        [TestMethod]
+        public void FilterNullSafe()
+        {
+            var field = new QueryField<Empleado> { NullSafe = true };
+            field.Where.Add(ExpressionBuilder.Build<Empleado, string>(x => x.Apellido));
+            
+            var empleados = new List<Empleado>
+            {
+                new Empleado { Apellido = "Chort", Dni = 1 },
+                new Empleado { Apellido = "Gieco", Dni = 2 },
+                new Empleado { Apellido = "Diaz", Dni = 3 },
+                new Empleado(),
+            };
+
+            var filter = new Filter { Valid = true, Value = "o", Operator = FilterOperator.Contains };
+
+            var result = field.Filter(empleados.AsQueryable(), filter).ToList();
+
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual("Chort", result[0].Apellido);
+            Assert.AreEqual("Gieco", result[1].Apellido);
+        }
+
+        [TestMethod]
+        public void FilterNullSafeNotNullable()
+        {
+            var field = new QueryField<Empleado> { NullSafe = true };
+            field.Where.Add(ExpressionBuilder.Build<Empleado, int>(x => x.Dni));
+            
+            var empleados = new List<Empleado>
+            {
+                new Empleado { Apellido = "Chort", Dni = 1 },
+                new Empleado { Apellido = "Gieco", Dni = 2 },
+                new Empleado { Apellido = "Diaz", Dni = 3 },
+                new Empleado(),
+            };
+
+            var filter = new Filter { Valid = true, Value = 1, Operator = FilterOperator.Equal };
+
+            var result = field.Filter(empleados.AsQueryable(), filter).ToList();
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(1, result[0].Dni);
+        }
     }
 }

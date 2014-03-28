@@ -23,6 +23,11 @@ namespace QueryTables.Common.Util
 
         public Expression Expression { get; private set; }
 
+        public static ExpressionBuilder New(ParameterExpression param)
+        {
+            return new ExpressionBuilder(param, null);
+        }
+
         public static ExpressionBuilder New(ParameterExpression param, Expression expression)
         {
             return new ExpressionBuilder(param, expression);
@@ -123,7 +128,14 @@ namespace QueryTables.Common.Util
         {
             var exp = Expression.Call(this.Expression, typeof(T).GetMethod(name, new[] { arg.GetType() }), Expression.Constant(arg));
 
-            return new ExpressionBuilder(this.Param, this.Expression = exp);
+            return new ExpressionBuilder(this.Param, exp);
+        }
+
+        public ExpressionBuilder CallStatic<T>(string name, params Expression[] args)
+        {
+            var exp = Expression.Call(typeof(T), name, null, args);
+
+            return new ExpressionBuilder(this.Param, exp);
         }
 
         public ExpressionBuilder TruncateTime()
@@ -160,6 +172,11 @@ namespace QueryTables.Common.Util
         public ExpressionBuilder NotEqualTo<T>(T right)
         {
             return this.NotEqual(Expression.Constant(right));
+        }
+
+        public ExpressionBuilder NotNull()
+        {
+            return new ExpressionBuilder(this.Param, Expression.NotEqual(this.Expression, Expression.Constant(null)));
         }
 
         public ExpressionBuilder GreaterThan(Expression right)
