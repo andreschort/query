@@ -213,6 +213,8 @@ namespace QueryTables.Web
         {
             var cell = (DataControlFieldHeaderCell)sender;
 
+            cell.ApplyStyle(this.HeaderStyle);
+
             // title with sorting
             var pnl = new Panel { CssClass = "query-header" };
             cell.Controls.Add(pnl);
@@ -290,6 +292,8 @@ namespace QueryTables.Web
         protected virtual void DataCell_Init(object sender, EventArgs e)
         {
             var cell = (TableCell)sender;
+
+            cell.ApplyStyle(this.ItemStyle);
 
             cell.Enabled = this.ItemEnabled;
             cell.CssClass = this.ItemCssClass;
