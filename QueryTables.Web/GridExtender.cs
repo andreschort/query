@@ -14,6 +14,8 @@ namespace QueryTables.Web
 
         private bool enableFilters = true;
 
+        private List<QueryFieldBase> fields;
+
         /// <summary>
         /// Filters that do not have a field, commonnly set by the client.
         /// These filters will remain until the Filter event is triggered.
@@ -246,11 +248,9 @@ namespace QueryTables.Web
 
         private void SetSortings(IList<KeyValuePair<string, SortDirection>> sortings)
         {
-            var fields = this.Grid.Columns.OfType<QueryFieldBase>().ToList();
-
             for (int index = 0; index < sortings.Count; index++)
             {
-                var field = fields.First(x => x.Name.Equals(sortings[index].Key));
+                var field = this.FindField(sortings[index].Key);
                 field.SortOrder = index + 1;
                 field.SortDir = sortings[index].Value;
             }
@@ -263,6 +263,20 @@ namespace QueryTables.Web
                        .OrderBy(field => field.SortOrder)
                        .Select(field => new KeyValuePair<string, SortDirection>(field.Name, field.SortDir.Value))
                        .ToList();
+        }
+
+        private QueryFieldBase FindField(string name)
+        {
+            this.fields = this.fields ?? this.Grid.Columns.OfType<QueryFieldBase>().ToList();
+
+            var field = this.fields.FirstOrDefault(x => x.Name.Equals(name));
+
+            if (field == null)
+            {
+                throw new Exception("Field not found: " + name);
+            }
+
+            return field;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace QueryTables.Core.Filters
 {
+    [DebuggerDisplay("Name: {Name}, Valid: {Valid}, Operator: {Operator}")]
     public class Filter
     {
         public Filter()

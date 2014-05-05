@@ -67,19 +67,23 @@ namespace QueryTables.Core
                     operatorFunc = (b, f) => b.NotEqualTo(f.Value);
                     break;
                 case FilterOperator.GreaterThan:
-                    operatorFunc = (b, f) => b.GreaterThanThis(f.Value);
+                    operatorFunc = (b, f) => b.CompareToThis(f.Value).GreaterThanThis(0);
                     break;
                 case FilterOperator.GreaterThanEqual:
-                    operatorFunc = (b, f) => b.GreaterThanOrEqualTo(f.Value);
+                    operatorFunc = (b, f) => b.CompareToThis(f.Value).GreaterThanOrEqualTo(0);
                     break;
                 case FilterOperator.LessThan:
-                    operatorFunc = (b, f) => b.LessThanThis(f.Value);
+                    operatorFunc = (b, f) => b.CompareToThis(f.Value).LessThanThis(0);
                     break;
                 case FilterOperator.LessThanEqual:
-                    operatorFunc = (b, f) => b.LessThanOrEqualTo(f.Value);
+                    operatorFunc = (b, f) => b.CompareToThis(f.Value).LessThanOrEqualTo(0);
                     break;
                 case FilterOperator.Between:
-                    operatorFunc = (b, f) => b.Between(f.Values[0], f.Values[1]);
+                    operatorFunc =
+                        (b, f) =>
+                        b.CompareToThis(f.Values[0])
+                            .GreaterThanOrEqualTo(0)
+                            .AndAlso(b.CompareToThis(f.Values[1]).LessThanOrEqualTo(0).Expression);
                     break;
                 case FilterOperator.Contains:
                     if (this.CaseSensitive)

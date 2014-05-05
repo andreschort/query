@@ -5,18 +5,11 @@ using SortDirection = QueryTables.Common.SortDirection;
 
 namespace QueryTables.Web
 {
-    public enum FieldType
-    {
-        Text = 0,
-        List = 1,
-        Date = 2
-    }
-
     public class DynamicField : QueryFieldBase
     {
         private QueryFieldBase field;
         
-        public FieldType? FieldType { get; set; }
+        public DynamicFieldType? FieldType { get; set; }
 
         public List<ListItem> Items { get; set; }
 
@@ -54,13 +47,13 @@ namespace QueryTables.Web
 
                 switch (this.FieldType.Value)
                 {
-                    case Web.FieldType.Text:
+                    case Web.DynamicFieldType.Text:
                         this.field = new TextField();
                         break;
-                    case Web.FieldType.List:
+                    case Web.DynamicFieldType.List:
                         this.field = new DropDownField();
                         break;
-                    case Web.FieldType.Date:
+                    case Web.DynamicFieldType.Date:
                         this.field = new DateField();
                         break;
                 }

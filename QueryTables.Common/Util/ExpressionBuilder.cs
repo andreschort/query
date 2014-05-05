@@ -110,6 +110,16 @@ namespace QueryTables.Common.Util
             return this.Call(type.GetMethod(name, new Type[] { }));
         }
 
+        public ExpressionBuilder Call(Type type, string name, object arg)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return new ExpressionBuilder(this.Param, this.Expression);
+            }
+
+            return this.Call(type.GetMethod(name, new Type[] { arg.GetType() }), Expression.Constant(arg));
+        }
+
         public ExpressionBuilder Call(MethodInfo methodInfo, params Expression[] parameters)
         {
             if (methodInfo == null)
@@ -221,6 +231,11 @@ namespace QueryTables.Common.Util
         public ExpressionBuilder LessThanOrEqualTo<T>(T right)
         {
             return this.LessThanOrEqual(Expression.Constant(right));
+        }
+
+        public ExpressionBuilder CompareToThis(object right)
+        {
+            return this.Call(right.GetType(), "CompareTo", right);
         }
 
         public ExpressionBuilder AndAlso(Expression right)

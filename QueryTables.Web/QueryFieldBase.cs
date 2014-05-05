@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,6 +13,7 @@ using SortDirection = QueryTables.Common.SortDirection;
 
 namespace QueryTables.Web
 {
+    [DebuggerDisplay("Name: {Name}")]
     public abstract class QueryFieldBase : DataControlField
     {
         #region Fields

@@ -41,6 +41,11 @@ namespace QueryTables.Core
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
         {
+            if (values == null || !values.Any())
+            {
+                return query;
+            }
+
             var fieldsNotFound = values.Keys.Except(this.Fields.Select(x => x.Name)).ToList();
 
             if (fieldsNotFound.Any())

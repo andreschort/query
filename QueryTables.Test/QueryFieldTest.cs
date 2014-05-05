@@ -376,7 +376,7 @@ namespace QueryTables.Test
         public void FilterDate()
         {
             var field = new QueryField<Empleado>();
-            field.Where.Add(ExpressionBuilder.Build<Empleado, DateTime?>(x => x.FechaNacimiento.Date as DateTime?));
+            field.Where.Add(ExpressionBuilder.Build<Empleado, DateTime>(x => x.FechaNacimiento.Date));
             var empleados = new List<Empleado>
             {
                 new Empleado { Apellido = "Chort", FechaNacimiento = DateTime.Today },
@@ -388,7 +388,7 @@ namespace QueryTables.Test
             var filter = new Filter
             {
                 Valid = true,
-                Value = (DateTime?)DateTime.Today,
+                Value = DateTime.Today,
                 Operator = FilterOperator.GreaterThanEqual
             };
 
