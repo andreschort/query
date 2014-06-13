@@ -23,9 +23,6 @@ QueryTables.Core
 - Extend operators to any target type.
 
 QueryTables.Web
-- TD Tooltip
-- TH y TD CssClass
-- Improve the way you can apply styles to the Query.Web controls.
 - New field types:
  - Autocomplete (from a service or automatically from the Query - if posible)
  - DropDownList with multiple options (Query.Core currently supports many filter values with an OR conjunction)
@@ -33,8 +30,7 @@ QueryTables.Web
 - Support TemplateField:
  - Sorting of columns that do not have filter.
  - Create the header with filter web controls
-   - Requires a refactor in the ui fields to extract web controls for each filter type)
-    - How would GridExtender set global properties and get sort and filter values?
+   - How would GridExtender set global properties and get sort and filter values?
 
 Basic projection
 ----------------
@@ -158,18 +154,20 @@ There are three kinds of `DataControlField`'s:
 - __DropDownField__: Renders a select as the filter UI element.
 - __DynamicField__: Enables to programmatically set the field type. Uses one of the above fields internally.
 
-All fields have a anchor as title above them which when clicked triggers the `Sort` event in `GridExtender`.
+All fields have an anchor as title above them which when clicked triggers the `Sort` event in `GridExtender`.
 The `Filter` event is triggered by hitting the enter key on a field's filter UI element or automatically by the AutoFilterDelay parameter.
 
 These are the properties common to all fields:
 - __Name__ (string - required): The name of the field. Determines the value shown and is the name used to identify the field's filter value and sorting direction in the `GridExtender` Filter and Sorting properties as explained above.
 - __DataField__ (string - optional): The name of the property of the data bound element from where to get the value of the data cell. If not specified it will use the __Name__ property.
+- __ItemToolTipDataField__ (string - optional): The name of the property of the data bound element from where to get the value of the data cell's tooltip (title).
 - __AssociatedControlID__ (string - optional): Makes the data cell to render a <label for=".."> tag.
 - __ItemCssClass__ (string - optional): Add a CSS class to the data cell.
 - __Placeholder__ (string - optional): The placeholder to show in the filter UI element.
 - __UrlFormat__ (string - optional): Turns the text in the cell into a link. The string is used as the url of the link.
 - __UrlFields__ (string, optional): A comma separated list of properties to use with UrlFormat. This allows to generate an url customized for each row.
 - __AutoFilterDelay__ (int - optional): Same as GridExtender but affects only this field.
+- __EnableFilter__ (bool - optional): Allows to show or hide the filter UI control. Default: true.
 - __ItemEnabled__ (bool - optional - default=true): Set to false when you want to disable everything inside the data cell.
 - __ItemTemplate__ (ITemplate - optional): Enables you to define the full content of the data cells (similar to TemplateField.ItemTemplate).
 - __Format__ (string - optional): Used to format the value shown in the data cell. Can be any standard format strings.
