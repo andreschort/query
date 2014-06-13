@@ -235,7 +235,7 @@ namespace QueryTables.Common.Util
 
         public ExpressionBuilder CompareToThis(object right)
         {
-            return this.Call(right.GetType(), "CompareTo", right);
+            return this.Call(this.Expression.Type, "CompareTo", right);
         }
 
         public ExpressionBuilder AndAlso(Expression right)

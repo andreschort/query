@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using QueryTables.Common.Extension;
@@ -9,6 +10,7 @@ using QueryTables.Core.Filters.Builders;
 
 namespace QueryTables.Core
 {
+    [DebuggerDisplay("Name: {Name}, Select:{Select}")]
     public class QueryField<T>
     {
         public QueryField()
@@ -67,23 +69,23 @@ namespace QueryTables.Core
                     operatorFunc = (b, f) => b.NotEqualTo(f.Value);
                     break;
                 case FilterOperator.GreaterThan:
-                    operatorFunc = (b, f) => b.CompareToThis(f.Value).GreaterThanThis(0);
+                    operatorFunc = (b, f) => b.GreaterThanThis(f.Value);
                     break;
                 case FilterOperator.GreaterThanEqual:
-                    operatorFunc = (b, f) => b.CompareToThis(f.Value).GreaterThanOrEqualTo(0);
+                    operatorFunc = (b, f) => b.GreaterThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.LessThan:
-                    operatorFunc = (b, f) => b.CompareToThis(f.Value).LessThanThis(0);
+                    operatorFunc = (b, f) => b.LessThanThis(f.Value);
                     break;
                 case FilterOperator.LessThanEqual:
-                    operatorFunc = (b, f) => b.CompareToThis(f.Value).LessThanOrEqualTo(0);
+                    operatorFunc = (b, f) => b.LessThanOrEqualTo(f.Value);
                     break;
                 case FilterOperator.Between:
                     operatorFunc =
                         (b, f) =>
-                        b.CompareToThis(f.Values[0])
-                            .GreaterThanOrEqualTo(0)
-                            .AndAlso(b.CompareToThis(f.Values[1]).LessThanOrEqualTo(0).Expression);
+                        b.GreaterThanOrEqualTo(f.Values[0])
+                            
+                            .AndAlso(b.LessThanOrEqualTo(f.Values[1]).Expression);
                     break;
                 case FilterOperator.Contains:
                     if (this.CaseSensitive)
