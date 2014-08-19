@@ -157,6 +157,26 @@ namespace QueryTables.Common.Util
             return new ExpressionBuilder(this.Param, exp);
         }
 
+        public ExpressionBuilder Truncate(int digits)
+        {
+            var type = this.Expression.Type;
+            if (type == typeof(decimal))
+            {
+                type = typeof(decimal?);
+            }
+            else if (type == typeof(double))
+            {
+                type = typeof(double?);
+            }
+
+            var exp = Expression.Call(
+                typeof(EntityFunctions).GetMethod("Truncate", new[] { type, typeof(int?) }),
+                Expression.Convert(this.Expression, type),
+                Expression.Convert(Expression.Constant(digits), typeof(int?)));
+
+            return new ExpressionBuilder(this.Param, exp);
+        }
+
         public ExpressionBuilder Convert<T>()
         {
             return new ExpressionBuilder(this.Param, Expression.Convert(this.Expression, typeof(T)));

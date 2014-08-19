@@ -151,6 +151,18 @@ namespace QueryTables.Core
             return this;
         }
 
+        public QueryFieldBuilder<T> Truncate(int digits)
+        {
+            var truncatedExpression =
+                ExpressionBuilder.New(this.Instance.Select.Parameters[0], this.Instance.Select.Body).Truncate(digits).Lambda();
+
+            this.Instance.Select = truncatedExpression;
+            this.Instance.Where.Clear();
+            this.Instance.Where.Add(truncatedExpression);
+
+            return this;
+        }
+
         public QueryFieldBuilder<T> CaseSensitive()
         {
             this.Instance.CaseSensitive = true;

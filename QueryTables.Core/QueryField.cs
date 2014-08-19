@@ -69,57 +69,47 @@ namespace QueryTables.Core
                     operatorFunc = (b, f) => b.NotEqualTo(f.Value);
                     break;
                 case FilterOperator.GreaterThan:
-                    operatorFunc = (b, f) => b.GreaterThanThis(f.Value);
+                    operatorFunc = filter.Value is string
+                                       ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                                         ((b, f) => b.CompareToThis(f.Value).GreaterThanThis(0))
+                                       : ((b, f) => b.GreaterThanThis(f.Value));
                     break;
                 case FilterOperator.GreaterThanEqual:
-                    operatorFunc = (b, f) => b.GreaterThanOrEqualTo(f.Value);
+                    operatorFunc = filter.Value is string
+                                       ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                                         ((b, f) => b.CompareToThis(f.Value).GreaterThanOrEqualTo(0))
+                                       : ((b, f) => b.GreaterThanOrEqualTo(f.Value));
                     break;
                 case FilterOperator.LessThan:
-                    operatorFunc = (b, f) => b.LessThanThis(f.Value);
+                    operatorFunc = filter.Value is string
+                                       ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                                         ((b, f) => b.CompareToThis(f.Value).LessThanThis(0))
+                                       : ((b, f) => b.LessThanThis(f.Value));
                     break;
                 case FilterOperator.LessThanEqual:
-                    operatorFunc = (b, f) => b.LessThanOrEqualTo(f.Value);
+                    operatorFunc = filter.Value is string
+                                       ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                                         ((b, f) => b.CompareToThis(f.Value).LessThanOrEqualTo(0))
+                                       : ((b, f) => b.LessThanOrEqualTo(f.Value));
                     break;
                 case FilterOperator.Between:
-                    operatorFunc =
-                        (b, f) =>
-                        b.GreaterThanOrEqualTo(f.Values[0])
-                            
-                            .AndAlso(b.LessThanOrEqualTo(f.Values[1]).Expression);
+                    operatorFunc = filter.Value is string
+                                       ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                                         ((b, f) => b.CompareToThis(f.Values[0]).GreaterThanOrEqualTo(0)
+                                                    .AndAlso(b.CompareToThis(f.Values[1]).LessThanOrEqualTo(0).Expression))
+                                       : (b, f) => b.GreaterThanOrEqualTo(f.Values[0])
+                                                    .AndAlso(b.LessThanOrEqualTo(f.Values[1]).Expression);
                     break;
                 case FilterOperator.Contains:
-                    if (this.CaseSensitive)
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("Contains", f.Value.ToString());
-                    }
-                    else
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("ToLower").Call<string>("Contains", f.Value.ToString().ToLower());
-                    }
-
-                    break;
                 case FilterOperator.StartsWith:
-                    if (this.CaseSensitive)
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("StartsWith", f.Value.ToString());
-                    }
-                    else
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("ToLower").Call<string>("StartsWith", f.Value.ToString().ToLower());
-                    }
-
-                    break;
                 case FilterOperator.EndsWith:
-                    if (this.CaseSensitive)
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("EndsWith", f.Value.ToString());
-                    }
-                    else
-                    {
-                        operatorFunc = (b, f) => b.Call<string>("ToLower").Call<string>("EndsWith", f.Value.ToString().ToLower());
-                    }
+                    operatorFunc = this.CaseSensitive
+                        ? (Func<ExpressionBuilder, Filter, ExpressionBuilder>)
+                            ((b, f) => b.Call<string>(filter.Operator.ToString(), f.Value.ToString()))
+                        : ((b, f) => b.Call<string>("ToLower").Call<string>(filter.Operator.ToString(), f.Value.ToString().ToLower()));
 
                     break;
+
                 default:
                     throw new Exception("Unkown operator: " + filter.Operator);
             }

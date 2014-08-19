@@ -43,7 +43,7 @@ QueryTables.Web.TextFilter.prototype = {
         if (this._hasFocus) {
             var _this = this;
             // use timeout to wait for every element to be loaded
-            setTimeout(function() { _this.setFocus(); }, 10);
+            setTimeout(function() { _this.setFocus(); }, 100);
         }
     },
 
