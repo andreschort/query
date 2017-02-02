@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Objects;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -107,7 +106,7 @@ namespace QueryTables.Common.Util
                 return new ExpressionBuilder(this.Param, this.Expression);
             }
 
-            return this.Call(type.GetMethod(name, new Type[] { }));
+            return this.Call(type.GetTypeInfo().GetMethod(name, new Type[] { }));
         }
 
         public ExpressionBuilder Call(Type type, string name, object arg)
@@ -117,7 +116,7 @@ namespace QueryTables.Common.Util
                 return new ExpressionBuilder(this.Param, this.Expression);
             }
 
-            return this.Call(type.GetMethod(name, new Type[] { arg.GetType() }), Expression.Constant(arg));
+            return this.Call(type.GetTypeInfo().GetMethod(name, new Type[] { arg.GetType() }), Expression.Constant(arg));
         }
 
         public ExpressionBuilder Call(MethodInfo methodInfo, params Expression[] parameters)
@@ -136,7 +135,7 @@ namespace QueryTables.Common.Util
 
         public ExpressionBuilder Call<T>(string name, object arg)
         {
-            var exp = Expression.Call(this.Expression, typeof(T).GetMethod(name, new[] { arg.GetType() }), Expression.Constant(arg));
+            var exp = Expression.Call(this.Expression, typeof(T).GetTypeInfo().GetMethod(name, new[] { arg.GetType() }), Expression.Constant(arg));
 
             return new ExpressionBuilder(this.Param, exp);
         }
@@ -148,6 +147,8 @@ namespace QueryTables.Common.Util
             return new ExpressionBuilder(this.Param, exp);
         }
 
+//TODO migration to netstandard
+/*
         public ExpressionBuilder TruncateTime()
         {
             var exp = Expression.Call(
@@ -176,7 +177,7 @@ namespace QueryTables.Common.Util
 
             return new ExpressionBuilder(this.Param, exp);
         }
-
+*/
         public ExpressionBuilder Convert<T>()
         {
             return new ExpressionBuilder(this.Param, Expression.Convert(this.Expression, typeof(T)));
@@ -284,6 +285,12 @@ namespace QueryTables.Common.Util
             var expression1 = this.LessThanOrEqualTo(right).Expression;
 
             return this.AndAlso(expression, expression1);
+        }
+
+        public ExpressionBuilder Add(Expression exp) {
+            this.Expression = Expression.Add(this.Expression, exp);
+
+            return this;
         }
 
         public Expression<Func<T, E>> Lambda<T, E>()

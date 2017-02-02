@@ -61,7 +61,7 @@ namespace QueryTables.Common.Extension
                 return ((MethodCallExpression)expression).Method;
             }
 
-            return expression.Type;
+            return expression.Type.GetTypeInfo();
         }
 
         public static Expression Replace(this Expression body, Expression from, Expression to)

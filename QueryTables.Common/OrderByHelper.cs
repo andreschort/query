@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace Common
 {
@@ -11,7 +10,7 @@ namespace Common
     {
         public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> enumerable, string orderBy)
         {
-            return enumerable.AsQueryable().OrderBy(orderBy).AsEnumerable();
+            return enumerable.OrderBy(orderBy).AsEnumerable();
         }
 
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> collection, string orderBy)
@@ -32,7 +31,7 @@ namespace Common
             foreach (string prop in props)
             {
                 // use reflection (not ComponentModel) to mirror LINQ
-                PropertyInfo pi = type.GetProperty(prop);
+                PropertyInfo pi = type.GetTypeInfo().GetProperty(prop);
                 expr = Expression.Property(expr, pi);
                 type = pi.PropertyType;
             }
@@ -56,7 +55,7 @@ namespace Common
             }
 
             //TODO: apply caching to the generic methodsinfos?
-            return (IOrderedQueryable<T>)typeof(Queryable).GetMethods().Single(
+            return (IOrderedQueryable<T>)typeof(Queryable).GetTypeInfo().GetMethods().Single(
                 method => method.Name == methodName
                         && method.IsGenericMethodDefinition
                         && method.GetGenericArguments().Length == 2

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 using QueryTables.Common.Extension;
 using QueryTables.Common.Util;
-using QueryTables.Core.Filters;
 using QueryTables.Core.Filters.Builders;
 
 namespace QueryTables.Core
@@ -139,6 +139,8 @@ namespace QueryTables.Core
             return this;
         }
 
+//TODO migration to netstandard
+/*
         public QueryFieldBuilder<T> TruncateTime()
         {
             var truncatedExpression =
@@ -162,7 +164,7 @@ namespace QueryTables.Core
 
             return this;
         }
-
+*/
         public QueryFieldBuilder<T> CaseSensitive()
         {
             this.Instance.CaseSensitive = true;
@@ -199,7 +201,7 @@ namespace QueryTables.Core
                 return new BooleanFilterBuilder();
             }
 
-            if (type.IsEnum)
+            if (type.GetTypeInfo().IsEnum)
             {
                 return new ListFilterBuilder();
             }

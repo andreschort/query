@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using QueryTables.Common.Extension;
 using QueryTables.Common.Util;
 using QueryTables.Core.Filters;
@@ -119,7 +120,7 @@ namespace QueryTables.Core
             foreach (var part in this.Where)
             {
                 var part_body = ExpressionBuilder.New(param, part.Body.Replace(part.Parameters[0], param));
-                var canBeNull = !part.ReturnType.IsValueType || Nullable.GetUnderlyingType(part.ReturnType) != null;
+                var canBeNull = !part.ReturnType.GetTypeInfo().IsValueType || Nullable.GetUnderlyingType(part.ReturnType) != null;
                 if (this.NullSafe && canBeNull)
                 {
                     var e = Expression.Condition(

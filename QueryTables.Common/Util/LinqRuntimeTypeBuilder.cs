@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
@@ -11,14 +10,14 @@ namespace QueryTables.Common.Util
     {
         private static AssemblyName assemblyName = new AssemblyName() { Name = "DynamicLinqTypes" };
         private static ModuleBuilder moduleBuilder = null;
-        private static Dictionary<string, Type> builtTypes = new Dictionary<string, Type>();
+        private static Dictionary<string, TypeInfo> builtTypes = new Dictionary<string, TypeInfo>();
 
         static LinqRuntimeTypeBuilder()
         {
-            moduleBuilder = Thread.GetDomain().DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run).DefineDynamicModule(assemblyName.Name);
+            moduleBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run).DefineDynamicModule(assemblyName.Name);
         }
 
-        public static Type GetDynamicType(Dictionary<string, Type> fields)
+        public static TypeInfo GetDynamicType(Dictionary<string, Type> fields)
         {
             if (null == fields)
             {
@@ -47,7 +46,7 @@ namespace QueryTables.Common.Util
                     CreateProperty(typeBuilder, field.Key, field.Value);
                 }   
 
-                builtTypes[className] = typeBuilder.CreateType();
+                builtTypes[className] = typeBuilder.CreateTypeInfo();
 
                 return builtTypes[className];
             }

@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace QueryTables.Test.Model
 {

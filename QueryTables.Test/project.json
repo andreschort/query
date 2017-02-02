@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0-*",
+
+  "testRunner": "mstest",
+
+  "dependencies": {
+    "Microsoft.EntityFrameworkCore.Sqlite": "1.1.0",
+    "Microsoft.EntityFrameworkCore.Design": {
+      "version": "1.1.0",
+      "type": "build"
+    },
+    "Microsoft.EntityFrameworkCore.Sqlite.Design": {
+      "version": "1.1.0",
+      "type": "build"
+    },
+    "dotnet-test-mstest": "1.1.2-preview",
+    "MSTest.TestFramework": "1.0.8-rc2"
+  },
+  
+  "tools": {
+    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "portable-net45+win8"
+      ],
+  
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0",
+          "type": "platform"
+        },
+        "QueryTables.Common": {
+          "tarjet": "project",
+          "version": "1.0.0-*"
+        },
+        "QueryTables.Core": {
+          "tarjet": "project",
+          "version": "1.0.0-*"
+        }
+      }
+    }
+  }
+}

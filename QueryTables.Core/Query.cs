@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using QueryTables.Common;
 using QueryTables.Common.Extension;
 using QueryTables.Common.Util;
@@ -18,7 +19,7 @@ namespace QueryTables.Core
 
         public List<QueryField<T>> Fields { get; set; }
 
-        public Type ResultType { get; private set; }
+        public TypeInfo ResultType { get; private set; }
 
         public bool NullSafe { get; set; }
 
@@ -36,7 +37,7 @@ namespace QueryTables.Core
 
         public IQueryable<E> Project<E>(IQueryable<T> queryable)
         {
-            return (IQueryable<E>)this.Project(queryable, typeof(E));
+            return (IQueryable<E>)this.Project(queryable, typeof(E).GetTypeInfo());
         }
 
         public IQueryable<T> Filter(IQueryable<T> query, Dictionary<string, string> values)
@@ -129,6 +130,27 @@ namespace QueryTables.Core
             return builder;
         }
 
+        public QueryFieldBuilder<T> AggregateOn(string fieldName, string fieldName1, string fieldName2, params string[] fields) {
+            var builder = this.AddField(fieldName);
+
+            var field1 = this.Fields.First(x => x.Name == fieldName1);
+            var p = ExpressionBuilder.New(field1.Select.Parameters[0], field1.Select.Body);
+
+            var field2 = this.Fields.First(x => x.Name == fieldName2);
+            var exp2 = field2.Select.Body.Replace(field2.Select.Parameters[0], p.Param);
+
+            p.Add(exp2);
+
+            foreach (var field in fields.Select(name => this.Fields.First(f => f.Name == name)))
+            {
+                p.Add(field.Select.Body.Replace(field.Select.Parameters[0], p.Param));
+            }
+
+            builder.Instance.Select = p.Lambda();
+            builder.Instance.Where.Add(builder.Instance.Select);
+            return builder;
+        }
+
         private IOrderedQueryable<T> OrderBy(IQueryable<T> query, string fieldName, SortDirection sortDirection, string methodName)
         {
             var field = this.Fields.First(x => x.Name.Equals(fieldName));
@@ -138,7 +160,7 @@ namespace QueryTables.Core
                 methodName += "Descending";
             }
 
-            var methodInfo = typeof(Queryable).GetMethods().Single(
+            var methodInfo = typeof(Queryable).GetTypeInfo().GetMethods().Single(
                 method => method.Name == methodName
                           && method.IsGenericMethodDefinition
                           && method.GetGenericArguments().Length == 2
@@ -147,7 +169,7 @@ namespace QueryTables.Core
             return (IOrderedQueryable<T>)methodInfo.MakeGenericMethod(typeof(T), field.Select.ReturnType).Invoke(null, new object[] { query, field.Select });
         }
         
-        private IQueryable Project(IQueryable<T> queryable, Type resultType)
+        private IQueryable Project(IQueryable<T> queryable, TypeInfo resultType)
         {
             this.ResultType = resultType;
             var parameter = Expression.Parameter(queryable.ElementType, "t");
@@ -183,13 +205,13 @@ namespace QueryTables.Core
                 });
 
             var selector = Expression.Lambda(
-                Expression.MemberInit(Expression.New(this.ResultType), bindings),
+                Expression.MemberInit(Expression.New(this.ResultType.AsType()), bindings),
                 parameter);
 
             var selectExpression = Expression.Call(
                 typeof(Queryable),
                 "Select",
-                new[] { queryable.ElementType, this.ResultType },
+                new[] { queryable.ElementType, this.ResultType.AsType() },
                 queryable.Expression,
                 Expression.Quote(selector));
 
@@ -218,10 +240,12 @@ namespace QueryTables.Core
             var keyValuePair = selectWhen.ElementAt(0);
             selectWhen.Remove(keyValuePair.Key);
 
+            var castedExpression = Expression.Convert(target, keyValuePair.Key.GetType());
+
             return Expression.Condition(
-                Expression.Equal(target, Expression.Constant(keyValuePair.Key)),
+                Expression.Equal(castedExpression, Expression.Constant(keyValuePair.Key)),
                 Expression.Constant(keyValuePair.Value),
-                this.CreateSelectWhen(target, selectWhen, selectElse));
+                this.CreateSelectWhen(castedExpression, selectWhen, selectElse));
         }
     }
 }
