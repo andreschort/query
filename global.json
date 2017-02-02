@@ -1,7 +1,0 @@
-{
-  "projects":[
-        "QueryTables.Common",
-        "QueryTables.Core"
-    ],
-  "sdk": { "version": "1.0.0-preview4-004233" }
-}

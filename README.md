@@ -1,6 +1,8 @@
 QueryTables
 =====
 
+This branch holds the port of QueryTables to NETStandard1.6
+
 QueryTables can:
 - Transform an IQueryable<T> with projections into another type(or an anonymous type), apply filters and multiple sortings. The IQueryable can be anything, from a list in memory to an Entity Framework query.
 - Easily create a GridView which gets the data from an IQueryable using the transformations provided.
