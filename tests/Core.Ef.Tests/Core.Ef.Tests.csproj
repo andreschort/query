@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QueryTables.Common\QueryTables.Common.csproj" />
-    <ProjectReference Include="..\QueryTables.Core\QueryTables.Core.csproj" />
-    <ProjectReference Include="..\Core.Test\Core.Test.csproj" />
+    <ProjectReference Include="..\..\src\Common\Common.csproj" />
+    <ProjectReference Include="..\..\src\Core\Core.csproj" />
+    <ProjectReference Include="..\Core.Tests\Core.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
