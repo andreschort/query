@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using QueryTables.Core;
 using QueryTables.Core.Filters;
 using QueryTables.Core.Filters.Builders;
@@ -6,24 +6,23 @@ using QueryTables.Test.Model;
 
 namespace QueryTables.Test.Filters.Builders
 {
-    [TestClass]
     public class ListFilterBuilderTest
     {
-        [TestMethod]
+        [Fact]
         public void ListDefault()
         {
             var builder = new ListFilterBuilder { DefaultValue = "default" };
 
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, builder.DefaultValue);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.IsFalse(filter.Valid);
-            Assert.IsNull(filter.Value);
-            Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual(builder.DefaultValue, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.False(filter.Valid);
+            Assert.Null(filter.Value);
+            Assert.Equal(FilterOperator.None, filter.Operator);
+            Assert.Equal(builder.DefaultValue, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void ListInteger()
         {
             var builder = new ListFilterBuilder { DefaultValue = "default" };
@@ -31,11 +30,11 @@ namespace QueryTables.Test.Filters.Builders
             const string Value = "1";
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.IsTrue(filter.Valid);
-            Assert.AreEqual(1, filter.Value);
-            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(Value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.True(filter.Valid);
+            Assert.Equal(1, filter.Value);
+            Assert.Equal(FilterOperator.Equal, filter.Operator);
+            Assert.Equal(Value, filter.OriginalText);
         }
     }
 }

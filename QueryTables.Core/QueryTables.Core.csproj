@@ -13,6 +13,10 @@
     <EmbeddedResource Include="compiler\resources\**\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QueryTables.Common\QueryTables.Common.csproj" />
+  </ItemGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <ProjectReference Include="..\QueryTables.Common\QueryTables.Common.csproj" />
     <PackageReference Include="NETStandard.Library">

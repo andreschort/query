@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using QueryTables.Common;
 using QueryTables.Common.Extension;
 using QueryTables.Common.Util;
@@ -11,10 +11,9 @@ using QueryTables.Test.Model;
 
 namespace QueryTables.Test
 {
-    [TestClass]
     public class QueryTest
     {
-        [TestMethod]
+        [Fact]
         public void ProjectResultingType()
         {
             // Init test vars
@@ -44,17 +43,17 @@ namespace QueryTables.Test
             var result = queryable.Cast<object>().ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(empleados.Count, result.Count);
+            Assert.Equal(empleados.Count, result.Count);
 
             var fields = result[0].GetType().GetTypeInfo().GetType().GetProperties();
 
-            Assert.AreEqual("FullName", fields[0].Name);
-            Assert.AreEqual(typeof(string), fields[0].PropertyType);
-            Assert.AreEqual("Dni", fields[1].Name);
-            Assert.AreEqual(typeof(int), fields[1].PropertyType);
+            Assert.Equal("FullName", fields[0].Name);
+            Assert.Equal(typeof(string), fields[0].PropertyType);
+            Assert.Equal("Dni", fields[1].Name);
+            Assert.Equal(typeof(int), fields[1].PropertyType);
         }
 
-        [TestMethod]
+        [Fact]
         public void ProjectResultingProjection()
         {
             // Init test vars
@@ -84,11 +83,11 @@ namespace QueryTables.Test
             List<dynamic> result = queryable.Cast<object>().ToList();
 
             // Assertions for the target method
-            Assert.AreEqual("Andres Chort", result[0].FullName);
-            Assert.AreEqual(31333555, result[0].Dni);
+            Assert.Equal("Andres Chort", result[0].FullName);
+            Assert.Equal(31333555, result[0].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void ProjectWhen()
         {
             // Init test vars
@@ -117,12 +116,12 @@ namespace QueryTables.Test
             List<dynamic> result = queryable.Cast<object>().ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(EstadoCivil.Soltero.ToString(), result[0].EstadoCivil);
-            Assert.AreEqual(EstadoCivil.Casado.ToString(), result[1].EstadoCivil);
-            Assert.AreEqual("no se", result[2].EstadoCivil);
+            Assert.Equal(EstadoCivil.Soltero.ToString(), result[0].EstadoCivil);
+            Assert.Equal(EstadoCivil.Casado.ToString(), result[1].EstadoCivil);
+            Assert.Equal("no se", result[2].EstadoCivil);
         }
 
-        [TestMethod]
+        [Fact]
         public void OrderBy()
         {
             // Init test vars
@@ -158,10 +157,10 @@ namespace QueryTables.Test
             empleados = empleados.OrderByDescending(x => x.Nombre + x.Apellido).ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(empleados[0].Nombre, result[0].Nombre);
+            Assert.Equal(empleados[0].Nombre, result[0].Nombre);
         }
 
-        [TestMethod]
+        [Fact]
         public void OrderByThenBy()
         {
             // Init test vars
@@ -198,10 +197,10 @@ namespace QueryTables.Test
             empleados = empleados.OrderByDescending(x => x.Salario).ThenBy(x => x.Edad).ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(empleados[0].Nombre, result[0].Nombre);
+            Assert.Equal(empleados[0].Nombre, result[0].Nombre);
         }
 
-        [TestMethod]
+        [Fact]
         public void ProjectNamedType()
         {
             var query = new Query<Empleado>();
@@ -229,11 +228,11 @@ namespace QueryTables.Test
             var result = query.Project<EmpleadoDTO>(empleados).ToList();
 
             // Assertions for the target method
-            Assert.AreEqual("Andres Chort", result[0].FullName);
-            Assert.AreEqual(31333555, result[0].Dni);
+            Assert.Equal("Andres Chort", result[0].FullName);
+            Assert.Equal(31333555, result[0].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateOnTwoFields() {
             var query = new Query<Empleado>();
 
@@ -266,12 +265,12 @@ namespace QueryTables.Test
             List<UnoDosTres> result = queryable.ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(1, result[0].Uno);
-            Assert.AreEqual(2, result[0].Dos);
-            Assert.AreEqual(3, result[0].Suma);
+            Assert.Equal(1, result[0].Uno);
+            Assert.Equal(2, result[0].Dos);
+            Assert.Equal(3, result[0].Suma);
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateOnThreeFields() {
             var query = new Query<Empleado>();
 
@@ -304,10 +303,10 @@ namespace QueryTables.Test
             List<UnoDosTres> result = queryable.ToList();
 
             // Assertions for the target method
-            Assert.AreEqual(1, result[0].Uno);
-            Assert.AreEqual(2, result[0].Dos);
-            Assert.AreEqual(3, result[0].Tres);
-            Assert.AreEqual(6, result[0].Suma);
+            Assert.Equal(1, result[0].Uno);
+            Assert.Equal(2, result[0].Dos);
+            Assert.Equal(3, result[0].Tres);
+            Assert.Equal(6, result[0].Suma);
         }
     }
 

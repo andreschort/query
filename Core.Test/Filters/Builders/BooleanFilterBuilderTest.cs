@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using QueryTables.Core;
 using QueryTables.Core.Filters;
 using QueryTables.Core.Filters.Builders;
@@ -6,10 +6,9 @@ using QueryTables.Test.Model;
 
 namespace QueryTables.Test.Filters.Builders
 {
-    [TestClass]
     public class BooleanFilterBuilderTest
     {
-        [TestMethod]
+        [Fact]
         public void BooleanTrue()
         {
             var builder = new BooleanFilterBuilder();
@@ -17,14 +16,14 @@ namespace QueryTables.Test.Filters.Builders
             var queryField = new QueryField<Empleado> { Name = "name" };
             var filter = builder.Create(queryField, true.ToString());
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(true, filter.Value);
-            Assert.AreEqual(true, filter.Valid);
-            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(true.ToString(), filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(true, filter.Value);
+            Assert.Equal(true, filter.Valid);
+            Assert.Equal(FilterOperator.Equal, filter.Operator);
+            Assert.Equal(true.ToString(), filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void BooleanFalse()
         {
             var builder = new BooleanFilterBuilder();
@@ -32,14 +31,14 @@ namespace QueryTables.Test.Filters.Builders
             var queryField = new QueryField<Empleado> { Name = "name" };
             var filter = builder.Create(queryField, false.ToString());
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(false, filter.Value);
-            Assert.AreEqual(true, filter.Valid);
-            Assert.AreEqual(FilterOperator.Equal, filter.Operator);
-            Assert.AreEqual(false.ToString(), filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(false, filter.Value);
+            Assert.Equal(true, filter.Valid);
+            Assert.Equal(FilterOperator.Equal, filter.Operator);
+            Assert.Equal(false.ToString(), filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void BooleanInvalid()
         {
             var builder = new BooleanFilterBuilder();
@@ -47,11 +46,11 @@ namespace QueryTables.Test.Filters.Builders
             var queryField = new QueryField<Empleado> { Name = "name" };
             var filter = builder.Create(queryField, "not_a_valid_bool_value");
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(null, filter.Value);
-            Assert.AreEqual(false, filter.Valid);
-            Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual("not_a_valid_bool_value", filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(null, filter.Value);
+            Assert.Equal(false, filter.Valid);
+            Assert.Equal(FilterOperator.None, filter.Operator);
+            Assert.Equal("not_a_valid_bool_value", filter.OriginalText);
         }
     }
 }

@@ -4,12 +4,8 @@ namespace QueryTables.Test.Model
 {
     public class TestContext : DbContext
     {
-        public TestContext()
-        {
-        }
-
-        public TestContext(DbConnection existingConnection)
-            : base(existingConnection, true)
+        public TestContext(DbContextOptions options)
+            : base(options)
         {
         }
 

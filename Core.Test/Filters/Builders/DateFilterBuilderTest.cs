@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using QueryTables.Core;
 using QueryTables.Core.Filters;
 using QueryTables.Core.Filters.Builders;
@@ -8,10 +8,9 @@ using QueryTables.Test.Model;
 
 namespace QueryTables.Test.Filters.Builders
 {
-    [TestClass]
     public class DateFilterBuilderTest
     {
-        [TestMethod]
+        [Fact]
         public void DateEmpty()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -19,14 +18,14 @@ namespace QueryTables.Test.Filters.Builders
             var value = string.Empty;
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(0, filter.Values.Count);
-            Assert.AreEqual(false, filter.Valid);
-            Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(0, filter.Values.Count);
+            Assert.Equal(false, filter.Valid);
+            Assert.Equal(FilterOperator.None, filter.Operator);
+            Assert.Equal(value, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void DateSeparatorOnly()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -36,14 +35,14 @@ namespace QueryTables.Test.Filters.Builders
 
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(0, filter.Values.Count);
-            Assert.AreEqual(false, filter.Valid);
-            Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(0, filter.Values.Count);
+            Assert.Equal(false, filter.Valid);
+            Assert.Equal(FilterOperator.None, filter.Operator);
+            Assert.Equal(value, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void DateFrom()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -54,14 +53,14 @@ namespace QueryTables.Test.Filters.Builders
             var value = fromStr + builder.Separator;
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(from, filter.Values[0]);
-            Assert.AreEqual(true, filter.Valid);
-            Assert.AreEqual(FilterOperator.GreaterThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(from, filter.Values[0]);
+            Assert.Equal(true, filter.Valid);
+            Assert.Equal(FilterOperator.GreaterThanEqual, filter.Operator);
+            Assert.Equal(value, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void DateTo()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -72,14 +71,14 @@ namespace QueryTables.Test.Filters.Builders
             var value = ";" + toStr;
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(to, filter.Values[0]);
-            Assert.AreEqual(true, filter.Valid);
-            Assert.AreEqual(FilterOperator.LessThanEqual, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(to, filter.Values[0]);
+            Assert.Equal(true, filter.Valid);
+            Assert.Equal(FilterOperator.LessThanEqual, filter.Operator);
+            Assert.Equal(value, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void DateBetween()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -93,15 +92,15 @@ namespace QueryTables.Test.Filters.Builders
             var value = fromStr + builder.Separator + toStr;
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(from, filter.Values[0]);
-            Assert.AreEqual(to, filter.Values[1]);
-            Assert.AreEqual(true, filter.Valid);
-            Assert.AreEqual(FilterOperator.Between, filter.Operator);
-            Assert.AreEqual(value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(from, filter.Values[0]);
+            Assert.Equal(to, filter.Values[1]);
+            Assert.Equal(true, filter.Valid);
+            Assert.Equal(FilterOperator.Between, filter.Operator);
+            Assert.Equal(value, filter.OriginalText);
         }
 
-        [TestMethod]
+        [Fact]
         public void DateInvalid()
         {
             var builder = new DateFilterBuilder { Separator = ';' };
@@ -109,11 +108,11 @@ namespace QueryTables.Test.Filters.Builders
             const string Value = "wefwef";
             var filter = builder.Create(new QueryField<Empleado> { Name = "name" }, Value);
 
-            Assert.AreEqual("name", filter.Name);
-            Assert.AreEqual(0, filter.Values.Count);
-            Assert.AreEqual(false, filter.Valid);
-            Assert.AreEqual(FilterOperator.None, filter.Operator);
-            Assert.AreEqual(Value, filter.OriginalText);
+            Assert.Equal("name", filter.Name);
+            Assert.Equal(0, filter.Values.Count);
+            Assert.Equal(false, filter.Valid);
+            Assert.Equal(FilterOperator.None, filter.Operator);
+            Assert.Equal(Value, filter.OriginalText);
         }
     }
 }

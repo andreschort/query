@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using QueryTables.Common.Util;
 using QueryTables.Core;
 using QueryTables.Core.Filters;
@@ -9,10 +9,9 @@ using QueryTables.Test.Model;
 
 namespace QueryTables.Test
 {
-    [TestClass]
     public class QueryFieldTest
     {
-        [TestMethod]
+        [Fact]
         public void FilterNotValidFilter()
         {
             var field = new QueryField<Empleado>();
@@ -26,10 +25,10 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), new Filter { Valid = false });
 
-            Assert.AreEqual(empleados.Count, result.Count());
+            Assert.Equal(empleados.Count, result.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhenCasado()
         {
             var field = new QueryField<Empleado>();
@@ -47,11 +46,11 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(EstadoCivil.Casado, result[0].EstadoCivil);
+            Assert.Equal(1, result.Count);
+            Assert.Equal(EstadoCivil.Casado, result[0].EstadoCivil);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntEqual()
         {
             var field = new QueryField<Empleado>();
@@ -70,11 +69,11 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(Dni, result[0].Dni);
+            Assert.Equal(1, result.Count);
+            Assert.Equal(Dni, result[0].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntNotEqual()
         {
             var field = new QueryField<Empleado>();
@@ -92,12 +91,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(2, result[0].Dni);
-            Assert.AreEqual(3, result[1].Dni);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result[0].Dni);
+            Assert.Equal(3, result[1].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntGreaterThan()
         {
             var field = new QueryField<Empleado>();
@@ -115,11 +114,11 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(3, result[0].Dni);
+            Assert.Equal(1, result.Count);
+            Assert.Equal(3, result[0].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntGreaterThanEqual()
         {
             var field = new QueryField<Empleado>();
@@ -137,12 +136,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(2, result[0].Dni);
-            Assert.AreEqual(3, result[1].Dni);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result[0].Dni);
+            Assert.Equal(3, result[1].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntLessThan()
         {
             var field = new QueryField<Empleado>();
@@ -160,11 +159,11 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(1, result[0].Dni);
+            Assert.Equal(1, result.Count);
+            Assert.Equal(1, result[0].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntLessThanEqual()
         {
             var field = new QueryField<Empleado>();
@@ -182,12 +181,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Dni);
-            Assert.AreEqual(2, result[1].Dni);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(1, result[0].Dni);
+            Assert.Equal(2, result[1].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereIntBetween()
         {
             var field = new QueryField<Empleado>();
@@ -209,13 +208,13 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(3, result.Count);
-            Assert.AreEqual(2, result[0].Dni);
-            Assert.AreEqual(3, result[1].Dni);
-            Assert.AreEqual(4, result[2].Dni);
+            Assert.Equal(3, result.Count);
+            Assert.Equal(2, result[0].Dni);
+            Assert.Equal(3, result[1].Dni);
+            Assert.Equal(4, result[2].Dni);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereContains()
         {
             var field = new QueryField<Empleado>();
@@ -232,12 +231,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Chort", result[0].Apellido);
-            Assert.AreEqual("Gieco", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Chort", result[0].Apellido);
+            Assert.Equal("Gieco", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereContainsCaseInsensitive()
         {
             var field = new QueryField<Empleado>();
@@ -254,12 +253,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Chort", result[0].Apellido);
-            Assert.AreEqual("Gieco", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Chort", result[0].Apellido);
+            Assert.Equal("Gieco", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereStartsWith()
         {
             var field = new QueryField<Empleado>();
@@ -277,12 +276,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Diaz", result[0].Apellido);
-            Assert.AreEqual("Dominguez", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Diaz", result[0].Apellido);
+            Assert.Equal("Dominguez", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereStartsWithCaseInsensitive()
         {
             var field = new QueryField<Empleado>();
@@ -300,12 +299,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Diaz", result[0].Apellido);
-            Assert.AreEqual("Dominguez", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Diaz", result[0].Apellido);
+            Assert.Equal("Dominguez", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereEndsWith()
         {
             var field = new QueryField<Empleado>();
@@ -323,12 +322,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Diaz", result[0].Apellido);
-            Assert.AreEqual("Dominguez", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Diaz", result[0].Apellido);
+            Assert.Equal("Dominguez", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterWhereEndsWithCaseInsensitive()
         {
             var field = new QueryField<Empleado>();
@@ -346,12 +345,12 @@ namespace QueryTables.Test
             
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Diaz", result[0].Apellido);
-            Assert.AreEqual("DomingueZ", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Diaz", result[0].Apellido);
+            Assert.Equal("DomingueZ", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterCaseSensitive()
         {
             var field = new QueryField<Empleado> { CaseSensitive = true };
@@ -368,11 +367,11 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("DomingueZ", result[0].Apellido);
+            Assert.Equal(1, result.Count);
+            Assert.Equal("DomingueZ", result[0].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterDate()
         {
             var field = new QueryField<Empleado>();
@@ -394,12 +393,12 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result.Any(x => x.Apellido.Equals("Chort")));
-            Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(x => x.Apellido.Equals("Chort")));
+            Assert.True(result.Any(x => x.Apellido.Equals("DomingueZ")));
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterDouble()
         {
             var field = new QueryField<Empleado>();
@@ -421,12 +420,12 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result.Any(x => x.Apellido.Equals("Diaz")));
-            Assert.IsTrue(result.Any(x => x.Apellido.Equals("DomingueZ")));
+            Assert.Equal(2, result.Count);
+            Assert.True(result.Any(x => x.Apellido.Equals("Diaz")));
+            Assert.True(result.Any(x => x.Apellido.Equals("DomingueZ")));
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterNullSafe()
         {
             var field = new QueryField<Empleado> { NullSafe = true };
@@ -444,12 +443,12 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(2, result.Count);
-            Assert.AreEqual("Chort", result[0].Apellido);
-            Assert.AreEqual("Gieco", result[1].Apellido);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Chort", result[0].Apellido);
+            Assert.Equal("Gieco", result[1].Apellido);
         }
 
-        [TestMethod]
+        [Fact]
         public void FilterNullSafeNotNullable()
         {
             var field = new QueryField<Empleado> { NullSafe = true };
@@ -467,8 +466,8 @@ namespace QueryTables.Test
 
             var result = field.Filter(empleados.AsQueryable(), filter).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(1, result[0].Dni);
+            Assert.Equal(1, result.Count);
+            Assert.Equal(1, result[0].Dni);
         }
     }
 }
